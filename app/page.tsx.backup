@@ -1,0 +1,1399 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import { IoMdWalk } from 'react-icons/io'
+import { MdDirectionsRun } from 'react-icons/md'
+import { GiWeightLiftingUp } from 'react-icons/gi'
+import { FaDollarSign, FaShieldAlt, FaHeart, FaUsers, FaCalendarAlt, FaCog, FaChartLine, FaExchangeAlt, FaPlus, FaLaptop, FaHandHoldingHeart, FaUserMd } from 'react-icons/fa'
+import { AiOutlineDollar, AiOutlineHeart, AiOutlineCalendar, AiOutlinePlus, AiOutlineLaptop, AiOutlineSwap, AiOutlineEye, AiOutlineMedicineBox, AiOutlineTeam, AiOutlineGlobal } from 'react-icons/ai'
+import { BsShield, BsPeople, BsGraphUp } from 'react-icons/bs'
+import { BentoGrid, BentoGridItem } from '../components/ui/bento-grid'
+
+const Home = () => {
+  const [activeFAQ, setActiveFAQ] = useState<number | null>(null)
+  const [showLeadForm, setShowLeadForm] = useState(false)
+  const [showOTPVerification, setShowOTPVerification] = useState(false)
+  const [showThankYou, setShowThankYou] = useState(false)
+  const [otp, setOTP] = useState(['', '', '', '', '', ''])
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [formData, setFormData] = useState({
+    fullName: '',
+    phoneNumber: '',
+    email: '',
+    gender: '',
+    dateOfBirth: '',
+    employmentStatus: '',
+    occupation: '',
+    annualIncome: '',
+    province: '',
+    provincialCoverage: '',
+    coverageAmount: 0
+  })
+
+  const toggleFAQ = (index: number) => {
+    setActiveFAQ(activeFAQ === index ? null : index)
+  }
+
+  const handleInputChange = (field: string, value: string | number) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleSubmitLead = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Store phone number for OTP verification
+    setPhoneNumber(formData.phoneNumber)
+    // Hide lead form and show OTP verification
+    setShowLeadForm(false)
+    setShowOTPVerification(true)
+  }
+
+  const handleOTPChange = (index: number, value: string) => {
+    const newOTP = [...otp]
+    // Only allow numbers
+    if (value.match(/^[0-9]$/)) {
+      newOTP[index] = value
+      setOTP(newOTP)
+      // Auto-focus next input
+      if (index < 5 && value !== '') {
+        const nextInput = document.getElementById(`otp-${index + 1}`)
+        nextInput?.focus()
+      }
+    } else if (value === '') {
+      // Allow backspace
+      newOTP[index] = ''
+      setOTP(newOTP)
+      // Auto-focus previous input
+      if (index > 0) {
+        const prevInput = document.getElementById(`otp-${index - 1}`)
+        prevInput?.focus()
+      }
+    }
+  }
+
+  const handleVerifyOTP = () => {
+    // Here you would verify the OTP
+    console.log('Verifying OTP:', otp.join(''))
+    setShowOTPVerification(false)
+    setShowThankYou(true)
+  }
+
+  const handleResendOTP = () => {
+    // Here you would trigger OTP resend
+    console.log('Resending OTP to:', phoneNumber)
+    // Reset OTP inputs
+    setOTP(['', '', '', '', '', ''])
+  }
+
+  return (
+    <main>
+      {/* Lead Form Modal */}
+      {showLeadForm && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+          padding: '20px',
+          overflowY: 'auto'
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            borderRadius: '20px',
+            padding: '40px',
+            maxWidth: '750px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            position: 'relative',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }}>
+            {/* Close Button */}
+            <button
+              onClick={() => setShowLeadForm(false)}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'none',
+                border: 'none',
+                fontSize: '28px',
+                cursor: 'pointer',
+                color: '#6b7280',
+                padding: '8px',
+                lineHeight: 1
+              }}
+            >
+              ×
+            </button>
+
+            {/* Form Header */}
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#1f2937',
+              marginBottom: '8px',
+              textAlign: 'center'
+            }}>
+              Get started today
+            </h2>
+            <p style={{
+              fontSize: '16px',
+              color: '#6b7280',
+              marginBottom: '16px',
+              textAlign: 'center'
+            }}>
+              Complete a short form to get your free, no-obligation quote for health and dental insurance. Your information is private, secure, and used only to assist with your Sun Life quote.
+            </p>
+            <p style={{
+              fontSize: '14px',
+              color: '#6b7280',
+              marginBottom: '32px',
+              textAlign: 'center',
+              fontStyle: 'italic'
+            }}>
+              <strong>Free of charge and with no obligation.</strong>
+            </p>
+
+            {/* Form */}
+            <form onSubmit={handleSubmitLead}>
+              {/* Basic Information Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Full Name <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="John Smith"
+                    value={formData.fullName}
+                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Phone Number <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="(555) 123-4567"
+                    value={formData.phoneNumber}
+                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Email Address <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="John.smith@gmail.com"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Primary Applicant Section */}
+              <div style={{ marginBottom: '32px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#1f2937', marginBottom: '24px', textAlign: 'center' }}>
+                  Primary Applicant Information
+                </h3>
+
+                {/* Primary Applicant Information - Row 1 */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '16px', marginBottom: '24px', alignItems: 'start' }}>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      Gender <span style={{ color: '#013946' }}>*</span>
+                    </label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleInputChange('gender', 'Man')}
+                        style={{
+                          padding: '10px 16px',
+                          fontSize: '14px',
+                          border: `2px solid ${formData.gender === 'Man' ? '#0086ae' : '#d1d5db'}`,
+                          borderRadius: '6px',
+                          backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
+                          color: '#1f2937',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          minWidth: '60px'
+                        }}
+                      >
+                        Man
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleInputChange('gender', 'Woman')}
+                        style={{
+                          padding: '10px 16px',
+                          fontSize: '14px',
+                          border: `2px solid ${formData.gender === 'Woman' ? '#0086ae' : '#d1d5db'}`,
+                          borderRadius: '6px',
+                          backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
+                          color: '#1f2937',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          minWidth: '60px'
+                        }}
+                      >
+                        Woman
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      Date of Birth <span style={{ color: '#013946' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={10}
+                      placeholder="24/10/1997"
+                      value={formData.dateOfBirth}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 8) {
+                          // Format as DD/MM/YYYY
+                          if (value.length >= 4) {
+                            value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
+                          } else if (value.length >= 2) {
+                            value = value.slice(0, 2) + '/' + value.slice(2);
+                          }
+                          handleInputChange('dateOfBirth', value);
+                        }
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        fontSize: '16px',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      What is your employment status? <span style={{ color: '#013946' }}>*</span>
+                    </label>
+                    <select
+                      value={formData.employmentStatus}
+                      onChange={(e) => handleInputChange('employmentStatus', e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        fontSize: '16px',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        outline: 'none',
+                        backgroundColor: '#fff',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <option value="">Salaried</option>
+                      <option value="employed">Employed</option>
+                      <option value="self-employed">Self-Employed</option>
+                      <option value="unemployed">Unemployed</option>
+                      <option value="retired">Retired</option>
+                      <option value="student">Student</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Row 2 - Occupation and Annual Income */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', marginBottom: '32px', alignItems: 'start' }}>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      What is your current occupation?
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Architect, Designer"
+                      value={formData.occupation}
+                      onChange={(e) => handleInputChange('occupation', e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        fontSize: '16px',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      What is your annual income?
+                    </label>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <input
+                        type="text"
+                        required
+                        placeholder="$1,000,000"
+                        value={formData.annualIncome}
+                        onChange={(e) => handleInputChange('annualIncome', e.target.value)}
+                        style={{
+                          width: '140px',
+                          padding: '12px 14px',
+                          fontSize: '16px',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '6px',
+                          outline: 'none'
+                        }}
+                      />
+                      <span style={{ marginLeft: '8px', fontSize: '16px', color: '#6b7280' }}>dollars</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Add Applicant Button */}
+                <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                  <button
+                    type="button"
+                    style={{
+                      padding: '12px 24px',
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      color: '#013946',
+                      backgroundColor: 'transparent',
+                      border: '2px solid #013946',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    + ADD AN APPLICANT
+                  </button>
+                </div>
+
+                {/* Provincial Coverage Question */}
+                <div style={{ marginBottom: '32px' }}>
+                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '16px' }}>
+                    Are all the applicants covered by a provincial government health care plan?
+                  </label>
+                  <div style={{ display: 'flex', gap: '16px' }}>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('provincialCoverage', 'Yes')}
+                      style={{
+                        flex: 1,
+                        padding: '14px',
+                        fontSize: '16px',
+                        border: `2px solid ${formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db'}`,
+                        borderRadius: '8px',
+                        backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f2fe' : '#fff',
+                        color: '#1f2937',
+                        cursor: 'pointer',
+                        fontWeight: 600
+                      }}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('provincialCoverage', 'No')}
+                      style={{
+                        flex: 1,
+                        padding: '14px',
+                        fontSize: '16px',
+                        border: `2px solid ${formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db'}`,
+                        borderRadius: '8px',
+                        backgroundColor: formData.provincialCoverage === 'No' ? '#e0f2fe' : '#fff',
+                        color: '#1f2937',
+                        cursor: 'pointer',
+                        fontWeight: 600
+                      }}
+                    >
+                      No
+                    </button>
+                  </div>
+
+                  {/* Provincial Coverage Disclaimer */}
+                  {formData.provincialCoverage === 'No' && (
+                    <div style={{
+                      marginTop: '12px',
+                      padding: '12px',
+                      backgroundColor: '#fef3c7',
+                      border: '1px solid #f59e0b',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      color: '#92400e',
+                      lineHeight: '1.4'
+                    }}>
+                      These plans require the insured to have a valid provincial coverage. If you do not have or are waiting for the provincial coverage, you can get emergency medical insurance.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                style={{
+                  width: '100%',
+                  padding: '18px',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  color: '#fff',
+                  backgroundColor: '#013946',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  transition: 'background-color 0.3s ease'
+                }}
+              >
+                Submit Request
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* OTP Verification Modal */}
+      {showOTPVerification && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            borderRadius: '20px',
+            padding: '40px',
+            maxWidth: '400px',
+            width: '100%',
+            textAlign: 'center',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }}>
+            <h2 style={{
+              fontSize: '24px',
+              fontWeight: 700,
+              color: '#1f2937',
+              marginBottom: '12px'
+            }}>
+              Verify Your Number
+            </h2>
+            <p style={{
+              fontSize: '14px',
+              color: '#6b7280',
+              marginBottom: '24px'
+            }}>
+              An OTP has been sent to {phoneNumber}
+            </p>
+            
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              justifyContent: 'center',
+              marginBottom: '24px'
+            }}>
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`otp-${index}`}
+                  type="text"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleOTPChange(index, e.target.value)}
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    textAlign: 'center',
+                    fontSize: '18px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    transition: 'border-color 0.2s ease'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#013946'}
+                  onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={handleVerifyOTP}
+              style={{
+                width: '100%',
+                padding: '14px',
+                backgroundColor: '#013946',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                marginBottom: '16px'
+              }}
+            >
+              Verify
+            </button>
+
+            <p style={{
+              fontSize: '14px',
+              color: '#6b7280'
+            }}>
+              Didn't receive the code? <button
+                onClick={handleResendOTP}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#013946',
+                  cursor: 'pointer',
+                  fontWeight: 500
+                }}
+              >
+                Resend OTP (42s)
+              </button>
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Thank You Modal */}
+      {showThankYou && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            borderRadius: '20px',
+            padding: '40px',
+            maxWidth: '500px',
+            width: '100%',
+            textAlign: 'center',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }}>
+            <div style={{
+              width: '64px',
+              height: '64px',
+              backgroundColor: '#013946',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 24px'
+            }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h2 style={{
+              fontSize: '24px',
+              fontWeight: 700,
+              color: '#1f2937',
+              marginBottom: '16px'
+            }}>
+              Thank You!
+            </h2>
+            <p style={{
+              fontSize: '16px',
+              color: '#6b7280',
+              lineHeight: 1.5,
+              marginBottom: '24px'
+            }}>
+              A Sun Life licensed advisor will get in touch with you shortly.
+            </p>
+            <button
+              onClick={() => setShowThankYou(false)}
+              style={{
+                width: '100%',
+                padding: '14px',
+                backgroundColor: '#013946',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-container" style={{ position: 'relative', maxWidth: '1200px', margin: '0 auto' }}>
+            <h1 style={{
+              position: 'absolute',
+              top: '15%',
+              left: '0',
+              color: '#013946',
+              fontSize: '58px',
+              fontWeight: '700',
+              textAlign: 'left',
+              maxWidth: '600px',
+              zIndex: '10',
+              textShadow: '2px 2px 4px rgba(255, 255, 255, 0.8)',
+              lineHeight: '1.1',
+              letterSpacing: '-0.5px'
+            }}>
+              Protect your health.<br />
+              Smile with confidence.
+            </h1>
+            <Image
+              src="/HEader-4.png"
+              alt="Sun Life Health and Dental Insurance - Protect Your Family's Health"
+              width={1920}
+              height={580}
+              priority
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxWidth: '1920px',
+                margin: '0 auto',
+                display: 'block'
+              }}
+            />
+          {/* Hero CTAs - Positioned below Manulife Vitality logo */}
+          <div style={{
+            position: 'absolute',
+            top: '75%',
+            left: '0',
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            padding: '0',
+            flexWrap: 'wrap'
+          }}>
+            <button 
+              onClick={() => setShowLeadForm(true)}
+              className="btn btn-primary"
+              style={{
+                minWidth: '200px',
+                fontSize: '20px',
+                fontWeight: 600,
+                padding: '16px 32px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '4px',
+                transition: 'all 0.3s ease',
+                textTransform: 'uppercase',
+                backgroundColor: '#FFB800',
+                color: '#1A1A1A',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}
+            >
+              GET QUOTE
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* What is Sun Life Health and Dental Insurance */}
+      <section className="section section-white">
+        <div className="vitality-intro">
+          <h2>Comprehensive health and dental coverage with Sun Life</h2>
+          <p style={{ lineHeight: '1.6', marginBottom: '16px' }}>
+            Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance that helps safeguard you from unexpected medical expenses not covered by provincial healthcare — including prescription drugs, dental care, vision, and paramedical services.
+          </p>
+          <p style={{ lineHeight: '1.6', marginBottom: '16px' }}>
+            Perfect especially for self-employed Canadians, retirees, or anyone losing group benefits, Sun Life makes it easy to maintain comprehensive coverage and peace of mind for you and your family.
+          </p>
+          <p style={{ lineHeight: '1.6', marginBottom: '0' }}>
+            Get started in minutes — complete a quick form to get a free personalized consult with a licensed advisor.
+            <br />
+            No fees. No pressure. Just trusted advice.
+          </p>
+        </div>
+      </section>
+
+      {/* CTA Section - Get Quote */}
+      <section className="section section-white">
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          backgroundColor: '#FFF8E0',
+          padding: '35px 45px',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '33px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ flex: '1', minWidth: '300px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#2d3748',
+              marginBottom: '12px',
+              lineHeight: 1.3,
+              textAlign: 'left'
+            }}>
+              Ready to protect your health with Sun Life?
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#4a5568',
+              margin: 0,
+              lineHeight: 1.7,
+              textAlign: 'left'
+            }}>
+              Get your personalized Sun Life health and dental quote in minutes!
+            </p>
+          </div>
+          <div>
+            <button
+              onClick={() => setShowLeadForm(true)}
+              className="btn btn-primary"
+              style={{
+                minWidth: '200px',
+                fontSize: '16px',
+                padding: '16px 40px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#013946'
+              }}
+            >
+              GET QUOTE
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Active Lifestyle Benefits */}
+      <section className="section section-white" style={{ paddingTop: '60px' }}>
+        <div className="benefits-section">
+          <div className="benefits-image" style={{ flex: '0 0 45%' }}>
+            <Image
+              src="/mid-image-2-.png"
+              alt="Family enjoying quality time together"
+              width={500}
+              height={594}
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '12px',
+                objectFit: 'cover',
+                maxHeight: '594px'
+              }}
+            />
+          </div>
+          <div className="benefits-content">
+            <div style={{ marginTop: '0px', marginBottom: '20px', textAlign: 'left' }}>
+              <h4 style={{
+                fontSize: '32px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '20px',
+                textAlign: 'left'
+              }}>
+                Why choose Sun Life Health Insurance?
+              </h4>
+              <div style={{ marginBottom: '20px' }}>
+                <p style={{
+                  fontSize: '20px',
+                  color: '#1f2937',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  lineHeight: '1.4'
+                }}>
+                  ✓ <strong>Comprehensive protection:</strong>
+                </p>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#4a5568',
+                  margin: '0',
+                  lineHeight: '1.5'
+                }}>
+                  From prescription drugs and dental to vision and extended health coverage
+                </p>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <p style={{
+                  fontSize: '20px',
+                  color: '#1f2937',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  lineHeight: '1.4'
+                }}>
+                  ✓ <strong>Financial security:</strong>
+                </p>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#4a5568',
+                  margin: '0',
+                  lineHeight: '1.5'
+                }}>
+                  Get support for out-of-pocket expenses and unexpected medical costs not covered by your provincial plan
+                </p>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <p style={{
+                  fontSize: '20px',
+                  color: '#1f2937',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  lineHeight: '1.4'
+                }}>
+                  ✓ <strong>Flexible family options:</strong>
+                </p>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#4a5568',
+                  margin: '0',
+                  lineHeight: '1.5'
+                }}>
+                  Add your spouse or children easily under one plan
+                </p>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <p style={{
+                  fontSize: '20px',
+                  color: '#1f2937',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  lineHeight: '1.4'
+                }}>
+                  ✓ <strong>Wellness benefits:</strong>
+                </p>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#4a5568',
+                  margin: '0',
+                  lineHeight: '1.5'
+                }}>
+                  Includes mental health support, wellness programs, and access to virtual healthcare
+                </p>
+              </div>
+
+              <div style={{ marginBottom: '0' }}>
+                <p style={{
+                  fontSize: '20px',
+                  color: '#1f2937',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  lineHeight: '1.4'
+                }}>
+                  ✓ <strong>Trusted by Canadians:</strong>
+                </p>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#4a5568',
+                  margin: '0',
+                  lineHeight: '1.5'
+                }}>
+                  One of Canada's top-rated insurers with strong financial strength and claim reliability
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+      {/* Insurance Answers Section */}
+      <section className="section section-white">
+          <div style={{
+          backgroundColor: '#FFF8E0',
+          borderRadius: '16px',
+          padding: '36px 40px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '60px',
+          maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+          <div style={{
+            flex: '1',
+            maxWidth: '500px'
+          }}>
+            <Image
+              src="/CTA-NEW-.png"
+              alt="Ready to get your Sun Life quote"
+              width={500}
+              height={400}
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px'
+              }}
+            />
+              </div>
+          <div style={{ flex: '1' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#1f2937',
+              marginBottom: '20px',
+              lineHeight: 1.2,
+              textAlign: 'left'
+            }}>
+              Ready to get your Sun Life quote?
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#4a5568',
+              lineHeight: 1.6,
+              marginBottom: '32px',
+              textAlign: 'left'
+            }}>
+              Get personalized quotes from our licensed advisors in minutes. No obligation, just expert guidance to help you choose the right coverage.
+            </p>
+            <button
+              onClick={() => setShowLeadForm(true)}
+              style={{
+              backgroundColor: '#013946',
+              color: 'white',
+                  border: 'none',
+              padding: '16px 32px',
+              fontSize: '16px',
+              fontWeight: 600,
+              borderRadius: '8px',
+                  cursor: 'pointer',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              minWidth: '200px'
+            }}>
+              GET MY QUOTE
+              </button>
+          </div>
+        </div>
+      </section>
+
+
+      {/* What does private health insurance cover? */}
+      <section className="section section-white">
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 className="centered-underlined-heading" style={{ 
+            fontSize: '32px', 
+            fontWeight: 700, 
+            color: '#2d3748', 
+            marginBottom: '40px', 
+            textAlign: 'center',
+            lineHeight: 1.3 
+          }}>
+            What does private health insurance cover?
+          </h2>
+          <p style={{
+            fontSize: '20px',
+            color: '#4a5568',
+            lineHeight: '1.6',
+            marginBottom: '40px',
+            textAlign: 'center',
+            maxWidth: '900px',
+            margin: '0 auto 40px'
+          }}>
+            Private health insurance helps cover healthcare costs not fully included in public plans, giving you access to services like prescription drugs, dental, vision, and paramedical care. Here's what a personal health insurance plan typically covers:
+          </p>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '30px',
+            marginTop: '40px'
+          }}>
+            {/* Dental */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <AiOutlineMedicineBox />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Dental
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Covers routine checkups, cleanings, fillings, crowns, and major work depending on your plan
+              </p>
+            </div>
+
+            {/* Prescription drugs */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <AiOutlineMedicineBox />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Prescription drugs
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Helps pay for medications and treatments not covered by public health plans
+              </p>
+            </div>
+
+            {/* Paramedical services */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <AiOutlineTeam />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Paramedical services
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Includes physiotherapy, chiropractic care, massage therapy, and counselling services
+              </p>
+            </div>
+
+            {/* Vision care */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <AiOutlineEye />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Vision care
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Covers eye exams, prescription glasses, contact lenses, and corrective procedures
+              </p>
+            </div>
+
+            {/* Travel medical */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <AiOutlineGlobal />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Travel medical
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Provides emergency medical coverage for unexpected expenses incurred while traveling
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* CTA Section - Get Quote */}
+      <section className="section section-white">
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          backgroundColor: '#FFF8E0',
+          padding: '35px 45px',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '33px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ flex: '1', minWidth: '300px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#2d3748',
+              marginBottom: '12px',
+              lineHeight: 1.3,
+              textAlign: 'left'
+            }}>
+              Ready to protect your health with Sun Life?
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#4a5568',
+              margin: 0,
+              lineHeight: 1.7,
+              textAlign: 'left'
+            }}>
+              Get your personalized Sun Life health and dental quote in minutes!
+            </p>
+          </div>
+          <div>
+            <button
+              onClick={() => setShowLeadForm(true)}
+              className="btn btn-primary"
+              style={{
+                minWidth: '200px',
+                fontSize: '16px',
+                padding: '16px 40px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#013946'
+              }}
+            >
+              GET QUOTE
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section className="faq-section">
+        <h2 style={{ textAlign: 'center' }}>FAQs</h2>
+            <p className="faq-subtitle">Everything you need to know about Sun Life health and dental insurance.</p>
+        <div className="faq-list">
+          <div className={`faq-item ${activeFAQ === 0 ? 'active' : ''}`} onClick={() => toggleFAQ(0)}>
+            <div className="faq-question">
+                  <span>What is Sun Life health and dental insurance?</span>
+              <span>{activeFAQ === 0 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 0 && (
+              <div className="faq-answer">
+                    Sun Life health and dental insurance provides coverage for prescription drugs, dental care, vision services, and paramedical practitioners. It's designed for individuals, families, or those who need supplemental coverage beyond government health plans.
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 1 ? 'active' : ''}`} onClick={() => toggleFAQ(1)}>
+            <div className="faq-question">
+                  <span>Who should consider Sun Life health and dental insurance?</span>
+              <span>{activeFAQ === 1 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 1 && (
+              <div className="faq-answer">
+                    This coverage is ideal for self-employed individuals, retirees, contract workers, or anyone losing workplace benefits. It's also great for supplementing existing employer coverage or covering family members not included in a group plan.
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 2 ? 'active' : ''}`} onClick={() => toggleFAQ(2)}>
+            <div className="faq-question">
+                  <span>What does Sun Life health and dental insurance cover?</span>
+              <span>{activeFAQ === 2 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 2 && (
+              <div className="faq-answer">
+                    Coverage includes prescription medications, dental care (preventive, basic, and major), vision care (eye exams, glasses, contacts), paramedical services (physiotherapy, massage, chiropractic), and medical equipment and supplies.
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 3 ? 'active' : ''}`} onClick={() => toggleFAQ(3)}>
+            <div className="faq-question">
+                  <span>How much does Sun Life health and dental insurance cost?</span>
+              <span>{activeFAQ === 3 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 3 && (
+              <div className="faq-answer">
+                    Premiums vary based on age, family size, coverage level, and deductibles. Individual plans typically range from $100-$300/month, while family coverage ranges from $250-$600/month. Your advisor will help you find a plan that fits your budget and needs.
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 4 ? 'active' : ''}`} onClick={() => toggleFAQ(4)}>
+            <div className="faq-question">
+                  <span>Can I customize my Sun Life health and dental plan?</span>
+              <span>{activeFAQ === 4 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 4 && (
+              <div className="faq-answer">
+                    Yes! Sun Life offers flexible coverage options allowing you to choose health only, dental only, or combined coverage. You can also select different coverage levels, deductibles, and annual maximums to match your specific needs and budget.
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+export default Home;
+
