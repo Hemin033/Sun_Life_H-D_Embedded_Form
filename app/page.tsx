@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { IoMdWalk } from 'react-icons/io'
 import { MdDirectionsRun } from 'react-icons/md'
 import { GiWeightLiftingUp } from 'react-icons/gi'
-import { FaDollarSign, FaShieldAlt, FaHeart, FaUsers, FaCalendarAlt, FaCog, FaChartLine, FaExchangeAlt, FaPlus, FaLaptop, FaUserMd } from 'react-icons/fa'
+import { FaDollarSign, FaShieldAlt, FaHeart, FaUsers, FaCalendarAlt, FaCog, FaChartLine, FaExchangeAlt, FaPlus, FaLaptop, FaUserMd, FaCheck } from 'react-icons/fa'
 import { AiOutlineDollar, AiOutlineHeart, AiOutlineCalendar, AiOutlinePlus, AiOutlineLaptop, AiOutlineSwap, AiOutlineEye, AiOutlineMedicineBox, AiOutlineTeam, AiOutlineGlobal } from 'react-icons/ai'
 import { BsShield, BsPeople, BsGraphUp } from 'react-icons/bs'
 import { TbDental } from 'react-icons/tb'
@@ -669,7 +669,7 @@ const Home = () => {
               lineHeight: 1.5,
               marginBottom: '24px'
             }}>
-              A Sun Life licensed advisor will get in touch with you shortly.
+              One of our licensed advisors will reach out soon with your Sun Life health and dental plan options and guide you on what's best for your needs.
             </p>
             <button
               onClick={() => setShowThankYou(false)}
@@ -694,23 +694,9 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-container" style={{ position: 'relative', maxWidth: '1200px', margin: '0 auto' }}>
-            <Image
-              src="/Sun-Life-Financial-Logo.png"
-              alt="Sun Life Financial"
-              width={180}
-              height={60}
-              style={{
-                position: 'absolute',
-                top: '-10%',
-                left: '-15px',
-                zIndex: '10',
-                width: '277px',
-                height: 'auto'
-              }}
-            />
             <h1 style={{
               position: 'absolute',
-              top: '25%',
+              top: '30%',
               left: '0',
               color: '#013946',
               fontSize: '58px',
@@ -726,7 +712,7 @@ const Home = () => {
               Smile with confidence.
             </h1>
             <Image
-              src="/HeaderH&D-final-.png"
+              src="/HeaderH&D-final-2-.png"
               alt="Sun Life Health and Dental Insurance - Protect Your Family's Health"
               width={1920}
               height={580}
@@ -867,14 +853,14 @@ const Home = () => {
           </div>
           <div className="benefits-content">
             <div style={{ marginTop: '0px', marginBottom: '20px', textAlign: 'left' }}>
-              <h4 style={{ 
+              <h4 style={{
                 fontSize: '32px',
                 fontWeight: 700,
                 color: '#1f2937',
                 marginBottom: '20px',
                 textAlign: 'left'
               }}>
-                Why choose Sun Life Health Insurance?
+                Why Canadians choose Sun Life health & dental insurance
               </h4>
               <div style={{ marginBottom: '20px' }}>
               <p style={{
@@ -882,9 +868,12 @@ const Home = () => {
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  ✓ <strong>Comprehensive protection:</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Comprehensive coverage</strong>
                 </p>
                 <p style={{
                   fontSize: '18px',
@@ -892,7 +881,7 @@ const Home = () => {
                   margin: '0',
                   lineHeight: '1.5'
               }}>
-                  From prescription drugs and dental to vision and extended health coverage
+                  Protects what provincial healthcare doesn't, including prescriptions, dental, vision, and mental health care.
               </p>
               </div>
 
@@ -902,9 +891,12 @@ const Home = () => {
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  ✓ <strong>Financial security:</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Flexible, affordable plans</strong>
                 </p>
                 <p style={{
                   fontSize: '18px',
@@ -912,7 +904,7 @@ const Home = () => {
                   margin: '0',
                   lineHeight: '1.5'
               }}>
-                  Get support for out-of-pocket expenses and unexpected medical costs not covered by your provincial plan
+                  Customize your coverage and budget with options for individuals and families.
               </p>
               </div>
 
@@ -922,9 +914,12 @@ const Home = () => {
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  ✓ <strong>Flexible family options:</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Wellness & virtual care</strong>
                 </p>
                 <p style={{
                   fontSize: '18px',
@@ -932,7 +927,7 @@ const Home = () => {
                   margin: '0',
                   lineHeight: '1.5'
               }}>
-                  Add your spouse or children easily under one plan
+                  Access mental health support, telemedicine, and wellness programs anytime, anywhere.
               </p>
             </div>
 
@@ -942,9 +937,12 @@ const Home = () => {
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  ✓ <strong>Wellness benefits:</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Trusted protection</strong>
                 </p>
                 <p style={{
                   fontSize: '18px',
@@ -952,7 +950,7 @@ const Home = () => {
                   margin: '0',
                   lineHeight: '1.5'
                 }}>
-                  Includes mental health support, wellness programs, and access to virtual healthcare
+                  Backed by 150+ years of experience, Sun Life is one of Canada's most reliable insurers.
                 </p>
               </div>
 
@@ -962,9 +960,12 @@ const Home = () => {
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  ✓ <strong>Trusted by Canadians:</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Free expert advice</strong>
                 </p>
                 <p style={{
                   fontSize: '18px',
@@ -972,7 +973,7 @@ const Home = () => {
                   margin: '0',
                   lineHeight: '1.5'
                 }}>
-                  One of Canada's top-rated insurers with strong financial strength and claim reliability
+                  Get a personalized quote and consultation from a licensed advisor — at no cost, with no pressure.
                 </p>
               </div>
             </div>
