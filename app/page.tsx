@@ -241,20 +241,20 @@ const Home = () => {
                     <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                   Gender <span style={{ color: '#013946' }}>*</span>
                 </label>
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
                   <button
                     type="button"
                     onClick={() => handleInputChange('gender', 'Man')}
                     style={{
-                          padding: '10px 16px',
-                          fontSize: '14px',
+                          flex: 1,
+                          padding: '12px 16px',
+                          fontSize: '16px',
                       border: `2px solid ${formData.gender === 'Man' ? '#0086ae' : '#d1d5db'}`,
                           borderRadius: '6px',
                       backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
                       color: '#1f2937',
                       cursor: 'pointer',
-                          fontWeight: 600,
-                          minWidth: '60px'
+                          fontWeight: 600
                     }}
                   >
                     Man
@@ -263,15 +263,15 @@ const Home = () => {
                     type="button"
                     onClick={() => handleInputChange('gender', 'Woman')}
                     style={{
-                          padding: '10px 16px',
-                          fontSize: '14px',
+                          flex: 1,
+                          padding: '12px 16px',
+                          fontSize: '16px',
                       border: `2px solid ${formData.gender === 'Woman' ? '#0086ae' : '#d1d5db'}`,
                           borderRadius: '6px',
                       backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
                       color: '#1f2937',
                       cursor: 'pointer',
-                          fontWeight: 600,
-                          minWidth: '60px'
+                          fontWeight: 600
                     }}
                   >
                     Woman
