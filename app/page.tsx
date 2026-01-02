@@ -90,7 +90,7 @@ const Home = () => {
     <main>
       {/* Lead Form Modal */}
       {showLeadForm && (
-        <div style={{
+        <div className="lead-form-modal" style={{
           position: 'fixed',
           top: 0,
           left: 0,
@@ -99,21 +99,22 @@ const Home = () => {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           zIndex: 1000,
-          padding: '20px',
+          padding: '10px',
           overflowY: 'auto'
         }}>
-          <div style={{
+          <div className="lead-form-content" style={{
             backgroundColor: '#fff',
             borderRadius: '20px',
-            padding: '40px',
+            padding: 'clamp(20px, 4vw, 40px)',
             maxWidth: '900px',
             width: '100%',
-            maxHeight: '90vh',
+            maxHeight: '95vh',
             overflowY: 'auto',
             position: 'relative',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+            margin: 'auto 0'
           }}>
             {/* Close Button */}
             <button
@@ -165,7 +166,7 @@ const Home = () => {
             {/* Form */}
             <form onSubmit={handleSubmitLead}>
               {/* Basic Information Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                   Full Name <span style={{ color: '#013946' }}>*</span>
@@ -234,10 +235,10 @@ const Home = () => {
                   Primary Applicant Information
                 </h3>
 
-                {/* Primary Applicant Information - Row 1 */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '16px', marginBottom: '24px', alignItems: 'start' }}>
+                {/* Primary Applicant Information - Row 1: Gender and DOB */}
+                <div className="form-row-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px', alignItems: 'start' }}>
                   <div>
-                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                   Gender <span style={{ color: '#013946' }}>*</span>
                 </label>
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -278,7 +279,7 @@ const Home = () => {
                 </div>
               </div>
                 <div>
-                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                     Date of Birth <span style={{ color: '#013946' }}>*</span>
                   </label>
                 <input
@@ -309,9 +310,13 @@ const Home = () => {
                   }}
                 />
               </div>
+                </div>
+
+                {/* Row 2 - Employment Status and Occupation */}
+                <div className="form-row-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px', alignItems: 'start' }}>
                   <div>
-                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      What is your employment status? <span style={{ color: '#013946' }}>*</span>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      Employment Status <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <select
                       value={formData.employmentStatus}
@@ -335,13 +340,9 @@ const Home = () => {
                       <option value="student">Student</option>
                 </select>
                   </div>
-              </div>
-
-                {/* Row 2 - Occupation and Annual Income */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', marginBottom: '32px', alignItems: 'start' }}>
                   <div>
-                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      What is your current occupation?
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                      Occupation
                 </label>
                     <input
                       type="text"
@@ -358,29 +359,28 @@ const Home = () => {
                       }}
                     />
               </div>
-                  <div>
-                    <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      What is your annual income?
+                </div>
+
+                {/* Row 3 - Annual Income */}
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Annual Income
                 </label>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
                 <input
                   type="text"
-                        required
-                        placeholder="$1,000,000"
-                        value={formData.annualIncome}
-                        onChange={(e) => handleInputChange('annualIncome', e.target.value)}
+                  required
+                  placeholder="$1,000,000"
+                  value={formData.annualIncome}
+                  onChange={(e) => handleInputChange('annualIncome', e.target.value)}
                   style={{
-                          width: '140px',
-                          padding: '12px 14px',
+                    width: '100%',
+                    padding: '12px 14px',
                     fontSize: '16px',
                     border: '1px solid #d1d5db',
-                          borderRadius: '6px',
+                    borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
-                      <span style={{ marginLeft: '8px', fontSize: '16px', color: '#6b7280' }}>dollars</span>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Add Applicant Button */}
@@ -691,21 +691,21 @@ const Home = () => {
         </div>
       )}
 
-      {/* Hero Section */}
-      <section className="hero-section">
+      {/* Hero Section - Desktop */}
+      <section className="hero-section hero-desktop">
         <div className="hero-container" style={{ position: 'relative', maxWidth: '1200px', margin: '0 auto' }}>
-            <h1 style={{
+            <h1 className="hero-title" style={{
               position: 'absolute',
-              top: '30%',
-              left: '0',
+              top: '28%',
+              left: '24px',
               color: '#013946',
-              fontSize: '58px',
+              fontSize: 'clamp(28px, 4.5vw, 54px)',
               fontWeight: '700',
               textAlign: 'left',
-              maxWidth: '600px',
+              maxWidth: 'min(550px, 50%)',
               zIndex: '10',
               textShadow: '2px 2px 4px rgba(255, 255, 255, 0.8)',
-              lineHeight: '1.1',
+              lineHeight: '1.15',
               letterSpacing: '-0.5px'
             }}>
               Protect your health.<br />
@@ -717,6 +717,7 @@ const Home = () => {
               width={1920}
               height={580}
               priority
+              className="hero-image"
               style={{
                 width: '100%',
                 height: 'auto',
@@ -725,11 +726,11 @@ const Home = () => {
                 display: 'block'
               }}
             />
-          {/* Hero CTAs - Positioned below Manulife Vitality logo */}
-          <div style={{
+          {/* Hero CTA Button */}
+          <div className="hero-cta-wrapper" style={{
             position: 'absolute',
-            top: '75%',
-            left: '0',
+            top: '70%',
+            left: '24px',
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
@@ -738,23 +739,23 @@ const Home = () => {
           }}>
             <button 
               onClick={() => setShowLeadForm(true)}
-              className="btn btn-primary"
+              className="btn btn-primary hero-cta-btn"
               style={{
-                minWidth: '200px',
-                fontSize: '20px',
+                minWidth: '180px',
+                fontSize: 'clamp(14px, 2vw, 18px)',
                 fontWeight: 600,
-                padding: '16px 32px',
+                padding: '14px 28px',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderRadius: '4px',
+                borderRadius: '6px',
                 transition: 'all 0.3s ease',
                 textTransform: 'uppercase',
                 backgroundColor: '#FFB800',
                 color: '#1A1A1A',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
               }}
             >
               GET QUOTE
@@ -763,14 +764,95 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Hero Section - Mobile */}
+      <section className="hero-section hero-mobile" style={{ display: 'none' }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center',
+          backgroundColor: '#EEFCFE'
+        }}>
+          {/* Logo Bar */}
+          <Image
+            src="/IMAGE-TOP-OVERLAY-Mob-2-.png"
+            alt="PolicyAdvisor and Sun Life"
+            width={800}
+            height={80}
+            priority
+            style={{
+              width: '70%',
+              height: 'auto',
+              maxWidth: '70%',
+              margin: '0 auto',
+              paddingTop: '16px'
+            }}
+          />
+          
+          {/* Hero Text */}
+          <div style={{
+            padding: '32px 24px 24px',
+            textAlign: 'center'
+          }}>
+            <h1 style={{
+              color: '#013946',
+              fontSize: '32px',
+              fontWeight: '700',
+              lineHeight: '1.2',
+              marginBottom: '24px'
+            }}>
+              Protect your health.<br />
+              Smile with confidence.
+            </h1>
+            
+            {/* CTA Button */}
+            <button 
+              onClick={() => setShowLeadForm(true)}
+              style={{
+                minWidth: '220px',
+                fontSize: '16px',
+                fontWeight: 600,
+                padding: '16px 32px',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '8px',
+                textTransform: 'uppercase',
+                backgroundColor: '#FFB800',
+                color: '#1A1A1A',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+              }}
+            >
+              GET QUOTE
+            </button>
+          </div>
+          
+          {/* Hero Image */}
+          <Image
+            src="/Mobile-header-BAse-H&D.png"
+            alt="Healthy lifestyle"
+            width={800}
+            height={600}
+            priority
+            style={{
+              width: '85%',
+              height: 'auto',
+              maxWidth: '85%',
+              margin: '0 auto'
+            }}
+          />
+        </div>
+      </section>
+
       {/* What is Sun Life Health and Dental Insurance */}
       <section className="section section-white">
-        <div className="vitality-intro">
-          <h2>Comprehensive health and dental coverage with Sun Life</h2>
-          <p style={{ lineHeight: '1.6', marginBottom: '16px' }}>
+        <div className="vitality-intro" style={{ padding: '0 8px' }}>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)' }}>Comprehensive health and dental coverage with Sun Life</h2>
+          <p style={{ lineHeight: '1.6', marginBottom: '16px', fontSize: 'clamp(16px, 2.5vw, 20px)' }}>
             Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance that helps safeguard you from unexpected medical expenses not covered by provincial healthcare — including prescription drugs, dental care, vision, and paramedical services.
           </p>
-          <p style={{ lineHeight: '1.6', marginBottom: '0' }}>
+          <p style={{ lineHeight: '1.6', marginBottom: '0', fontSize: 'clamp(16px, 2.5vw, 20px)' }}>
             Perfect especially for self-employed Canadians, retirees, or anyone losing group benefits, Sun Life makes it easy to maintain comprehensive coverage and peace of mind for you and your family.
           </p>
         </div>
@@ -778,47 +860,47 @@ const Home = () => {
 
       {/* CTA Section - Get Quote */}
       <section className="section section-white">
-        <div style={{
+        <div className="cta-box" style={{
           maxWidth: '1200px',
           margin: '0 auto',
           backgroundColor: '#FFF8E0',
-          padding: '35px 45px',
+          padding: 'clamp(20px, 4vw, 35px) clamp(16px, 4vw, 45px)',
           borderRadius: '12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '33px',
+          gap: 'clamp(16px, 3vw, 33px)',
           flexWrap: 'wrap'
         }}>
-          <div style={{ flex: '1', minWidth: '300px' }}>
-            <h2 style={{
-              fontSize: '32px',
+          <div style={{ flex: '1', minWidth: '250px' }}>
+            <h2 className="cta-heading" style={{
+              fontSize: 'clamp(16px, 3vw, 32px)',
               fontWeight: 700,
               color: '#2d3748',
-              marginBottom: '12px',
+              marginBottom: '8px',
               lineHeight: 1.3,
               textAlign: 'left'
             }}>
-              Ready to protect your health with Sun Life?
+              Ready to protect your health with Sun&nbsp;Life?
             </h2>
-            <p style={{
-              fontSize: '18px',
+            <p className="cta-subtext" style={{
+              fontSize: 'clamp(12px, 2vw, 18px)',
               color: '#4a5568',
               margin: 0,
-              lineHeight: 1.7,
+              lineHeight: 1.5,
               textAlign: 'left'
             }}>
-              Get your personalized Sun Life health and dental quote in minutes!
+              Get your personalized Sun&nbsp;Life health and dental quote in minutes!
             </p>
           </div>
-          <div>
+          <div style={{ width: '100%', maxWidth: '250px', flexShrink: 0 }}>
             <button
               onClick={() => setShowLeadForm(true)}
               className="btn btn-primary"
               style={{
-                minWidth: '200px',
-                fontSize: '16px',
-                padding: '16px 40px',
+                width: '100%',
+                fontSize: 'clamp(14px, 2vw, 16px)',
+                padding: 'clamp(12px, 2vw, 16px) clamp(20px, 4vw, 40px)',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'inline-flex',
@@ -834,9 +916,9 @@ const Home = () => {
       </section>
 
       {/* Active Lifestyle Benefits */}
-      <section className="section section-white" style={{ paddingTop: '60px' }}>
+      <section className="section section-white" style={{ paddingTop: 'clamp(30px, 6vw, 60px)' }}>
         <div className="benefits-section">
-          <div className="benefits-image" style={{ flex: '0 0 45%' }}>
+          <div className="benefits-image" style={{ flex: '0 0 45%', minWidth: '280px' }}>
             <Image
               src="/mid-image-2-.png"
               alt="Family enjoying quality time together"
@@ -844,7 +926,7 @@ const Home = () => {
               height={594}
               style={{
                 width: '100%',
-                height: '100%',
+                height: 'auto',
                 borderRadius: '12px',
                 objectFit: 'cover',
                 maxHeight: '594px'
@@ -854,7 +936,7 @@ const Home = () => {
           <div className="benefits-content">
             <div style={{ marginTop: '0px', marginBottom: '20px', textAlign: 'left' }}>
               <h4 style={{
-                fontSize: '32px',
+                fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: 700,
                 color: '#1f2937',
                 marginBottom: '20px',
@@ -862,93 +944,97 @@ const Home = () => {
               }}>
                 Why Canadians choose Sun Life health & dental insurance
               </h4>
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: '16px' }}>
               <p style={{
-                fontSize: '20px',
+                fontSize: 'clamp(16px, 2.5vw, 20px)',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
                   lineHeight: '1.4',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '8px'
                 }}>
-                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Comprehensive coverage</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '16px', marginTop: '4px', flexShrink: 0 }} /> <strong>Comprehensive coverage</strong>
                 </p>
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(14px, 2vw, 18px)',
                 color: '#4a5568',
                   margin: '0',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  paddingLeft: '24px'
               }}>
                   Protects what provincial healthcare doesn't, including prescriptions, dental, vision, and mental health care.
               </p>
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: '16px' }}>
               <p style={{
-                fontSize: '20px',
+                fontSize: 'clamp(16px, 2.5vw, 20px)',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
                   lineHeight: '1.4',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '8px'
                 }}>
-                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Flexible, affordable plans</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '16px', marginTop: '4px', flexShrink: 0 }} /> <strong>Flexible, affordable plans</strong>
                 </p>
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(14px, 2vw, 18px)',
                 color: '#4a5568',
                   margin: '0',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  paddingLeft: '24px'
               }}>
                   Customize your coverage and budget with options for individuals and families.
               </p>
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: '16px' }}>
               <p style={{
-                fontSize: '20px',
+                fontSize: 'clamp(16px, 2.5vw, 20px)',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
                   lineHeight: '1.4',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '8px'
                 }}>
-                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Wellness & virtual care</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '16px', marginTop: '4px', flexShrink: 0 }} /> <strong>Wellness & virtual care</strong>
                 </p>
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(14px, 2vw, 18px)',
                 color: '#4a5568',
                   margin: '0',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  paddingLeft: '24px'
               }}>
                   Access mental health support, telemedicine, and wellness programs anytime, anywhere.
               </p>
             </div>
 
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: '16px' }}>
                 <p style={{
-                  fontSize: '20px',
+                  fontSize: 'clamp(16px, 2.5vw, 20px)',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
                   lineHeight: '1.4',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '8px'
                 }}>
-                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Trusted protection</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '16px', marginTop: '4px', flexShrink: 0 }} /> <strong>Trusted protection</strong>
                 </p>
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(14px, 2vw, 18px)',
                   color: '#4a5568',
                   margin: '0',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  paddingLeft: '24px'
                 }}>
                   Backed by 150+ years of experience, Sun Life is one of Canada's most reliable insurers.
                 </p>
@@ -956,22 +1042,23 @@ const Home = () => {
 
               <div style={{ marginBottom: '0' }}>
                 <p style={{
-                  fontSize: '20px',
+                  fontSize: 'clamp(16px, 2.5vw, 20px)',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
                   lineHeight: '1.4',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '8px'
                 }}>
-                  <FaCheck style={{ color: '#10b981', fontSize: '18px' }} /> <strong>Free expert advice</strong>
+                  <FaCheck style={{ color: '#10b981', fontSize: '16px', marginTop: '4px', flexShrink: 0 }} /> <strong>Free expert advice</strong>
                 </p>
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(14px, 2vw, 18px)',
                   color: '#4a5568',
                   margin: '0',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  paddingLeft: '24px'
                 }}>
                   Get a personalized quote and consultation from a licensed advisor — at no cost, with no pressure.
                 </p>
@@ -986,18 +1073,20 @@ const Home = () => {
 
       {/* Insurance Answers Section */}
       <section className="section section-white">
-          <div style={{
+          <div className="cta-image-box" style={{
           backgroundColor: '#FFF8E0',
           borderRadius: '16px',
-          padding: '20px 30px',
+          padding: 'clamp(16px, 3vw, 20px) clamp(16px, 4vw, 30px)',
           display: 'flex',
           alignItems: 'center',
-          gap: '40px',
+          gap: 'clamp(20px, 4vw, 40px)',
           maxWidth: '1200px',
-            margin: '0 auto'
+          margin: '0 auto',
+          flexWrap: 'wrap'
           }}>
           <div style={{
             flex: '1',
+            minWidth: '250px',
             maxWidth: '500px'
           }}>
             <Image
@@ -1012,40 +1101,42 @@ const Home = () => {
               }}
             />
               </div>
-          <div style={{ flex: '1' }}>
+          <div style={{ flex: '1', minWidth: '280px' }}>
             <h2 style={{
-              fontSize: '32px',
+              fontSize: 'clamp(24px, 4vw, 32px)',
               fontWeight: 700,
               color: '#1f2937',
-              marginBottom: '20px',
+              marginBottom: '16px',
               lineHeight: 1.2,
               textAlign: 'left'
             }}>
               Ready to get your Sun Life quote?
             </h2>
             <p style={{
-              fontSize: '18px',
+              fontSize: 'clamp(15px, 2.5vw, 18px)',
               color: '#4a5568',
               lineHeight: 1.6,
-              marginBottom: '32px',
+              marginBottom: 'clamp(20px, 4vw, 32px)',
               textAlign: 'left'
             }}>
               Get personalized quotes from our licensed advisors in minutes. No obligation, just expert guidance to help you choose the right coverage.
             </p>
             <button
               onClick={() => setShowLeadForm(true)}
+              className="btn btn-primary"
               style={{
               backgroundColor: '#013946',
               color: 'white',
                   border: 'none',
-              padding: '16px 32px',
-              fontSize: '16px',
+              padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
+              fontSize: 'clamp(14px, 2vw, 16px)',
               fontWeight: 600,
               borderRadius: '8px',
                   cursor: 'pointer',
               textTransform: 'uppercase',
               letterSpacing: '0.5px',
-              minWidth: '200px'
+              width: '100%',
+              maxWidth: '250px'
             }}>
               GET MY QUOTE
               </button>
@@ -1056,40 +1147,40 @@ const Home = () => {
 
       {/* What does private health insurance cover? */}
       <section className="section section-white">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 8px' }}>
           <h2 className="centered-underlined-heading" style={{ 
-            fontSize: '32px', 
+            fontSize: 'clamp(24px, 4vw, 32px)', 
             fontWeight: 700, 
             color: '#2d3748', 
-            marginBottom: '40px', 
+            marginBottom: 'clamp(24px, 4vw, 40px)', 
             textAlign: 'center',
             lineHeight: 1.3 
           }}>
             What does private health insurance cover?
           </h2>
           <p style={{
-            fontSize: '20px',
+            fontSize: 'clamp(16px, 2.5vw, 20px)',
             color: '#4a5568',
             lineHeight: '1.6',
-            marginBottom: '40px',
+            marginBottom: 'clamp(24px, 4vw, 40px)',
             textAlign: 'center',
             maxWidth: '900px',
-            margin: '0 auto 40px'
+            margin: '0 auto clamp(24px, 4vw, 40px)'
           }}>
             Private health insurance helps cover healthcare costs not fully included in public plans, giving you access to services like prescription drugs, dental, vision, and paramedical care. Here's what a personal health insurance plan typically covers:
           </p>
 
-          <div style={{
+          <div className="coverage-cards-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '30px',
-            marginTop: '40px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 'clamp(16px, 3vw, 30px)',
+            marginTop: 'clamp(24px, 4vw, 40px)'
           }}>
             {/* Prescription drugs */}
-            <div style={{
+            <div className="coverage-card" style={{
               backgroundColor: '#fff',
               borderRadius: '12px',
-              padding: '30px',
+              padding: 'clamp(20px, 3vw, 30px)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
@@ -1102,22 +1193,22 @@ const Home = () => {
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(28px, 4vw, 32px)',
                 color: '#013946',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <AiOutlineMedicineBox />
               </div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 3vw, 24px)',
                 fontWeight: 700,
                 color: '#1f2937',
-                marginBottom: '16px'
+                marginBottom: '12px'
               }}>
                 Prescription drugs
               </h3>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
@@ -1126,10 +1217,10 @@ const Home = () => {
             </div>
 
             {/* Paramedical services */}
-            <div style={{
+            <div className="coverage-card" style={{
               backgroundColor: '#fff',
               borderRadius: '12px',
-              padding: '30px',
+              padding: 'clamp(20px, 3vw, 30px)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
@@ -1142,22 +1233,22 @@ const Home = () => {
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(28px, 4vw, 32px)',
                 color: '#013946',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <AiOutlineTeam />
               </div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 3vw, 24px)',
                 fontWeight: 700,
                 color: '#1f2937',
-                marginBottom: '16px'
+                marginBottom: '12px'
               }}>
                 Paramedical services
               </h3>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
@@ -1166,10 +1257,10 @@ const Home = () => {
             </div>
 
             {/* Vision care */}
-            <div style={{
+            <div className="coverage-card" style={{
               backgroundColor: '#fff',
               borderRadius: '12px',
-              padding: '30px',
+              padding: 'clamp(20px, 3vw, 30px)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
@@ -1182,22 +1273,22 @@ const Home = () => {
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(28px, 4vw, 32px)',
                 color: '#013946',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <AiOutlineEye />
               </div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 3vw, 24px)',
                 fontWeight: 700,
                 color: '#1f2937',
-                marginBottom: '16px'
+                marginBottom: '12px'
               }}>
                 Vision care
               </h3>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
@@ -1206,10 +1297,10 @@ const Home = () => {
             </div>
 
             {/* Travel medical */}
-            <div style={{
+            <div className="coverage-card" style={{
               backgroundColor: '#fff',
               borderRadius: '12px',
-              padding: '30px',
+              padding: 'clamp(20px, 3vw, 30px)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
@@ -1222,22 +1313,22 @@ const Home = () => {
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(28px, 4vw, 32px)',
                 color: '#013946',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <AiOutlineGlobal />
               </div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 3vw, 24px)',
                 fontWeight: 700,
                 color: '#1f2937',
-                marginBottom: '16px'
+                marginBottom: '12px'
               }}>
                 Travel medical
               </h3>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
@@ -1246,10 +1337,10 @@ const Home = () => {
             </div>
 
             {/* Medical equipment */}
-            <div style={{
+            <div className="coverage-card" style={{
               backgroundColor: '#fff',
               borderRadius: '12px',
-              padding: '30px',
+              padding: 'clamp(20px, 3vw, 30px)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
@@ -1262,22 +1353,22 @@ const Home = () => {
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(28px, 4vw, 32px)',
                 color: '#013946',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <AiOutlineMedicineBox />
               </div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 3vw, 24px)',
                 fontWeight: 700,
                 color: '#1f2937',
-                marginBottom: '16px'
+                marginBottom: '12px'
               }}>
                 Medical equipment
               </h3>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
@@ -1286,10 +1377,10 @@ const Home = () => {
             </div>
 
             {/* Dental */}
-            <div style={{
+            <div className="coverage-card" style={{
               backgroundColor: '#fff',
               borderRadius: '12px',
-              padding: '30px',
+              padding: 'clamp(20px, 3vw, 30px)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
@@ -1302,22 +1393,22 @@ const Home = () => {
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(28px, 4vw, 32px)',
                 color: '#013946',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <TbDental />
               </div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 3vw, 24px)',
                 fontWeight: 700,
                 color: '#1f2937',
-                marginBottom: '16px'
+                marginBottom: '12px'
               }}>
                 Dental
               </h3>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
@@ -1339,47 +1430,47 @@ const Home = () => {
 
       {/* CTA Section - Get Quote */}
       <section className="section section-white">
-        <div style={{ 
+        <div className="cta-box" style={{ 
           maxWidth: '1200px', 
           margin: '0 auto',
           backgroundColor: '#FFF8E0',
-          padding: '35px 45px',
+          padding: 'clamp(20px, 4vw, 35px) clamp(16px, 4vw, 45px)',
           borderRadius: '12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '33px',
+          gap: 'clamp(16px, 3vw, 33px)',
           flexWrap: 'wrap'
         }}>
-          <div style={{ flex: '1', minWidth: '300px' }}>
-            <h2 style={{
-              fontSize: '32px',
+          <div style={{ flex: '1', minWidth: '250px' }}>
+            <h2 className="cta-heading" style={{
+              fontSize: 'clamp(16px, 3vw, 32px)',
               fontWeight: 700,
               color: '#2d3748',
-              marginBottom: '12px',
+              marginBottom: '8px',
               lineHeight: 1.3,
               textAlign: 'left'
             }}>
-              Ready to protect your health with Sun Life?
+              Ready to protect your health with Sun&nbsp;Life?
             </h2>
-            <p style={{
-              fontSize: '18px',
+            <p className="cta-subtext" style={{
+              fontSize: 'clamp(12px, 2vw, 18px)',
               color: '#4a5568',
               margin: 0,
-              lineHeight: 1.7,
+              lineHeight: 1.5,
               textAlign: 'left'
             }}>
-              Get your personalized Sun Life health and dental quote in minutes!
+              Get your personalized Sun&nbsp;Life health and dental quote in minutes!
             </p>
           </div>
-          <div>
+          <div style={{ width: '100%', maxWidth: '250px', flexShrink: 0 }}>
             <button
               onClick={() => setShowLeadForm(true)}
               className="btn btn-primary"
               style={{
-                minWidth: '200px',
-                fontSize: '16px',
-                padding: '16px 40px',
+                width: '100%',
+                fontSize: 'clamp(14px, 2vw, 16px)',
+                padding: 'clamp(12px, 2vw, 16px) clamp(20px, 4vw, 40px)',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'inline-flex',
@@ -1464,29 +1555,26 @@ const Home = () => {
       {/* Footer */}
       <footer style={{
         backgroundColor: '#f8f9fa',
-        padding: '40px 20px',
-        marginTop: '60px',
+        padding: 'clamp(24px, 4vw, 40px) clamp(16px, 4vw, 20px)',
+        marginTop: 'clamp(30px, 6vw, 60px)',
         borderTop: '1px solid #e5e7eb'
       }}>
         <div style={{
           width: '100%',
+          maxWidth: '1200px',
+          margin: '0 auto',
           textAlign: 'center'
         }}>
           <p style={{
-            fontSize: '14px',
+            fontSize: 'clamp(12px, 2vw, 14px)',
             color: '#6b7280',
             lineHeight: '1.5',
-            margin: '0 0 20px 0',
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            margin: '0 0 16px 0'
           }}>
             <strong>Disclaimer:</strong> This website is operated by Policy Advisor, an independent insurance broker. We are not directly affiliated with or endorsed by Sun Life Financial. All product names, logos, and brands are property of their respective owners. The information provided on this site is for general informational purposes only and should not be considered as professional insurance advice. Insurance products and their features may vary based on your location and individual circumstances. For specific details about Sun Life insurance products, please consult with a licensed insurance advisor or contact Sun Life directly.
           </p>
           <p style={{
-            fontSize: '14px',
+            fontSize: 'clamp(12px, 2vw, 14px)',
             color: '#6b7280',
             lineHeight: '1.6',
             margin: '0'

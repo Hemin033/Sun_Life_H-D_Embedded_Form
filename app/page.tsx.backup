@@ -5,9 +5,10 @@ import Image from 'next/image'
 import { IoMdWalk } from 'react-icons/io'
 import { MdDirectionsRun } from 'react-icons/md'
 import { GiWeightLiftingUp } from 'react-icons/gi'
-import { FaDollarSign, FaShieldAlt, FaHeart, FaUsers, FaCalendarAlt, FaCog, FaChartLine, FaExchangeAlt, FaPlus, FaLaptop, FaHandHoldingHeart, FaUserMd } from 'react-icons/fa'
+import { FaDollarSign, FaShieldAlt, FaHeart, FaUsers, FaCalendarAlt, FaCog, FaChartLine, FaExchangeAlt, FaPlus, FaLaptop, FaUserMd } from 'react-icons/fa'
 import { AiOutlineDollar, AiOutlineHeart, AiOutlineCalendar, AiOutlinePlus, AiOutlineLaptop, AiOutlineSwap, AiOutlineEye, AiOutlineMedicineBox, AiOutlineTeam, AiOutlineGlobal } from 'react-icons/ai'
 import { BsShield, BsPeople, BsGraphUp } from 'react-icons/bs'
+import { TbDental } from 'react-icons/tb'
 import { BentoGrid, BentoGridItem } from '../components/ui/bento-grid'
 
 const Home = () => {
@@ -107,7 +108,7 @@ const Home = () => {
             backgroundColor: '#fff',
             borderRadius: '20px',
             padding: '40px',
-            maxWidth: '750px',
+            maxWidth: '900px',
             width: '100%',
             maxHeight: '90vh',
             overflowY: 'auto',
@@ -167,63 +168,63 @@ const Home = () => {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '32px' }}>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Full Name <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="John Smith"
-                    value={formData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '14px 16px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
+                  Full Name <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="John Smith"
+                  value={formData.fullName}
+                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Phone Number <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="(555) 123-4567"
-                    value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '14px 16px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
+                  Phone Number <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="(555) 123-4567"
+                  value={formData.phoneNumber}
+                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Email Address <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="John.smith@gmail.com"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '14px 16px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
+                  Email Address <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="John.smith@gmail.com"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
                 </div>
               </div>
 
@@ -237,146 +238,146 @@ const Home = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '16px', marginBottom: '24px', alignItems: 'start' }}>
                   <div>
                     <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      Gender <span style={{ color: '#013946' }}>*</span>
-                    </label>
+                  Gender <span style={{ color: '#013946' }}>*</span>
+                </label>
                     <div style={{ display: 'flex', gap: '8px' }}>
-                      <button
-                        type="button"
-                        onClick={() => handleInputChange('gender', 'Man')}
-                        style={{
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('gender', 'Man')}
+                    style={{
                           padding: '10px 16px',
                           fontSize: '14px',
-                          border: `2px solid ${formData.gender === 'Man' ? '#0086ae' : '#d1d5db'}`,
+                      border: `2px solid ${formData.gender === 'Man' ? '#0086ae' : '#d1d5db'}`,
                           borderRadius: '6px',
-                          backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
-                          color: '#1f2937',
-                          cursor: 'pointer',
+                      backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
+                      color: '#1f2937',
+                      cursor: 'pointer',
                           fontWeight: 600,
                           minWidth: '60px'
-                        }}
-                      >
-                        Man
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleInputChange('gender', 'Woman')}
-                        style={{
+                    }}
+                  >
+                    Man
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('gender', 'Woman')}
+                    style={{
                           padding: '10px 16px',
                           fontSize: '14px',
-                          border: `2px solid ${formData.gender === 'Woman' ? '#0086ae' : '#d1d5db'}`,
+                      border: `2px solid ${formData.gender === 'Woman' ? '#0086ae' : '#d1d5db'}`,
                           borderRadius: '6px',
-                          backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
-                          color: '#1f2937',
-                          cursor: 'pointer',
+                      backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
+                      color: '#1f2937',
+                      cursor: 'pointer',
                           fontWeight: 600,
                           minWidth: '60px'
-                        }}
-                      >
-                        Woman
-                      </button>
-                    </div>
-                  </div>
-                  <div>
+                    }}
+                  >
+                    Woman
+                  </button>
+                </div>
+              </div>
+                <div>
                     <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      Date of Birth <span style={{ color: '#013946' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      maxLength={10}
+                    Date of Birth <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                <input
+                  type="text"
+                  required
+                  maxLength={10}
                       placeholder="24/10/1997"
-                      value={formData.dateOfBirth}
-                      onChange={(e) => {
-                        let value = e.target.value.replace(/\D/g, '');
-                        if (value.length <= 8) {
+                  value={formData.dateOfBirth}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 8) {
                           // Format as DD/MM/YYYY
-                          if (value.length >= 4) {
-                            value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
-                          } else if (value.length >= 2) {
-                            value = value.slice(0, 2) + '/' + value.slice(2);
-                          }
-                          handleInputChange('dateOfBirth', value);
-                        }
-                      }}
-                      style={{
-                        width: '100%',
+                      if (value.length >= 4) {
+                        value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
+                      } else if (value.length >= 2) {
+                        value = value.slice(0, 2) + '/' + value.slice(2);
+                      }
+                      handleInputChange('dateOfBirth', value);
+                    }
+                  }}
+                  style={{
+                    width: '100%',
                         padding: '12px 14px',
-                        fontSize: '16px',
-                        border: '1px solid #d1d5db',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
                         borderRadius: '6px',
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
+                    outline: 'none'
+                  }}
+                />
+              </div>
                   <div>
                     <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                       What is your employment status? <span style={{ color: '#013946' }}>*</span>
-                    </label>
-                    <select
+                </label>
+                <select
                       value={formData.employmentStatus}
                       onChange={(e) => handleInputChange('employmentStatus', e.target.value)}
-                      style={{
-                        width: '100%',
+                  style={{
+                    width: '100%',
                         padding: '12px 14px',
-                        fontSize: '16px',
-                        border: '1px solid #d1d5db',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
                         borderRadius: '6px',
-                        outline: 'none',
-                        backgroundColor: '#fff',
-                        cursor: 'pointer'
-                      }}
-                    >
+                    outline: 'none',
+                    backgroundColor: '#fff',
+                    cursor: 'pointer'
+                  }}
+                >
                       <option value="">Salaried</option>
                       <option value="employed">Employed</option>
                       <option value="self-employed">Self-Employed</option>
                       <option value="unemployed">Unemployed</option>
                       <option value="retired">Retired</option>
                       <option value="student">Student</option>
-                    </select>
+                </select>
                   </div>
-                </div>
+              </div>
 
                 {/* Row 2 - Occupation and Annual Income */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', marginBottom: '32px', alignItems: 'start' }}>
                   <div>
                     <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                       What is your current occupation?
-                    </label>
+                </label>
                     <input
                       type="text"
                       placeholder="Architect, Designer"
                       value={formData.occupation}
                       onChange={(e) => handleInputChange('occupation', e.target.value)}
-                      style={{
-                        width: '100%',
+                  style={{
+                    width: '100%',
                         padding: '12px 14px',
-                        fontSize: '16px',
-                        border: '1px solid #d1d5db',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
                         borderRadius: '6px',
                         outline: 'none'
                       }}
                     />
-                  </div>
+              </div>
                   <div>
                     <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                       What is your annual income?
-                    </label>
+                </label>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <input
-                        type="text"
+                <input
+                  type="text"
                         required
                         placeholder="$1,000,000"
                         value={formData.annualIncome}
                         onChange={(e) => handleInputChange('annualIncome', e.target.value)}
-                        style={{
+                  style={{
                           width: '140px',
                           padding: '12px 14px',
-                          fontSize: '16px',
-                          border: '1px solid #d1d5db',
+                    fontSize: '16px',
+                    border: '1px solid #d1d5db',
                           borderRadius: '6px',
-                          outline: 'none'
-                        }}
-                      />
+                    outline: 'none'
+                  }}
+                />
                       <span style={{ marginLeft: '8px', fontSize: '16px', color: '#6b7280' }}>dollars</span>
                     </div>
                   </div>
@@ -482,6 +483,26 @@ const Home = () => {
               >
                 Submit Request
               </button>
+
+              {/* Form Disclaimer */}
+              <div style={{
+                marginTop: '20px',
+                padding: '16px',
+                backgroundColor: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                fontSize: '14px',
+                color: '#64748b',
+                lineHeight: '1.5',
+                textAlign: 'left'
+              }}>
+                <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: '#334155' }}>
+                  By submitting this form, you agree to be contacted by a licensed advisor to discuss your Sun Life Health and Dental Insurance options.
+                </p>
+                <p style={{ margin: '0', fontSize: '13px' }}>
+                  Your information is secure, confidential and used only to assist with your insurance inquiry.
+                </p>
+              </div>
             </form>
           </div>
         </div>
@@ -673,9 +694,23 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-container" style={{ position: 'relative', maxWidth: '1200px', margin: '0 auto' }}>
+            <Image
+              src="/Sun-Life-Financial-Logo.png"
+              alt="Sun Life Financial"
+              width={180}
+              height={60}
+              style={{
+                position: 'absolute',
+                top: '-10%',
+                left: '-15px',
+                zIndex: '10',
+                width: '277px',
+                height: 'auto'
+              }}
+            />
             <h1 style={{
               position: 'absolute',
-              top: '15%',
+              top: '25%',
               left: '0',
               color: '#013946',
               fontSize: '58px',
@@ -691,7 +726,7 @@ const Home = () => {
               Smile with confidence.
             </h1>
             <Image
-              src="/HEader-4.png"
+              src="/HeaderH&D-final-2-.png"
               alt="Sun Life Health and Dental Insurance - Protect Your Family's Health"
               width={1920}
               height={580}
@@ -749,13 +784,8 @@ const Home = () => {
           <p style={{ lineHeight: '1.6', marginBottom: '16px' }}>
             Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance that helps safeguard you from unexpected medical expenses not covered by provincial healthcare — including prescription drugs, dental care, vision, and paramedical services.
           </p>
-          <p style={{ lineHeight: '1.6', marginBottom: '16px' }}>
-            Perfect especially for self-employed Canadians, retirees, or anyone losing group benefits, Sun Life makes it easy to maintain comprehensive coverage and peace of mind for you and your family.
-          </p>
           <p style={{ lineHeight: '1.6', marginBottom: '0' }}>
-            Get started in minutes — complete a quick form to get a free personalized consult with a licensed advisor.
-            <br />
-            No fees. No pressure. Just trusted advice.
+            Perfect especially for self-employed Canadians, retirees, or anyone losing group benefits, Sun Life makes it easy to maintain comprehensive coverage and peace of mind for you and your family.
           </p>
         </div>
       </section>
@@ -837,7 +867,7 @@ const Home = () => {
           </div>
           <div className="benefits-content">
             <div style={{ marginTop: '0px', marginBottom: '20px', textAlign: 'left' }}>
-              <h4 style={{
+              <h4 style={{ 
                 fontSize: '32px',
                 fontWeight: 700,
                 color: '#1f2937',
@@ -847,8 +877,8 @@ const Home = () => {
                 Why choose Sun Life Health Insurance?
               </h4>
               <div style={{ marginBottom: '20px' }}>
-                <p style={{
-                  fontSize: '20px',
+              <p style={{
+                fontSize: '20px',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
@@ -858,17 +888,17 @@ const Home = () => {
                 </p>
                 <p style={{
                   fontSize: '18px',
-                  color: '#4a5568',
+                color: '#4a5568',
                   margin: '0',
                   lineHeight: '1.5'
-                }}>
+              }}>
                   From prescription drugs and dental to vision and extended health coverage
-                </p>
+              </p>
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <p style={{
-                  fontSize: '20px',
+              <p style={{
+                fontSize: '20px',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
@@ -878,17 +908,17 @@ const Home = () => {
                 </p>
                 <p style={{
                   fontSize: '18px',
-                  color: '#4a5568',
+                color: '#4a5568',
                   margin: '0',
                   lineHeight: '1.5'
-                }}>
+              }}>
                   Get support for out-of-pocket expenses and unexpected medical costs not covered by your provincial plan
-                </p>
+              </p>
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <p style={{
-                  fontSize: '20px',
+              <p style={{
+                fontSize: '20px',
                   color: '#1f2937',
                   fontWeight: '700',
                   margin: '0 0 4px 0',
@@ -898,13 +928,13 @@ const Home = () => {
                 </p>
                 <p style={{
                   fontSize: '18px',
-                  color: '#4a5568',
+                color: '#4a5568',
                   margin: '0',
                   lineHeight: '1.5'
-                }}>
+              }}>
                   Add your spouse or children easily under one plan
-                </p>
-              </div>
+              </p>
+            </div>
 
               <div style={{ marginBottom: '20px' }}>
                 <p style={{
@@ -958,10 +988,10 @@ const Home = () => {
           <div style={{
           backgroundColor: '#FFF8E0',
           borderRadius: '16px',
-          padding: '36px 40px',
+          padding: '20px 30px',
           display: 'flex',
           alignItems: 'center',
-          gap: '60px',
+          gap: '40px',
           maxWidth: '1200px',
             margin: '0 auto'
           }}>
@@ -1054,46 +1084,6 @@ const Home = () => {
             gap: '30px',
             marginTop: '40px'
           }}>
-            {/* Dental */}
-            <div style={{
-              backgroundColor: '#fff',
-              borderRadius: '12px',
-              padding: '30px',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-            }}>
-              <div style={{
-                fontSize: '32px',
-                color: '#013946',
-                marginBottom: '20px'
-              }}>
-                <AiOutlineMedicineBox />
-              </div>
-              <h3 style={{
-                fontSize: '24px',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '16px'
-              }}>
-                Dental
-              </h3>
-              <p style={{
-                fontSize: '18px',
-                color: '#4a5568',
-                lineHeight: '1.6'
-              }}>
-                Covers routine checkups, cleanings, fillings, crowns, and major work depending on your plan
-              </p>
-            </div>
-
             {/* Prescription drugs */}
             <div style={{
               backgroundColor: '#fff',
@@ -1253,6 +1243,86 @@ const Home = () => {
                 Provides emergency medical coverage for unexpected expenses incurred while traveling
               </p>
             </div>
+
+            {/* Medical equipment */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <AiOutlineMedicineBox />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Medical equipment
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Coverage for medical devices, supplies, and durable equipment
+              </p>
+            </div>
+
+            {/* Dental */}
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '30px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{
+                fontSize: '32px',
+                color: '#013946',
+                marginBottom: '20px'
+              }}>
+                <TbDental />
+              </div>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#1f2937',
+                marginBottom: '16px'
+              }}>
+                Dental
+              </h3>
+              <p style={{
+                fontSize: '18px',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Covers routine checkups, cleanings, fillings, crowns, and major work depending on your plan
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -1266,12 +1336,10 @@ const Home = () => {
 
 
 
-
-
       {/* CTA Section - Get Quote */}
       <section className="section section-white">
-        <div style={{
-          maxWidth: '1200px',
+        <div style={{ 
+          maxWidth: '1200px', 
           margin: '0 auto',
           backgroundColor: '#FFF8E0',
           padding: '35px 45px',
@@ -1332,65 +1400,100 @@ const Home = () => {
         <div className="faq-list">
           <div className={`faq-item ${activeFAQ === 0 ? 'active' : ''}`} onClick={() => toggleFAQ(0)}>
             <div className="faq-question">
-                  <span>What is Sun Life health and dental insurance?</span>
+                  <span>What does Sun Life health & dental insurance cover?</span>
               <span>{activeFAQ === 0 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 0 && (
               <div className="faq-answer">
-                    Sun Life health and dental insurance provides coverage for prescription drugs, dental care, vision services, and paramedical practitioners. It's designed for individuals, families, or those who need supplemental coverage beyond government health plans.
+                    Sun Life's extended health and dental coverage helps pay for expenses not covered by your provincial health plan. This includes prescription drugs, preventive dental care, major dental work, vision care, medical equipment, and registered health services such as physiotherapy and chiropractic.
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 1 ? 'active' : ''}`} onClick={() => toggleFAQ(1)}>
             <div className="faq-question">
-                  <span>Who should consider Sun Life health and dental insurance?</span>
+                  <span>How are dental coverage costs determined?</span>
               <span>{activeFAQ === 1 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 1 && (
               <div className="faq-answer">
-                    This coverage is ideal for self-employed individuals, retirees, contract workers, or anyone losing workplace benefits. It's also great for supplementing existing employer coverage or covering family members not included in a group plan.
+                    Sun Life reimburses dental expenses based on fee guides published annually by the Canadian Dental Association for each province. The plan pays the reasonable cost of the least expensive eligible procedure that achieves an adequate result.
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 2 ? 'active' : ''}`} onClick={() => toggleFAQ(2)}>
             <div className="faq-question">
-                  <span>What does Sun Life health and dental insurance cover?</span>
+                  <span>When should I submit a dental pre-treatment estimate?</span>
               <span>{activeFAQ === 2 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 2 && (
               <div className="faq-answer">
-                    Coverage includes prescription medications, dental care (preventive, basic, and major), vision care (eye exams, glasses, contacts), paramedical services (physiotherapy, massage, chiropractic), and medical equipment and supplies.
+                    Sun Life recommends that plan members submit an estimate before receiving any dental service costing $500 or more. This allows the insurer to confirm your coverage and the amount payable before the work is completed.
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 3 ? 'active' : ''}`} onClick={() => toggleFAQ(3)}>
             <div className="faq-question">
-                  <span>How much does Sun Life health and dental insurance cost?</span>
+                  <span>How long do I have to submit a claim?</span>
               <span>{activeFAQ === 3 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 3 && (
               <div className="faq-answer">
-                    Premiums vary based on age, family size, coverage level, and deductibles. Individual plans typically range from $100-$300/month, while family coverage ranges from $250-$600/month. Your advisor will help you find a plan that fits your budget and needs.
+                    For most dental and extended health claims, you must submit within 365 days after the end of the benefit year in which the expense occurred or within 90 days after your coverage ends—whichever comes first.
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 4 ? 'active' : ''}`} onClick={() => toggleFAQ(4)}>
             <div className="faq-question">
-                  <span>Can I customize my Sun Life health and dental plan?</span>
+                  <span>Can I coordinate my Sun Life benefits with another plan?</span>
               <span>{activeFAQ === 4 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 4 && (
               <div className="faq-answer">
-                    Yes! Sun Life offers flexible coverage options allowing you to choose health only, dental only, or combined coverage. You can also select different coverage levels, deductibles, and annual maximums to match your specific needs and budget.
+                    Yes. Sun Life allows coordination of benefits between your plan and a spouse's plan. You may also refuse coverage if you already have comparable dental or extended health benefits elsewhere, then re-enroll later if that coverage ends.
               </div>
             )}
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer style={{
+        backgroundColor: '#f8f9fa',
+        padding: '40px 20px',
+        marginTop: '60px',
+        borderTop: '1px solid #e5e7eb'
+      }}>
+        <div style={{
+          width: '100%',
+          textAlign: 'center'
+        }}>
+          <p style={{
+            fontSize: '14px',
+            color: '#6b7280',
+            lineHeight: '1.5',
+            margin: '0 0 20px 0',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>
+            <strong>Disclaimer:</strong> This website is operated by Policy Advisor, an independent insurance broker. We are not directly affiliated with or endorsed by Sun Life Financial. All product names, logos, and brands are property of their respective owners. The information provided on this site is for general informational purposes only and should not be considered as professional insurance advice. Insurance products and their features may vary based on your location and individual circumstances. For specific details about Sun Life insurance products, please consult with a licensed insurance advisor or contact Sun Life directly.
+          </p>
+          <p style={{
+            fontSize: '14px',
+            color: '#6b7280',
+            lineHeight: '1.6',
+            margin: '0'
+          }}>
+            © {new Date().getFullYear()} Policy Advisor. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </main>
   )
 }

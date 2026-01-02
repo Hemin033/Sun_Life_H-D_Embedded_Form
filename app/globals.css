@@ -39,6 +39,63 @@ a {
   max-width: 100%;
   margin: 0 auto;
   display: block;
+  position: relative;
+}
+
+/* Desktop hero visible by default, mobile hidden */
+.hero-desktop {
+  display: block;
+}
+
+.hero-mobile {
+  display: none !important;
+}
+
+/* Hero responsive styles - Tablet */
+@media (max-width: 900px) {
+  .hero-container h1,
+  .hero-title {
+    top: 20% !important;
+    font-size: 32px !important;
+    max-width: 55% !important;
+    left: 16px !important;
+    line-height: 1.15 !important;
+  }
+  
+  .hero-cta-wrapper {
+    top: 65% !important;
+    left: 16px !important;
+  }
+  
+  .hero-cta-btn {
+    font-size: 14px !important;
+    padding: 12px 20px !important;
+    min-width: 140px !important;
+  }
+}
+
+/* Hero responsive styles - Mobile: Show mobile hero, hide desktop */
+@media (max-width: 768px) {
+  .hero-desktop {
+    display: none !important;
+  }
+  
+  .hero-mobile {
+    display: block !important;
+  }
+}
+
+/* Hero responsive styles - Small Mobile */
+@media (max-width: 480px) {
+  .hero-mobile h1 {
+    font-size: 26px !important;
+  }
+  
+  .hero-mobile button {
+    font-size: 15px !important;
+    padding: 14px 28px !important;
+    min-width: 200px !important;
+  }
 }
 
 /* Hero content styles - no longer needed with image header */
@@ -708,93 +765,371 @@ a {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
+  
+  .vitality-intro h2 {
+    font-size: 30px;
+  }
+  
+  .vitality-intro p {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 768px) {
-  /* Reduce gaps between sections */
+  /* Base font size adjustment */
+  html, body {
+    font-size: 15px;
+  }
+  
+  /* Section padding */
   .section {
-    padding: 20px 20px;
+    padding: 30px 16px;
   }
 
-  /* Increase image sizes by 10% */
-  .hero-section img,
-  .benefits-section img,
-  .insurance-answers img {
-    transform: scale(1.1);
+  /* Hero Section Mobile */
+  .hero-section {
+    padding: 0;
+  }
+  
+  .hero-container {
+    position: relative;
+  }
+  
+  .hero-container h1 {
+    font-size: 28px !important;
+    max-width: 90% !important;
+    top: 15% !important;
+    left: 16px !important;
+    line-height: 1.2 !important;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  .hero-container .btn {
+    font-size: 14px !important;
+    padding: 12px 20px !important;
+    min-width: 140px !important;
   }
 
-  /* Reduce points font size by 50% for mobile */
-  .points-text {
-    font-size: 13.5px !important;
+  /* Vitality intro */
+  .vitality-intro {
+    padding: 0 8px;
+  }
+  
+  .vitality-intro h2 {
+    font-size: 26px;
+    margin-bottom: 16px;
+  }
+  
+  .vitality-intro p {
+    font-size: 16px;
+    line-height: 1.6;
   }
 
-  /* Change status levels to vertical layout on mobile */
-  .status-levels-grid {
-    grid-template-columns: 1fr !important;
-    gap: 30px !important;
-  }
-
-  /* Hide Frequency column on mobile for points table */
-  .points-table th:nth-child(3),
-  .points-table td:nth-child(3) {
-    display: none;
-  }
-
-  /* Add left and right margins to text elements on mobile */
-  .section p,
-  .section h2,
-  .section h3,
-  .vitality-intro p,
-  .benefits-content p,
-  .benefits-content h3,
-  .testimonials-section h2,
-  .rewards-section h2,
-  .insurance-content h2,
-  .insurance-content p,
-  .faq-section h2,
-  .faq-subtitle {
-    margin-left: 15px !important;
-    margin-right: 15px !important;
-  }
-
-  .benefits-section,
-  .insurance-answers {
+  /* Benefits Section Mobile */
+  .benefits-section {
     flex-direction: column;
+    gap: 24px;
+  }
+  
+  .benefits-image {
+    flex: none;
+    width: 100%;
+  }
+  
+  .benefits-content {
+    padding: 0 8px;
+  }
+  
+  .benefits-content h3 {
+    font-size: 22px;
   }
 
+  /* Coverage Grid */
   .coverage-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
   }
 
-  .testimonials-grid,
-  .workout-grid,
-  .partners-grid {
+  /* Testimonials */
+  .testimonials-section h2 {
+    font-size: 26px;
+  }
+  
+  .testimonials-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  /* FAQ responsive layout */
+  /* Workout Grid */
+  .workout-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Partners Grid */
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Insurance Answers */
+  .insurance-answers {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .insurance-content h2 {
+    font-size: 26px;
+  }
+
+  /* FAQ Section */
+  .faq-section {
+    padding: 40px 16px;
+  }
+  
+  .faq-section h2 {
+    font-size: 26px;
+  }
+  
+  .faq-subtitle {
+    font-size: 15px;
+    padding: 0 8px;
+  }
+  
   .faq-wrapper {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 24px;
   }
 
   .faq-header {
     position: static;
   }
-
-  .faq-header h2 {
-    font-size: 36px !important;
+  
+  .faq-item {
+    padding: 16px 20px;
+  }
+  
+  .faq-question {
+    font-size: 16px;
+  }
+  
+  .faq-answer {
+    font-size: 15px;
   }
 
+  /* CTA Buttons */
   .cta-buttons {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
 
   .btn {
     width: 100%;
-    max-width: 400px;
-    justify-content: center;
+    max-width: 100%;
+    padding: 14px 24px;
+    font-size: 14px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 30px 16px !important;
+  }
+  
+  footer p {
+    font-size: 13px !important;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  html, body {
+    font-size: 14px;
+  }
+  
+  .section {
+    padding: 24px 12px;
+  }
+  
+  .hero-container h1 {
+    font-size: 22px !important;
+    top: 10% !important;
+  }
+  
+  .vitality-intro h2 {
+    font-size: 22px;
+  }
+  
+  .vitality-intro p {
+    font-size: 15px;
+  }
+  
+  .benefits-content h3,
+  .testimonials-section h2,
+  .insurance-content h2,
+  .faq-section h2 {
+    font-size: 22px;
+  }
+  
+  .partners-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+}
+
+/* Mobile Modal Styles */
+@media (max-width: 768px) {
+  .lead-form-modal {
+    padding: 10px !important;
+    align-items: flex-start !important;
+  }
+  
+  .lead-form-content {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+    max-height: 95vh !important;
+    margin: 10px 0 !important;
+  }
+  
+  .lead-form-content h2 {
+    font-size: 22px !important;
+  }
+  
+  .lead-form-content p {
+    font-size: 14px !important;
+  }
+  
+  .lead-form-content form label {
+    font-size: 13px !important;
+  }
+  
+  .lead-form-content form input,
+  .lead-form-content form select {
+    font-size: 14px !important;
+    padding: 10px 12px !important;
+  }
+  
+  .lead-form-content form button[type="submit"] {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+  
+  /* Keep form rows in 2 columns on mobile */
+  .form-row-2col {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  
+  /* Gender buttons smaller on mobile */
+  .lead-form-content form button[type="button"] {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    min-width: 45px !important;
+  }
+}
+
+/* Extra small mobile form adjustments */
+@media (max-width: 400px) {
+  .form-row-2col {
+    gap: 8px !important;
+  }
+  
+  .lead-form-content form label {
+    font-size: 12px !important;
+  }
+  
+  .lead-form-content form input,
+  .lead-form-content form select {
+    font-size: 13px !important;
+    padding: 8px 10px !important;
+  }
+  
+  .lead-form-content form button[type="button"] {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+    min-width: 40px !important;
+  }
+}
+
+/* CTA Box Mobile Styles */
+@media (max-width: 768px) {
+  .cta-box {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  
+  .cta-box > div:first-child {
+    text-align: center !important;
+  }
+  
+  .cta-box > div:first-child h2,
+  .cta-box > div:first-child p {
+    text-align: center !important;
+  }
+  
+  .cta-heading {
+    font-size: 18px !important;
+    white-space: nowrap !important;
+  }
+  
+  .cta-subtext {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+  
+  .cta-box > div:last-child {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .cta-box .btn {
+    width: 100% !important;
+  }
+  
+  .cta-image-box {
+    flex-direction: column !important;
+  }
+  
+  .cta-image-box > div:first-child {
+    max-width: 100% !important;
+  }
+  
+  .cta-image-box > div:last-child {
+    text-align: center !important;
+  }
+  
+  .cta-image-box > div:last-child h2,
+  .cta-image-box > div:last-child p {
+    text-align: center !important;
+  }
+  
+  .cta-image-box > div:last-child button {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .cta-heading {
+    font-size: 15px !important;
+  }
+  
+  .cta-subtext {
+    font-size: 11px !important;
+  }
+}
+
+/* Coverage Cards Mobile */
+@media (max-width: 480px) {
+  .coverage-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .coverage-card {
+    padding: 16px !important;
   }
 }
 
