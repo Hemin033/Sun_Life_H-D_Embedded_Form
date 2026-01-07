@@ -280,24 +280,27 @@ const Home = () => {
               </div>
                 <div>
                     <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Date of Birth <span style={{ color: '#013946' }}>*</span>
+                    Age <span style={{ color: '#013946' }}>*</span>
                   </label>
                 <input
                   type="text"
                   required
-                  maxLength={10}
-                      placeholder="24/10/1997"
-                  value={formData.dateOfBirth}
+                  maxLength={3}
+                      placeholder="e.g. 35"
+                  value={formData.age}
                   onChange={(e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length <= 8) {
-                          // Format as DD/MM/YYYY
-                      if (value.length >= 4) {
-                        value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
-                      } else if (value.length >= 2) {
-                        value = value.slice(0, 2) + '/' + value.slice(2);
-                      }
-                      handleInputChange('dateOfBirth', value);
+                    const value = e.target.value.replace(/\D/g, '');
+                    const numValue = parseInt(value);
+                    if (value === '' || (numValue >= 0 && numValue <= 120)) {
+                      handleInputChange('age', value);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const value = e.target.value;
+                    const numValue = parseInt(value);
+                    if (value && (numValue < 18 || numValue > 99)) {
+                      alert('Please enter an age between 18 and 99');
+                      handleInputChange('age', '');
                     }
                   }}
                   style={{
@@ -1268,23 +1271,27 @@ const Home = () => {
                 </div>
                 <div>
                   <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Date of Birth <span style={{ color: '#013946' }}>*</span>
+                    Age <span style={{ color: '#013946' }}>*</span>
                   </label>
                   <input
                     type="text"
                     required
-                    maxLength={10}
-                    placeholder="DD/MM/YYYY"
-                    value={formData.dateOfBirth}
+                    maxLength={3}
+                    placeholder="e.g. 35"
+                    value={formData.age}
                     onChange={(e) => {
-                      let value = e.target.value.replace(/\D/g, '');
-                      if (value.length <= 8) {
-                        if (value.length >= 4) {
-                          value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
-                        } else if (value.length >= 2) {
-                          value = value.slice(0, 2) + '/' + value.slice(2);
-                        }
-                        handleInputChange('dateOfBirth', value);
+                      const value = e.target.value.replace(/\D/g, '');
+                      const numValue = parseInt(value);
+                      if (value === '' || (numValue >= 0 && numValue <= 120)) {
+                        handleInputChange('age', value);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      const numValue = parseInt(value);
+                      if (value && (numValue < 18 || numValue > 99)) {
+                        alert('Please enter an age between 18 and 99');
+                        handleInputChange('age', '');
                       }
                     }}
                     style={{
