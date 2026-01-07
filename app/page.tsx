@@ -1098,7 +1098,7 @@ const Home = () => {
                 lineHeight: '1.5',
                 textAlign: 'center'
               }}>
-                By submitting, you agree to be contacted by a licensed advisor.
+                By submitting, you agree to be contacted by a licensed advisor from Sun Life.
               </p>
             </form>
           </div>
@@ -1444,7 +1444,7 @@ const Home = () => {
                 lineHeight: '1.4',
                 textAlign: 'center'
               }}>
-                By submitting, you agree to be contacted by a licensed advisor.
+                By submitting, you agree to be contacted by a licensed advisor from Sun Life.
               </p>
             </form>
           </div>
