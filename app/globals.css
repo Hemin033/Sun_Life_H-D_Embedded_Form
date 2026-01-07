@@ -51,26 +51,56 @@ a {
   display: none !important;
 }
 
+/* Hero with Floating Form Layout */
+.hero-left {
+  flex: 1;
+}
+
+.floating-form-wrapper {
+  position: absolute;
+  top: 40px;
+  right: max(30px, calc((100% - 1400px) / 2 + 30px));
+  width: 100%;
+  max-width: 480px;
+  z-index: 100;
+}
+
+.form-spacer {
+  height: 480px;
+}
+
 /* Hero responsive styles - Tablet */
-@media (max-width: 900px) {
-  .hero-container h1,
-  .hero-title {
-    top: 20% !important;
-    font-size: 32px !important;
-    max-width: 55% !important;
-    left: 16px !important;
-    line-height: 1.15 !important;
+@media (max-width: 1200px) {
+  .floating-form-wrapper {
+    max-width: 420px;
+    right: 20px;
   }
   
-  .hero-cta-wrapper {
-    top: 65% !important;
-    left: 16px !important;
+  .hero-form-container {
+    padding: 24px 22px !important;
   }
   
-  .hero-cta-btn {
-    font-size: 14px !important;
-    padding: 12px 20px !important;
-    min-width: 140px !important;
+  .hero-form-container h2 {
+    font-size: 20px !important;
+  }
+  
+  .form-spacer {
+    height: 520px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .floating-form-wrapper {
+    max-width: 380px;
+    right: 15px;
+  }
+  
+  .hero-form-container {
+    padding: 20px 18px !important;
+  }
+  
+  .form-spacer {
+    height: 560px;
   }
 }
 
@@ -88,13 +118,7 @@ a {
 /* Hero responsive styles - Small Mobile */
 @media (max-width: 480px) {
   .hero-mobile h1 {
-    font-size: 26px !important;
-  }
-  
-  .hero-mobile button {
-    font-size: 15px !important;
-    padding: 14px 28px !important;
-    min-width: 200px !important;
+    font-size: 24px !important;
   }
 }
 
