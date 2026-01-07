@@ -49,6 +49,7 @@ a {
 
 .hero-mobile {
   display: none !important;
+  overflow: visible !important;
 }
 
 /* Hero with Floating Form Layout */

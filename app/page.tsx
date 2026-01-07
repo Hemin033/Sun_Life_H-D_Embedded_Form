@@ -14,6 +14,7 @@ import { BentoGrid, BentoGridItem } from '../components/ui/bento-grid'
 const Home = () => {
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null)
   const [showLeadForm, setShowLeadForm] = useState(false)
+  const [mobileProvinceDropdownOpen, setMobileProvinceDropdownOpen] = useState(false)
   const [showOTPVerification, setShowOTPVerification] = useState(false)
   const [showThankYou, setShowThankYou] = useState(false)
   const [otp, setOTP] = useState(['', '', '', '', '', ''])
@@ -694,36 +695,35 @@ const Home = () => {
         </div>
       )}
 
-      {/* Top Header Bar with Logos */}
-      <div className="header-logo-bar" style={{
-        width: '100%',
-        backgroundColor: '#F9FAFA',
-        position: 'relative',
-        padding: '12px 0'
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 40px'
-        }}>
-          <Image
-            src="/IMAGE-TOP-OVERLAY-Mob-2-.png"
-            alt="PolicyAdvisor and Sun Life"
-            width={400}
-            height={50}
-            style={{
-              width: 'auto',
-              height: '40px',
-              objectFit: 'contain',
-              display: 'block'
-            }}
-            priority
-          />
-        </div>
-      </div>
-
       {/* Hero Section - Desktop with Overlapping Form (Funeralcare Style) */}
       <section className="hero-section hero-desktop" style={{ position: 'relative', paddingBottom: '0' }}>
+        {/* Logo Bar */}
+        <div style={{
+          width: '100%',
+          backgroundColor: '#F9FAFA',
+          padding: '12px 0'
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '0 40px'
+          }}>
+            <Image
+              src="/IMAGE-TOP-OVERLAY-Mob-2-.png"
+              alt="PolicyAdvisor and Sun Life"
+              width={400}
+              height={50}
+              style={{
+                width: 'auto',
+                height: '40px',
+                objectFit: 'contain',
+                display: 'block'
+              }}
+              priority
+            />
+          </div>
+        </div>
+
         {/* Top Section - Light background with text */}
         <div style={{ 
           backgroundColor: '#f8fafa',
@@ -792,7 +792,7 @@ const Home = () => {
           top: '40px',
           right: 'max(20px, calc((100% - 1200px) / 2 - 20px))',
           width: '100%',
-          maxWidth: '480px',
+          maxWidth: '520px',
           zIndex: 100
         }}>
           <div className="hero-form-container" style={{
@@ -912,7 +912,7 @@ const Home = () => {
                         borderRadius: '6px',
                         backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Man' ? '#013946' : '#1f2937',
-                        cursor: 'pointer',
+                cursor: 'pointer',
                         fontWeight: 500
                       }}
                     >
@@ -926,7 +926,7 @@ const Home = () => {
                         padding: '14px 12px',
                         fontSize: '15px',
                         border: `2px solid ${formData.gender === 'Woman' ? '#FFB800' : '#d1d5db'}`,
-                        borderRadius: '6px',
+                borderRadius: '6px',
                         backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
                         cursor: 'pointer',
@@ -1015,7 +1015,7 @@ const Home = () => {
                 </div>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
-                    Provincial Coverage? *
+                    Do you have Provincial Coverage? *
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <button
@@ -1106,7 +1106,7 @@ const Home = () => {
       </section>
 
       {/* Hero Section - Mobile */}
-      <section className="hero-section hero-mobile" style={{ display: 'none' }}>
+      <section className="hero-section hero-mobile" style={{ display: 'none', overflow: 'visible' }}>
         <div style={{ 
           display: 'flex', 
           flexDirection: 'column', 
@@ -1153,17 +1153,33 @@ const Home = () => {
               Get your free Sun Life health & dental quote below.
             </p>
           </div>
+
+          {/* Header Image */}
+          <Image
+            src="/Mobile-header-BAse-H&D.png"
+            alt="Health and Dental Coverage"
+            width={800}
+            height={400}
+              style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block'
+            }}
+          />
           
           {/* Mobile Form */}
           <div style={{
             width: '100%',
-            padding: '20px',
-            backgroundColor: '#fff'
+            padding: '16px',
+            backgroundColor: '#fff',
+            overflow: 'visible',
+            position: 'relative',
+            zIndex: 10
           }}>
             <form onSubmit={handleSubmitLead}>
               {/* Basic Info */}
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ fontWeight: 600, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
                   Full Name <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <input
@@ -1172,202 +1188,10 @@ const Home = () => {
                   placeholder="John Smith"
                   value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
-              style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                fontSize: '16px',
-                    border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
-                <div>
-                  <label style={{ fontWeight: 600, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Phone <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="(555) 123-4567"
-                    value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '12px 14px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontWeight: 600, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Email <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="email@example.com"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '12px 14px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Gender and DOB */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
-                <div>
-                  <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Gender <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    <button
-                      type="button"
-                      onClick={() => handleInputChange('gender', 'Man')}
-                      style={{
-                        flex: 1,
-                        padding: '10px 8px',
-                        fontSize: '14px',
-                        border: `2px solid ${formData.gender === 'Man' ? '#013946' : '#d1d5db'}`,
-                        borderRadius: '6px',
-                        backgroundColor: formData.gender === 'Man' ? '#e0f7fa' : '#fff',
-                        color: '#1f2937',
-                        cursor: 'pointer',
-                        fontWeight: 600
-                      }}
-                    >
-                      Man
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleInputChange('gender', 'Woman')}
-                      style={{
-                        flex: 1,
-                        padding: '10px 8px',
-                        fontSize: '14px',
-                        border: `2px solid ${formData.gender === 'Woman' ? '#013946' : '#d1d5db'}`,
-                        borderRadius: '6px',
-                        backgroundColor: formData.gender === 'Woman' ? '#e0f7fa' : '#fff',
-                        color: '#1f2937',
-                        cursor: 'pointer',
-                        fontWeight: 600
-                      }}
-                    >
-                      Woman
-            </button>
-                  </div>
-                </div>
-                <div>
-                  <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Age <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={3}
-                    placeholder="e.g. 35"
-                    value={formData.age}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
-                      const numValue = parseInt(value);
-                      if (value === '' || (numValue >= 0 && numValue <= 120)) {
-                        handleInputChange('age', value);
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const value = e.target.value;
-                      const numValue = parseInt(value);
-                      if (value && (numValue < 18 || numValue > 99)) {
-                        alert('Please enter an age between 18 and 99');
-                        handleInputChange('age', '');
-                      }
-                    }}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '6px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-          </div>
-          
-              {/* Employment and Occupation */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
-                <div>
-                  <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Employment <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <select
-                    value={formData.employmentStatus}
-                    onChange={(e) => handleInputChange('employmentStatus', e.target.value)}
-            style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '6px',
-                      outline: 'none',
-                      backgroundColor: '#fff'
-                    }}
-                  >
-                    <option value="">Select...</option>
-                    <option value="salaried">Salaried</option>
-                    <option value="employed">Employed</option>
-                    <option value="self-employed">Self-Employed</option>
-                    <option value="retired">Retired</option>
-                    <option value="student">Student</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                    Occupation
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Designer"
-                    value={formData.occupation}
-                    onChange={(e) => handleInputChange('occupation', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      fontSize: '16px',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '6px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Annual Income */}
-              <div style={{ marginBottom: '14px' }}>
-                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '6px' }}>
-                  Annual Income
-                </label>
-                <input
-                  type="text"
-                  placeholder="$75,000"
-                  value={formData.annualIncome}
-                  onChange={(e) => handleInputChange('annualIncome', e.target.value)}
                   style={{
                     width: '100%',
                     padding: '10px 12px',
-                    fontSize: '16px',
+                    fontSize: '15px',
                     border: '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
@@ -1375,19 +1199,222 @@ const Home = () => {
                 />
               </div>
 
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Phone <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="(555) 123-4567"
+                  value={formData.phoneNumber}
+                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '15px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Email <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="email@example.com"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '15px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+
+              {/* Gender */}
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Gender <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('gender', 'Man')}
+                    style={{
+                      flex: 1,
+                      padding: '10px',
+                      fontSize: '14px',
+                      border: `2px solid ${formData.gender === 'Man' ? '#013946' : '#d1d5db'}`,
+                      borderRadius: '6px',
+                      backgroundColor: formData.gender === 'Man' ? '#e0f7fa' : '#fff',
+                      color: '#1f2937',
+                      cursor: 'pointer',
+                      fontWeight: 600
+                    }}
+                  >
+                    Man
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('gender', 'Woman')}
+                    style={{
+                      flex: 1,
+                      padding: '10px',
+                      fontSize: '14px',
+                      border: `2px solid ${formData.gender === 'Woman' ? '#013946' : '#d1d5db'}`,
+                      borderRadius: '6px',
+                      backgroundColor: formData.gender === 'Woman' ? '#e0f7fa' : '#fff',
+                      color: '#1f2937',
+                      cursor: 'pointer',
+                      fontWeight: 600
+                    }}
+                  >
+                    Woman
+                  </button>
+                </div>
+              </div>
+          
+              {/* Age */}
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Age <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  maxLength={3}
+                  placeholder="e.g. 35"
+                  value={formData.age}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    const numValue = parseInt(value);
+                    if (value === '' || (numValue >= 0 && numValue <= 120)) {
+                      handleInputChange('age', value);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const value = e.target.value;
+                    const numValue = parseInt(value);
+                    if (value && (numValue < 18 || numValue > 99)) {
+                      alert('Please enter an age between 18 and 99');
+                      handleInputChange('age', '');
+                    }
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '15px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+          
+              {/* Province of Residence - Custom Dropdown */}
+              <div style={{ marginBottom: '10px', position: 'relative' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Province of Residence <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <div
+                  onClick={() => setMobileProvinceDropdownOpen(!mobileProvinceDropdownOpen)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '15px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    backgroundColor: '#fff',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}
+                >
+                  <span style={{ color: formData.province ? '#1f2937' : '#9ca3af' }}>
+                    {formData.province ? 
+                      { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'NB': 'New Brunswick', 'NL': 'Newfoundland and Labrador', 'NS': 'Nova Scotia', 'ON': 'Ontario', 'PE': 'Prince Edward Island', 'QC': 'Quebec', 'SK': 'Saskatchewan', 'NT': 'Northwest Territories', 'NU': 'Nunavut', 'YT': 'Yukon' }[formData.province] 
+                      : 'Select...'}
+                  </span>
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: mobileProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                    <path d="M1 1.5L6 6.5L11 1.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                {mobileProvinceDropdownOpen && (
+                  <ul style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    right: 0,
+                    backgroundColor: '#fff',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    marginTop: '4px',
+                    padding: 0,
+                    listStyle: 'none',
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                    zIndex: 9999,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                  }}>
+                    {[
+                      { value: 'AB', label: 'Alberta' },
+                      { value: 'BC', label: 'British Columbia' },
+                      { value: 'MB', label: 'Manitoba' },
+                      { value: 'NB', label: 'New Brunswick' },
+                      { value: 'NL', label: 'Newfoundland and Labrador' },
+                      { value: 'NS', label: 'Nova Scotia' },
+                      { value: 'ON', label: 'Ontario' },
+                      { value: 'PE', label: 'Prince Edward Island' },
+                      { value: 'QC', label: 'Quebec' },
+                      { value: 'SK', label: 'Saskatchewan' },
+                      { value: 'NT', label: 'Northwest Territories' },
+                      { value: 'NU', label: 'Nunavut' },
+                      { value: 'YT', label: 'Yukon' }
+                    ].map((province) => (
+                      <li
+                        key={province.value}
+                        onClick={() => {
+                          handleInputChange('province', province.value);
+                          setMobileProvinceDropdownOpen(false);
+                        }}
+                        style={{
+                          padding: '10px 12px',
+                          fontSize: '15px',
+                          cursor: 'pointer',
+                          backgroundColor: formData.province === province.value ? '#e0f7fa' : '#fff',
+                          borderBottom: '1px solid #f3f4f6'
+                        }}
+                      >
+                        {province.label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
               {/* Provincial Coverage */}
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
                   Covered by provincial health care?
                 </label>
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
                   <button
                     type="button"
                     onClick={() => handleInputChange('provincialCoverage', 'Yes')}
                     style={{
                       flex: 1,
-                      padding: '12px',
-                      fontSize: '15px',
+                      padding: '10px',
+                      fontSize: '14px',
                       border: `2px solid ${formData.provincialCoverage === 'Yes' ? '#013946' : '#d1d5db'}`,
                       borderRadius: '6px',
                       backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f7fa' : '#fff',
@@ -1403,8 +1430,8 @@ const Home = () => {
                     onClick={() => handleInputChange('provincialCoverage', 'No')}
                     style={{
                       flex: 1,
-                      padding: '12px',
-                      fontSize: '15px',
+                      padding: '10px',
+                      fontSize: '14px',
                       border: `2px solid ${formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db'}`,
                       borderRadius: '6px',
                       backgroundColor: formData.provincialCoverage === 'No' ? '#e0f7fa' : '#fff',
@@ -1423,13 +1450,13 @@ const Home = () => {
                 type="submit"
                 style={{
                   width: '100%',
-                  padding: '16px',
-                  fontSize: '16px',
+                  padding: '12px',
+                  fontSize: '15px',
                   fontWeight: 700,
                   color: '#fff',
                   backgroundColor: '#013946',
                   border: 'none',
-                  borderRadius: '8px',
+                  borderRadius: '6px',
                   cursor: 'pointer',
                   textTransform: 'uppercase'
                 }}
@@ -1438,8 +1465,8 @@ const Home = () => {
               </button>
 
               <p style={{
-                marginTop: '12px',
-                fontSize: '11px',
+                marginTop: '10px',
+                fontSize: '10px',
                 color: '#6b7280',
                 lineHeight: '1.4',
                 textAlign: 'center'
