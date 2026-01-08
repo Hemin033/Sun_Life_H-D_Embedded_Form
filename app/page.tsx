@@ -188,7 +188,7 @@ const Home = () => {
     // Here you would verify the OTP
     console.log('Verifying OTP:', otp.join(''))
     setShowOTPVerification(false)
-    setShowThankYou(true)
+    router.push('/thank-you?return=/')
   }
 
   const handleResendOTP = () => {
@@ -281,36 +281,36 @@ const Home = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Full Name <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="John Smith"
-                    value={formData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '14px 16px',
-                      fontSize: '16px',
+                  Full Name <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="John Smith"
+                  value={formData.fullName}
+                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
                       border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
                   {formErrors.fullName && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
                   )}
-                </div>
+              </div>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Phone Number <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="(555) 123-4567"
-                    value={formData.phoneNumber}
+                  Phone Number <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="(555) 123-4567"
+                  value={formData.phoneNumber}
                     onChange={(e) => {
                       const value = e.target.value.replace(/[^\d\s\-()]/g, '');
                       const digits = value.replace(/\D/g, '');
@@ -332,19 +332,19 @@ const Home = () => {
                         setFormErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid 10-digit phone number' }));
                       }
                     }}
-                    style={{
-                      width: '100%',
-                      padding: '14px 16px',
-                      fontSize: '16px',
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
                       border: formErrors.phoneNumber ? '1px solid #dc2626' : '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
                   {formErrors.phoneNumber && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
                   )}
-                </div>
+              </div>
               </div>
 
               {/* Email */}
@@ -382,61 +382,61 @@ const Home = () => {
 
               {/* Gender and Age */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
-                <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Gender <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                    <button
-                      type="button"
-                      onClick={() => handleInputChange('gender', 'Man')}
-                      style={{
-                        flex: 1,
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                  Gender <span style={{ color: '#013946' }}>*</span>
+                </label>
+                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('gender', 'Man')}
+                    style={{
+                          flex: 1,
                         padding: '14px 16px',
-                        fontSize: '16px',
+                          fontSize: '16px',
                         border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
-                        backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
-                        color: '#1f2937',
-                        cursor: 'pointer',
-                        fontWeight: 600
-                      }}
-                    >
-                      Man
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleInputChange('gender', 'Woman')}
-                      style={{
-                        flex: 1,
+                      backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
+                      color: '#1f2937',
+                      cursor: 'pointer',
+                          fontWeight: 600
+                    }}
+                  >
+                    Man
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('gender', 'Woman')}
+                    style={{
+                          flex: 1,
                         padding: '14px 16px',
-                        fontSize: '16px',
+                          fontSize: '16px',
                         border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
-                        backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
-                        color: '#1f2937',
-                        cursor: 'pointer',
-                        fontWeight: 600
-                      }}
-                    >
-                      Woman
-                    </button>
-                  </div>
+                      backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
+                      color: '#1f2937',
+                      cursor: 'pointer',
+                          fontWeight: 600
+                    }}
+                  >
+                    Woman
+                  </button>
+                </div>
                   {formErrors.gender && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
                   )}
-                </div>
+              </div>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                     Age <span style={{ color: '#013946' }}>*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
+                <input
+                  type="text"
+                  required
                     maxLength={3}
                     placeholder="e.g. 35"
                     value={formData.age}
-                    onChange={(e) => {
+                  onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, '');
                       const numValue = parseInt(value);
                       if (value === '' || (numValue >= 0 && numValue <= 120)) {
@@ -448,43 +448,43 @@ const Home = () => {
                       const numValue = parseInt(value);
                       if (value && (numValue < 18 || numValue > 99)) {
                         setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
-                      }
-                    }}
-                    style={{
-                      width: '100%',
+                    }
+                  }}
+                  style={{
+                    width: '100%',
                       padding: '14px 16px',
-                      fontSize: '16px',
+                    fontSize: '16px',
                       border: formErrors.age ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
+                    outline: 'none'
+                  }}
+                />
                   {formErrors.age && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
                   )}
-                </div>
               </div>
+                </div>
 
               {/* Province and Provincial Coverage */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
-                <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                     Province of Residence <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <select
+                </label>
+                <select
                     value={formData.province}
                     onChange={(e) => handleInputChange('province', e.target.value)}
-                    style={{
-                      width: '100%',
+                  style={{
+                    width: '100%',
                       padding: '14px 16px',
-                      fontSize: '16px',
+                    fontSize: '16px',
                       border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '8px',
-                      outline: 'none',
-                      backgroundColor: '#fff',
-                      cursor: 'pointer'
-                    }}
-                  >
+                    outline: 'none',
+                    backgroundColor: '#fff',
+                    cursor: 'pointer'
+                  }}
+                >
                     <option value="">Select...</option>
                     <option value="AB">Alberta</option>
                     <option value="BC">British Columbia</option>
@@ -499,18 +499,18 @@ const Home = () => {
                     <option value="QC">Quebec</option>
                     <option value="SK">Saskatchewan</option>
                     <option value="YT">Yukon</option>
-                  </select>
+                </select>
                   {formErrors.province && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
                   )}
-                </div>
-                <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                  </div>
+                  <div>
+                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                     Do you have Provincial Coverage? <span style={{ color: '#013946' }}>*</span>
-                  </label>
+                </label>
                   <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                    <button
-                      type="button"
+                  <button
+                    type="button"
                       onClick={() => {
                         handleInputChange('provincialCoverage', 'Yes')
                         setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
@@ -740,13 +740,13 @@ const Home = () => {
         </div>
 
         {/* Top Section - Light background with text */}
-        <div style={{ 
+            <div style={{
           backgroundColor: '#f8fafa',
           position: 'relative',
           zIndex: 1
         }}>
           <div style={{
-            display: 'flex',
+              display: 'flex',
             maxWidth: '1200px',
             margin: '0 auto',
             padding: '50px 40px 60px',
@@ -850,8 +850,8 @@ const Home = () => {
                     placeholder="John Smith"
                     value={formData.fullName}
                     onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    style={{
-                      width: '100%',
+              style={{
+                width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
                       border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
@@ -986,12 +986,12 @@ const Home = () => {
                       }}
                     >
                       Woman
-                    </button>
-                  </div>
+            </button>
+          </div>
                   {formErrors.gender && (
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
                   )}
-                </div>
+        </div>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
                     Age *
@@ -1042,8 +1042,8 @@ const Home = () => {
                   <select
                     value={formData.province}
                     onChange={(e) => handleInputChange('province', e.target.value)}
-                    style={{
-                      width: '100%',
+              style={{
+                width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
                       border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
@@ -1134,22 +1134,22 @@ const Home = () => {
               )}
 
               {/* Submit Button */}
-              <button
+            <button 
                 type="submit"
-                style={{
+              style={{
                   width: '100%',
                   padding: '18px',
                   fontSize: '17px',
                   fontWeight: 700,
                   color: '#013946',
                 backgroundColor: '#FFB800',
-                  border: 'none',
-                  borderRadius: '6px',
+                border: 'none',
+                borderRadius: '6px',
                   cursor: 'pointer',
-                  textTransform: 'uppercase',
+                textTransform: 'uppercase',
                   letterSpacing: '0.5px'
-                }}
-              >
+              }}
+            >
                 Submit Request
             </button>
 
