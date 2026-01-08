@@ -19,6 +19,18 @@ const Home = () => {
   const [showThankYou, setShowThankYou] = useState(false)
   const [otp, setOTP] = useState(['', '', '', '', '', ''])
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [formErrors, setFormErrors] = useState({
+    fullName: '',
+    phoneNumber: '',
+    email: '',
+    gender: '',
+    age: '',
+    employmentStatus: '',
+    occupation: '',
+    annualIncome: '',
+    province: '',
+    provincialCoverage: ''
+  })
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -33,16 +45,129 @@ const Home = () => {
     coverageAmount: 0
   })
 
+  // Validation functions
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  const validatePhone = (phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+    return digits.length === 10;
+  }
+
+  const validateAge = (age: string) => {
+    const numAge = parseInt(age);
+    return numAge >= 18 && numAge <= 99;
+  }
+
   const toggleFAQ = (index: number) => {
     setActiveFAQ(activeFAQ === index ? null : index)
   }
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+    // Clear error when user starts typing
+    if (formErrors[field as keyof typeof formErrors]) {
+      setFormErrors(prev => ({ ...prev, [field]: '' }))
+    }
+  }
+
+  const validateAllFields = () => {
+    const errors = {
+      fullName: '',
+      phoneNumber: '',
+      email: '',
+      gender: '',
+      age: '',
+      employmentStatus: '',
+      occupation: '',
+      annualIncome: '',
+      province: '',
+      provincialCoverage: ''
+    }
+    let isValid = true
+
+    // Full Name
+    if (!formData.fullName.trim()) {
+      errors.fullName = 'Full name is required'
+      isValid = false
+    }
+
+    // Phone Number
+    if (!formData.phoneNumber.trim()) {
+      errors.phoneNumber = 'Phone number is required'
+      isValid = false
+    } else if (!validatePhone(formData.phoneNumber)) {
+      errors.phoneNumber = 'Please enter a valid 10-digit phone number'
+      isValid = false
+    }
+
+    // Email
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required'
+      isValid = false
+    } else if (!validateEmail(formData.email)) {
+      errors.email = 'Please enter a valid email address'
+      isValid = false
+    }
+
+    // Gender
+    if (!formData.gender) {
+      errors.gender = 'Please select your gender'
+      isValid = false
+    }
+
+    // Age
+    if (!formData.age.trim()) {
+      errors.age = 'Age is required'
+      isValid = false
+    } else if (!validateAge(formData.age)) {
+      errors.age = 'Age must be between 18 and 99'
+      isValid = false
+    }
+
+    // Employment Status
+    if (!formData.employmentStatus) {
+      errors.employmentStatus = 'Please select employment status'
+      isValid = false
+    }
+
+    // Occupation
+    if (!formData.occupation.trim()) {
+      errors.occupation = 'Occupation is required'
+      isValid = false
+    }
+
+    // Annual Income
+    if (!formData.annualIncome) {
+      errors.annualIncome = 'Please select annual income'
+      isValid = false
+    }
+
+    // Province
+    if (!formData.province) {
+      errors.province = 'Please select your province'
+      isValid = false
+    }
+
+    // Provincial Coverage
+    if (!formData.provincialCoverage) {
+      errors.provincialCoverage = 'Please select provincial coverage'
+      isValid = false
+    }
+
+    setFormErrors(errors)
+    return isValid
   }
 
   const handleSubmitLead = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!validateAllFields()) {
+      return
+    }
+    
     // Store phone number for OTP verification
     setPhoneNumber(formData.phoneNumber)
     // Hide lead form and show OTP verification
@@ -182,11 +307,14 @@ const Home = () => {
                     width: '100%',
                     padding: '14px 16px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '8px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.fullName && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                )}
               </div>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
@@ -197,16 +325,39 @@ const Home = () => {
                   required
                   placeholder="(555) 123-4567"
                   value={formData.phoneNumber}
-                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^\d\s\-()]/g, '');
+                    const digits = value.replace(/\D/g, '');
+                    let formatted = '';
+                    if (digits.length > 0) {
+                      formatted = '(' + digits.substring(0, 3);
+                      if (digits.length > 3) {
+                        formatted += ') ' + digits.substring(3, 6);
+                      }
+                      if (digits.length > 6) {
+                        formatted += '-' + digits.substring(6, 10);
+                      }
+                    }
+                    handleInputChange('phoneNumber', formatted || value);
+                    setFormErrors(prev => ({ ...prev, phoneNumber: '' }));
+                  }}
+                  onBlur={() => {
+                    if (formData.phoneNumber && !validatePhone(formData.phoneNumber)) {
+                      setFormErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid 10-digit phone number' }));
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.phoneNumber ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '8px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.phoneNumber && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
+                )}
               </div>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
@@ -217,16 +368,27 @@ const Home = () => {
                   required
                   placeholder="John.smith@gmail.com"
                   value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onChange={(e) => {
+                    handleInputChange('email', e.target.value);
+                    setFormErrors(prev => ({ ...prev, email: '' }));
+                  }}
+                  onBlur={() => {
+                    if (formData.email && !validateEmail(formData.email)) {
+                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '8px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.email && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
+                )}
                 </div>
               </div>
 
@@ -250,7 +412,7 @@ const Home = () => {
                           flex: 1,
                           padding: '12px 16px',
                           fontSize: '16px',
-                      border: `2px solid ${formData.gender === 'Man' ? '#0086ae' : '#d1d5db'}`,
+                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#0086ae' : '#d1d5db')}`,
                           borderRadius: '6px',
                       backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
                       color: '#1f2937',
@@ -267,7 +429,7 @@ const Home = () => {
                           flex: 1,
                           padding: '12px 16px',
                           fontSize: '16px',
-                      border: `2px solid ${formData.gender === 'Woman' ? '#0086ae' : '#d1d5db'}`,
+                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#0086ae' : '#d1d5db')}`,
                           borderRadius: '6px',
                       backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
                       color: '#1f2937',
@@ -278,6 +440,9 @@ const Home = () => {
                     Woman
                   </button>
                 </div>
+                {formErrors.gender && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
+                )}
               </div>
                 <div>
                     <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
@@ -300,19 +465,21 @@ const Home = () => {
                     const value = e.target.value;
                     const numValue = parseInt(value);
                     if (value && (numValue < 18 || numValue > 99)) {
-                      alert('Please enter an age between 18 and 99');
-                      handleInputChange('age', '');
+                      setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
                     }
                   }}
                   style={{
                     width: '100%',
                         padding: '12px 14px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.age ? '1px solid #dc2626' : '1px solid #d1d5db',
                         borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.age && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
+                )}
               </div>
                 </div>
 
@@ -329,24 +496,28 @@ const Home = () => {
                     width: '100%',
                         padding: '12px 14px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.employmentStatus ? '1px solid #dc2626' : '1px solid #d1d5db',
                         borderRadius: '6px',
                     outline: 'none',
                     backgroundColor: '#fff',
                     cursor: 'pointer'
                   }}
                 >
-                      <option value="">Salaried</option>
+                      <option value="">Select Status</option>
+                      <option value="salaried">Salaried</option>
                       <option value="employed">Employed</option>
                       <option value="self-employed">Self-Employed</option>
                       <option value="unemployed">Unemployed</option>
                       <option value="retired">Retired</option>
                       <option value="student">Student</option>
                 </select>
+                {formErrors.employmentStatus && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.employmentStatus}</p>
+                )}
                   </div>
                   <div>
                     <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      Occupation
+                      Occupation <span style={{ color: '#013946' }}>*</span>
                 </label>
                     <input
                       type="text"
@@ -357,18 +528,21 @@ const Home = () => {
                     width: '100%',
                         padding: '12px 14px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.occupation ? '1px solid #dc2626' : '1px solid #d1d5db',
                         borderRadius: '6px',
                         outline: 'none'
                       }}
                     />
+                {formErrors.occupation && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.occupation}</p>
+                )}
               </div>
                 </div>
 
                 {/* Row 3 - Annual Income */}
                 <div style={{ marginBottom: '24px' }}>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Annual Income
+                    Annual Income <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -380,11 +554,14 @@ const Home = () => {
                     width: '100%',
                     padding: '12px 14px',
                     fontSize: '16px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.annualIncome ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.annualIncome && (
+                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.annualIncome}</p>
+                )}
                 </div>
 
                 {/* Add Applicant Button */}
@@ -420,7 +597,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px',
                         fontSize: '16px',
-                        border: `2px solid ${formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f2fe' : '#fff',
                         color: '#1f2937',
@@ -437,7 +614,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px',
                         fontSize: '16px',
-                        border: `2px solid ${formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#e0f2fe' : '#fff',
                         color: '#1f2937',
@@ -448,6 +625,9 @@ const Home = () => {
                       No
                     </button>
                   </div>
+                  {formErrors.provincialCoverage && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
+                  )}
 
                   {/* Provincial Coverage Disclaimer */}
                   {formData.provincialCoverage === 'No' && (
@@ -839,13 +1019,16 @@ const Home = () => {
                       width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
-                      border: '1px solid #d1d5db',
+                      border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
                       outline: 'none',
                       backgroundColor: '#fff',
                       color: '#1f2937'
                     }}
                   />
+                  {formErrors.fullName && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                  )}
                 </div>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
@@ -856,18 +1039,41 @@ const Home = () => {
                     required
                     placeholder="(555) 123-4567"
                     value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\d\s\-()]/g, '');
+                      const digits = value.replace(/\D/g, '');
+                      let formatted = '';
+                      if (digits.length > 0) {
+                        formatted = '(' + digits.substring(0, 3);
+                        if (digits.length > 3) {
+                          formatted += ') ' + digits.substring(3, 6);
+                        }
+                        if (digits.length > 6) {
+                          formatted += '-' + digits.substring(6, 10);
+                        }
+                      }
+                      handleInputChange('phoneNumber', formatted || value);
+                      setFormErrors(prev => ({ ...prev, phoneNumber: '' }));
+                    }}
+                    onBlur={() => {
+                      if (formData.phoneNumber && !validatePhone(formData.phoneNumber)) {
+                        setFormErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid 10-digit phone number' }));
+                      }
+                    }}
                     style={{
                       width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
-                      border: '1px solid #d1d5db',
+                      border: formErrors.phoneNumber ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
                       outline: 'none',
                       backgroundColor: '#fff',
                       color: '#1f2937'
                     }}
                   />
+                  {formErrors.phoneNumber && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
+                  )}
                 </div>
               </div>
 
@@ -880,18 +1086,29 @@ const Home = () => {
                   required
                   placeholder="john.smith@gmail.com"
                   value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onChange={(e) => {
+                    handleInputChange('email', e.target.value);
+                    setFormErrors(prev => ({ ...prev, email: '' }));
+                  }}
+                  onBlur={() => {
+                    if (formData.email && !validateEmail(formData.email)) {
+                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
                     fontSize: '15px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none',
                     backgroundColor: '#fff',
                     color: '#1f2937'
                   }}
                 />
+                {formErrors.email && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
+                )}
               </div>
 
               {/* Gender and Age */}
@@ -908,7 +1125,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formData.gender === 'Man' ? '#FFB800' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#FFB800' : '#d1d5db')}`,
                         borderRadius: '6px',
                         backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Man' ? '#013946' : '#1f2937',
@@ -925,7 +1142,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formData.gender === 'Woman' ? '#FFB800' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#FFB800' : '#d1d5db')}`,
                 borderRadius: '6px',
                         backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
@@ -936,6 +1153,9 @@ const Home = () => {
                       Woman
                     </button>
                   </div>
+                  {formErrors.gender && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
+                  )}
                 </div>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
@@ -958,21 +1178,23 @@ const Home = () => {
                       const value = e.target.value;
                       const numValue = parseInt(value);
                       if (value && (numValue < 18 || numValue > 99)) {
-                        alert('Please enter an age between 18 and 99');
-                        handleInputChange('age', '');
+                        setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
                       }
                     }}
                     style={{
                       width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
-                      border: '1px solid #d1d5db',
+                      border: formErrors.age ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
                       outline: 'none',
                       backgroundColor: '#fff',
                       color: '#1f2937'
                     }}
                   />
+                  {formErrors.age && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
+                  )}
                 </div>
               </div>
 
@@ -989,7 +1211,7 @@ const Home = () => {
                       width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
-                      border: '1px solid #d1d5db',
+                      border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
                       outline: 'none',
                       backgroundColor: '#fff',
@@ -1012,6 +1234,9 @@ const Home = () => {
                     <option value="SK">Saskatchewan</option>
                     <option value="YT">Yukon</option>
                   </select>
+                  {formErrors.province && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
+                  )}
                 </div>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
@@ -1025,7 +1250,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db')}`,
                         borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
@@ -1042,7 +1267,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
                         borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
@@ -1053,6 +1278,9 @@ const Home = () => {
                       No
                     </button>
                   </div>
+                  {formErrors.provincialCoverage && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
+                  )}
                 </div>
               </div>
               
@@ -1106,7 +1334,7 @@ const Home = () => {
       </section>
 
       {/* Hero Section - Mobile */}
-      <section className="hero-section hero-mobile" style={{ display: 'none', overflow: 'visible' }}>
+      <section className="hero-section hero-mobile" style={{ display: 'none' }}>
         <div style={{ 
           display: 'flex', 
           flexDirection: 'column', 
@@ -1172,9 +1400,7 @@ const Home = () => {
             width: '100%',
             padding: '16px',
             backgroundColor: '#fff',
-            overflow: 'visible',
-            position: 'relative',
-            zIndex: 10
+            overflow: 'visible'
           }}>
             <form onSubmit={handleSubmitLead}>
               {/* Basic Info */}
@@ -1192,11 +1418,14 @@ const Home = () => {
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '15px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.fullName && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                )}
               </div>
 
               <div style={{ marginBottom: '10px' }}>
@@ -1208,16 +1437,39 @@ const Home = () => {
                   required
                   placeholder="(555) 123-4567"
                   value={formData.phoneNumber}
-                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^\d\s\-()]/g, '');
+                    const digits = value.replace(/\D/g, '');
+                    let formatted = '';
+                    if (digits.length > 0) {
+                      formatted = '(' + digits.substring(0, 3);
+                      if (digits.length > 3) {
+                        formatted += ') ' + digits.substring(3, 6);
+                      }
+                      if (digits.length > 6) {
+                        formatted += '-' + digits.substring(6, 10);
+                      }
+                    }
+                    handleInputChange('phoneNumber', formatted || value);
+                    setFormErrors(prev => ({ ...prev, phoneNumber: '' }));
+                  }}
+                  onBlur={() => {
+                    if (formData.phoneNumber && !validatePhone(formData.phoneNumber)) {
+                      setFormErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid 10-digit phone number' }));
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '15px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.phoneNumber ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.phoneNumber && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
+                )}
               </div>
               <div style={{ marginBottom: '10px' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
@@ -1228,16 +1480,27 @@ const Home = () => {
                   required
                   placeholder="email@example.com"
                   value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onChange={(e) => {
+                    handleInputChange('email', e.target.value);
+                    setFormErrors(prev => ({ ...prev, email: '' }));
+                  }}
+                  onBlur={() => {
+                    if (formData.email && !validateEmail(formData.email)) {
+                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '15px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.email && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
+                )}
               </div>
 
               {/* Gender */}
@@ -1246,18 +1509,18 @@ const Home = () => {
                   Gender <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button
+            <button 
                     type="button"
                     onClick={() => handleInputChange('gender', 'Man')}
-                    style={{
+              style={{
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formData.gender === 'Man' ? '#013946' : '#d1d5db'}`,
+                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.gender === 'Man' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
-                      cursor: 'pointer',
+                cursor: 'pointer',
                       fontWeight: 600
                     }}
                   >
@@ -1270,7 +1533,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formData.gender === 'Woman' ? '#013946' : '#d1d5db'}`,
+                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.gender === 'Woman' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1279,9 +1542,12 @@ const Home = () => {
                     }}
                   >
                     Woman
-                  </button>
+            </button>
                 </div>
-              </div>
+                {formErrors.gender && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
+                )}
+          </div>
           
               {/* Age */}
               <div style={{ marginBottom: '10px' }}>
@@ -1299,25 +1565,26 @@ const Home = () => {
                     const numValue = parseInt(value);
                     if (value === '' || (numValue >= 0 && numValue <= 120)) {
                       handleInputChange('age', value);
+                      setFormErrors(prev => ({ ...prev, age: '' }));
                     }
                   }}
-                  onBlur={(e) => {
-                    const value = e.target.value;
-                    const numValue = parseInt(value);
-                    if (value && (numValue < 18 || numValue > 99)) {
-                      alert('Please enter an age between 18 and 99');
-                      handleInputChange('age', '');
+                  onBlur={() => {
+                    if (formData.age && !validateAge(formData.age)) {
+                      setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
                     }
                   }}
-                  style={{
+            style={{
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '15px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.age ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
+                {formErrors.age && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
+                )}
               </div>
           
               {/* Province of Residence - Custom Dropdown */}
@@ -1331,7 +1598,7 @@ const Home = () => {
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '15px',
-                    border: '1px solid #d1d5db',
+                    border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     backgroundColor: '#fff',
                     cursor: 'pointer',
@@ -1363,8 +1630,8 @@ const Home = () => {
                     listStyle: 'none',
                     maxHeight: '200px',
                     overflowY: 'auto',
-                    zIndex: 9999,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                    zIndex: 1000,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                   }}>
                     {[
                       { value: 'AB', label: 'Alberta' },
@@ -1400,12 +1667,15 @@ const Home = () => {
                     ))}
                   </ul>
                 )}
+                {formErrors.province && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
+                )}
               </div>
 
               {/* Provincial Coverage */}
               <div style={{ marginBottom: '14px' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
-                  Covered by provincial health care?
+                  Covered by provincial health care? <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button
@@ -1415,7 +1685,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formData.provincialCoverage === 'Yes' ? '#013946' : '#d1d5db'}`,
+                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1432,7 +1702,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db'}`,
+                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.provincialCoverage === 'No' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1443,6 +1713,9 @@ const Home = () => {
                     No
                   </button>
                 </div>
+                {formErrors.provincialCoverage && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
+                )}
               </div>
 
               {/* Submit */}
