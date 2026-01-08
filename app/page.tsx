@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { IoMdWalk } from 'react-icons/io'
 import { MdDirectionsRun } from 'react-icons/md'
@@ -17,6 +17,7 @@ const Home = () => {
   const [mobileProvinceDropdownOpen, setMobileProvinceDropdownOpen] = useState(false)
   const [showOTPVerification, setShowOTPVerification] = useState(false)
   const [showThankYou, setShowThankYou] = useState(false)
+  const [thankYouCountdown, setThankYouCountdown] = useState(5)
   const [otp, setOTP] = useState(['', '', '', '', '', ''])
   const [phoneNumber, setPhoneNumber] = useState('')
   const [formErrors, setFormErrors] = useState({
@@ -60,6 +61,39 @@ const Home = () => {
     const numAge = parseInt(age);
     return numAge >= 18 && numAge <= 99;
   }
+
+  // Thank You countdown timer
+  useEffect(() => {
+    if (showThankYou) {
+      setThankYouCountdown(5);
+      const timer = setInterval(() => {
+        setThankYouCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setShowThankYou(false);
+            // Reset form data
+            setFormData({
+              fullName: '',
+              phoneNumber: '',
+              email: '',
+              gender: '',
+              age: '',
+              employmentStatus: '',
+              occupation: '',
+              annualIncome: '',
+              province: '',
+              provincialCoverage: '',
+              coverageAmount: 0
+            });
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [showThankYou]);
 
   const toggleFAQ = (index: number) => {
     setActiveFAQ(activeFAQ === index ? null : index)
@@ -127,24 +161,6 @@ const Home = () => {
       isValid = false
     }
 
-    // Employment Status
-    if (!formData.employmentStatus) {
-      errors.employmentStatus = 'Please select employment status'
-      isValid = false
-    }
-
-    // Occupation
-    if (!formData.occupation.trim()) {
-      errors.occupation = 'Occupation is required'
-      isValid = false
-    }
-
-    // Annual Income
-    if (!formData.annualIncome) {
-      errors.annualIncome = 'Please select annual income'
-      isValid = false
-    }
-
     // Province
     if (!formData.province) {
       errors.province = 'Please select your province'
@@ -154,6 +170,9 @@ const Home = () => {
     // Provincial Coverage
     if (!formData.provincialCoverage) {
       errors.provincialCoverage = 'Please select provincial coverage'
+      isValid = false
+    } else if (formData.provincialCoverage === 'No') {
+      errors.provincialCoverage = 'These plans require valid provincial coverage.'
       isValid = false
     }
 
@@ -168,11 +187,11 @@ const Home = () => {
       return
     }
     
-    // Store phone number for OTP verification
+    // Store phone number for reference
     setPhoneNumber(formData.phoneNumber)
-    // Hide lead form and show OTP verification
+    // Hide lead form and show Thank You modal
     setShowLeadForm(false)
-    setShowOTPVerification(true)
+    setShowThankYou(true)
   }
 
   const handleOTPChange = (index: number, value: string) => {
@@ -292,81 +311,84 @@ const Home = () => {
             {/* Form */}
             <form onSubmit={handleSubmitLead}>
               {/* Basic Information Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Full Name <span style={{ color: '#013946' }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="John Smith"
-                  value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    fontSize: '16px',
-                    border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    outline: 'none'
-                  }}
-                />
-                {formErrors.fullName && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
-                )}
-              </div>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Full Name <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="John Smith"
+                    value={formData.fullName}
+                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                  {formErrors.fullName && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                  )}
+                </div>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Phone Number <span style={{ color: '#013946' }}>*</span>
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="(555) 123-4567"
-                  value={formData.phoneNumber}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^\d\s\-()]/g, '');
-                    const digits = value.replace(/\D/g, '');
-                    let formatted = '';
-                    if (digits.length > 0) {
-                      formatted = '(' + digits.substring(0, 3);
-                      if (digits.length > 3) {
-                        formatted += ') ' + digits.substring(3, 6);
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Phone Number <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="(555) 123-4567"
+                    value={formData.phoneNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\d\s\-()]/g, '');
+                      const digits = value.replace(/\D/g, '');
+                      let formatted = '';
+                      if (digits.length > 0) {
+                        formatted = '(' + digits.substring(0, 3);
+                        if (digits.length > 3) {
+                          formatted += ') ' + digits.substring(3, 6);
+                        }
+                        if (digits.length > 6) {
+                          formatted += '-' + digits.substring(6, 10);
+                        }
                       }
-                      if (digits.length > 6) {
-                        formatted += '-' + digits.substring(6, 10);
+                      handleInputChange('phoneNumber', formatted || value);
+                      setFormErrors(prev => ({ ...prev, phoneNumber: '' }));
+                    }}
+                    onBlur={() => {
+                      if (formData.phoneNumber && !validatePhone(formData.phoneNumber)) {
+                        setFormErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid 10-digit phone number' }));
                       }
-                    }
-                    handleInputChange('phoneNumber', formatted || value);
-                    setFormErrors(prev => ({ ...prev, phoneNumber: '' }));
-                  }}
-                  onBlur={() => {
-                    if (formData.phoneNumber && !validatePhone(formData.phoneNumber)) {
-                      setFormErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid 10-digit phone number' }));
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    fontSize: '16px',
-                    border: formErrors.phoneNumber ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    outline: 'none'
-                  }}
-                />
-                {formErrors.phoneNumber && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
-                )}
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: formErrors.phoneNumber ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                  {formErrors.phoneNumber && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
+                  )}
+                </div>
               </div>
-                <div>
-                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+
+              {/* Email */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                   Email Address <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <input
                   type="email"
                   required
-                  placeholder="John.smith@gmail.com"
+                  placeholder="john.smith@gmail.com"
                   value={formData.email}
                   onChange={(e) => {
                     handleInputChange('email', e.target.value);
@@ -389,213 +411,146 @@ const Home = () => {
                 {formErrors.email && (
                   <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
                 )}
-                </div>
               </div>
 
-              {/* Primary Applicant Section */}
-              <div style={{ marginBottom: '32px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#1f2937', marginBottom: '24px', textAlign: 'center' }}>
-                  Primary Applicant Information
-                </h3>
-
-                {/* Primary Applicant Information - Row 1: Gender and DOB */}
-                <div className="form-row-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px', alignItems: 'start' }}>
-                  <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Gender <span style={{ color: '#013946' }}>*</span>
-                </label>
-                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                  <button
-                    type="button"
-                    onClick={() => handleInputChange('gender', 'Man')}
-                    style={{
-                          flex: 1,
-                          padding: '12px 16px',
-                          fontSize: '16px',
-                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#0086ae' : '#d1d5db')}`,
-                          borderRadius: '6px',
-                      backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
-                      color: '#1f2937',
-                      cursor: 'pointer',
-                          fontWeight: 600
-                    }}
-                  >
-                    Man
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleInputChange('gender', 'Woman')}
-                    style={{
-                          flex: 1,
-                          padding: '12px 16px',
-                          fontSize: '16px',
-                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#0086ae' : '#d1d5db')}`,
-                          borderRadius: '6px',
-                      backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
-                      color: '#1f2937',
-                      cursor: 'pointer',
-                          fontWeight: 600
-                    }}
-                  >
-                    Woman
-                  </button>
-                </div>
-                {formErrors.gender && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
-                )}
-              </div>
+              {/* Gender and Age */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
                 <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Age <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                <input
-                  type="text"
-                  required
-                  maxLength={3}
-                      placeholder="e.g. 35"
-                  value={formData.age}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '');
-                    const numValue = parseInt(value);
-                    if (value === '' || (numValue >= 0 && numValue <= 120)) {
-                      handleInputChange('age', value);
-                    }
-                  }}
-                  onBlur={(e) => {
-                    const value = e.target.value;
-                    const numValue = parseInt(value);
-                    if (value && (numValue < 18 || numValue > 99)) {
-                      setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                        padding: '12px 14px',
-                    fontSize: '16px',
-                    border: formErrors.age ? '1px solid #dc2626' : '1px solid #d1d5db',
-                        borderRadius: '6px',
-                    outline: 'none'
-                  }}
-                />
-                {formErrors.age && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
-                )}
-              </div>
-                </div>
-
-                {/* Row 2 - Employment Status and Occupation */}
-                <div className="form-row-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px', alignItems: 'start' }}>
-                  <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      Employment Status <span style={{ color: '#013946' }}>*</span>
-                </label>
-                <select
-                      value={formData.employmentStatus}
-                      onChange={(e) => handleInputChange('employmentStatus', e.target.value)}
-                  style={{
-                    width: '100%',
-                        padding: '12px 14px',
-                    fontSize: '16px',
-                    border: formErrors.employmentStatus ? '1px solid #dc2626' : '1px solid #d1d5db',
-                        borderRadius: '6px',
-                    outline: 'none',
-                    backgroundColor: '#fff',
-                    cursor: 'pointer'
-                  }}
-                >
-                      <option value="">Select Status</option>
-                      <option value="salaried">Salaried</option>
-                      <option value="employed">Employed</option>
-                      <option value="self-employed">Self-Employed</option>
-                      <option value="unemployed">Unemployed</option>
-                      <option value="retired">Retired</option>
-                      <option value="student">Student</option>
-                </select>
-                {formErrors.employmentStatus && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.employmentStatus}</p>
-                )}
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                      Occupation <span style={{ color: '#013946' }}>*</span>
-                </label>
-                    <input
-                      type="text"
-                      placeholder="Architect, Designer"
-                      value={formData.occupation}
-                      onChange={(e) => handleInputChange('occupation', e.target.value)}
-                  style={{
-                    width: '100%',
-                        padding: '12px 14px',
-                    fontSize: '16px',
-                    border: formErrors.occupation ? '1px solid #dc2626' : '1px solid #d1d5db',
-                        borderRadius: '6px',
-                        outline: 'none'
-                      }}
-                    />
-                {formErrors.occupation && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.occupation}</p>
-                )}
-              </div>
-                </div>
-
-                {/* Row 3 - Annual Income */}
-                <div style={{ marginBottom: '24px' }}>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Annual Income <span style={{ color: '#013946' }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="$1,000,000"
-                  value={formData.annualIncome}
-                  onChange={(e) => handleInputChange('annualIncome', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                    fontSize: '16px',
-                    border: formErrors.annualIncome ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '6px',
-                    outline: 'none'
-                  }}
-                />
-                {formErrors.annualIncome && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.annualIncome}</p>
-                )}
-                </div>
-
-                {/* Add Applicant Button */}
-                <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                  <button
-                    type="button"
-                    style={{
-                      padding: '12px 24px',
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      color: '#013946',
-                      backgroundColor: 'transparent',
-                      border: '2px solid #013946',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    + ADD AN APPLICANT
-                  </button>
-                </div>
-
-                {/* Provincial Coverage Question */}
-                <div style={{ marginBottom: '32px' }}>
-                  <label style={{ fontWeight: 700, fontSize: '16px', color: '#1f2937', display: 'block', marginBottom: '16px' }}>
-                    Are all the applicants covered by a provincial government health care plan?
+                    Gender <span style={{ color: '#013946' }}>*</span>
                   </label>
-                  <div style={{ display: 'flex', gap: '16px' }}>
+                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
                     <button
                       type="button"
-                      onClick={() => handleInputChange('provincialCoverage', 'Yes')}
+                      onClick={() => handleInputChange('gender', 'Man')}
                       style={{
                         flex: 1,
-                        padding: '14px',
+                        padding: '14px 16px',
+                        fontSize: '16px',
+                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#0086ae' : '#d1d5db')}`,
+                        borderRadius: '8px',
+                        backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
+                        color: '#1f2937',
+                        cursor: 'pointer',
+                        fontWeight: 600
+                      }}
+                    >
+                      Man
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('gender', 'Woman')}
+                      style={{
+                        flex: 1,
+                        padding: '14px 16px',
+                        fontSize: '16px',
+                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#0086ae' : '#d1d5db')}`,
+                        borderRadius: '8px',
+                        backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
+                        color: '#1f2937',
+                        cursor: 'pointer',
+                        fontWeight: 600
+                      }}
+                    >
+                      Woman
+                    </button>
+                  </div>
+                  {formErrors.gender && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
+                  )}
+                </div>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Age <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={3}
+                    placeholder="e.g. 35"
+                    value={formData.age}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      const numValue = parseInt(value);
+                      if (value === '' || (numValue >= 0 && numValue <= 120)) {
+                        handleInputChange('age', value);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      const numValue = parseInt(value);
+                      if (value && (numValue < 18 || numValue > 99)) {
+                        setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
+                      }
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: formErrors.age ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                  {formErrors.age && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Province and Provincial Coverage */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Province of Residence <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <select
+                    value={formData.province}
+                    onChange={(e) => handleInputChange('province', e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none',
+                      backgroundColor: '#fff',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="">Select...</option>
+                    <option value="AB">Alberta</option>
+                    <option value="BC">British Columbia</option>
+                    <option value="MB">Manitoba</option>
+                    <option value="NB">New Brunswick</option>
+                    <option value="NL">Newfoundland and Labrador</option>
+                    <option value="NS">Nova Scotia</option>
+                    <option value="NT">Northwest Territories</option>
+                    <option value="NU">Nunavut</option>
+                    <option value="ON">Ontario</option>
+                    <option value="PE">Prince Edward Island</option>
+                    <option value="QC">Quebec</option>
+                    <option value="SK">Saskatchewan</option>
+                    <option value="YT">Yukon</option>
+                  </select>
+                  {formErrors.province && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
+                  )}
+                </div>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Do you have Provincial Coverage? <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleInputChange('provincialCoverage', 'Yes')
+                        setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: '14px 16px',
                         fontSize: '16px',
                         border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
@@ -609,14 +564,17 @@ const Home = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleInputChange('provincialCoverage', 'No')}
+                      onClick={() => {
+                        handleInputChange('provincialCoverage', 'No')
+                        setFormErrors(prev => ({ ...prev, provincialCoverage: 'These plans require valid provincial coverage.' }))
+                      }}
                       style={{
                         flex: 1,
-                        padding: '14px',
+                        padding: '14px 16px',
                         fontSize: '16px',
-                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db')}`,
+                        border: `2px solid ${formData.provincialCoverage === 'No' ? '#dc2626' : '#d1d5db'}`,
                         borderRadius: '8px',
-                        backgroundColor: formData.provincialCoverage === 'No' ? '#e0f2fe' : '#fff',
+                        backgroundColor: formData.provincialCoverage === 'No' ? '#fee2e2' : '#fff',
                         color: '#1f2937',
                         cursor: 'pointer',
                         fontWeight: 600
@@ -627,22 +585,6 @@ const Home = () => {
                   </div>
                   {formErrors.provincialCoverage && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
-                  )}
-
-                  {/* Provincial Coverage Disclaimer */}
-                  {formData.provincialCoverage === 'No' && (
-                    <div style={{
-                      marginTop: '12px',
-                      padding: '12px',
-                      backgroundColor: '#fef3c7',
-                      border: '1px solid #f59e0b',
-                      borderRadius: '6px',
-                      fontSize: '14px',
-                      color: '#92400e',
-                      lineHeight: '1.4'
-                    }}>
-                      These plans require the insured to have a valid provincial coverage. If you do not have or are waiting for the provincial coverage, you can get emergency medical insurance.
-                    </div>
                   )}
                 </div>
               </div>
@@ -814,59 +756,119 @@ const Home = () => {
           justifyContent: 'center',
           alignItems: 'center',
           zIndex: 1000,
-          padding: '20px'
+          padding: '20px',
+          background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)'
         }}>
           <div style={{
             backgroundColor: '#fff',
             borderRadius: '20px',
-            padding: '40px',
-            maxWidth: '500px',
+            padding: 'clamp(40px, 6vw, 60px) clamp(30px, 5vw, 40px)',
+            maxWidth: '600px',
             width: '100%',
             textAlign: 'center',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.1)'
           }}>
+            {/* Success Icon */}
             <div style={{
-              width: '64px',
-              height: '64px',
-              backgroundColor: '#013946',
+              width: '100px',
+              height: '100px',
+              margin: '0 auto 30px',
               borderRadius: '50%',
+              background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 24px'
+              boxShadow: '0 10px 30px rgba(22, 163, 74, 0.3)'
             }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg 
+                width="50" 
+                height="50" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="white" 
+                strokeWidth="3" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <path d="M20 6L9 17l-5-5" />
               </svg>
             </div>
+
+            {/* Thank You Message */}
             <h2 style={{
-              fontSize: '24px',
+              fontSize: 'clamp(32px, 5vw, 42px)',
               fontWeight: 700,
-              color: '#1f2937',
-              marginBottom: '16px'
+              color: '#1a202c',
+              marginBottom: '16px',
+              lineHeight: '1.2'
             }}>
               Thank You!
             </h2>
+            
             <p style={{
-              fontSize: '16px',
-              color: '#6b7280',
-              lineHeight: 1.5,
-              marginBottom: '24px'
+              fontSize: 'clamp(16px, 2.5vw, 20px)',
+              color: '#4a5568',
+              marginBottom: '8px',
+              lineHeight: '1.6'
             }}>
-              One of our licensed advisors will reach out soon with your Sun Life health and dental plan options and guide you on what's best for your needs.
+              We've received your request successfully.
             </p>
+            
+            <p style={{
+              fontSize: 'clamp(15px, 2vw, 18px)',
+              color: '#64748b',
+              marginBottom: '40px',
+              lineHeight: '1.6'
+            }}>
+              One of our licensed advisors will reach out soon with your Sun Life health and dental plan options.
+            </p>
+
+            {/* Redirect Message */}
+            <div style={{
+              padding: '20px',
+              background: '#f1f5f9',
+              borderRadius: '12px',
+              marginBottom: '30px'
+            }}>
+              <p style={{
+                fontSize: '16px',
+                color: '#475569',
+                margin: '0',
+                lineHeight: '1.5'
+              }}>
+                This window will close in <strong style={{ color: '#013946', fontSize: '18px' }}>{thankYouCountdown}</strong> second{thankYouCountdown !== 1 ? 's' : ''}...
+              </p>
+            </div>
+
+            {/* Manual Close Button */}
             <button
-              onClick={() => setShowThankYou(false)}
+              onClick={() => {
+                setShowThankYou(false);
+                setFormData({
+                  fullName: '',
+                  phoneNumber: '',
+                  email: '',
+                  gender: '',
+                  age: '',
+                  employmentStatus: '',
+                  occupation: '',
+                  annualIncome: '',
+                  province: '',
+                  provincialCoverage: '',
+                  coverageAmount: 0
+                });
+              }}
               style={{
-                width: '100%',
-                padding: '14px',
-                backgroundColor: '#013946',
-                color: 'white',
+                padding: '14px 32px',
                 border: 'none',
-                borderRadius: '8px',
+                borderRadius: '12px',
                 fontSize: '16px',
                 fontWeight: 600,
-                cursor: 'pointer'
+                color: '#ffffff',
+                background: '#013946',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(1, 57, 70, 0.3)'
               }}
             >
               Close
@@ -1680,7 +1682,10 @@ const Home = () => {
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button
                     type="button"
-                    onClick={() => handleInputChange('provincialCoverage', 'Yes')}
+                    onClick={() => {
+                      handleInputChange('provincialCoverage', 'Yes')
+                      setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
+                    }}
                     style={{
                       flex: 1,
                       padding: '10px',
@@ -1697,14 +1702,17 @@ const Home = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleInputChange('provincialCoverage', 'No')}
+                    onClick={() => {
+                      handleInputChange('provincialCoverage', 'No')
+                      setFormErrors(prev => ({ ...prev, provincialCoverage: 'These plans require valid provincial coverage.' }))
+                    }}
                     style={{
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db')}`,
+                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#dc2626' : '#d1d5db')}`,
                       borderRadius: '6px',
-                      backgroundColor: formData.provincialCoverage === 'No' ? '#e0f7fa' : '#fff',
+                      backgroundColor: formData.provincialCoverage === 'No' ? '#fee2e2' : '#fff',
                       color: '#1f2937',
                       cursor: 'pointer',
                       fontWeight: 600
