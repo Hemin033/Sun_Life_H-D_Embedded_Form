@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { IoMdWalk } from 'react-icons/io'
 import { MdDirectionsRun } from 'react-icons/md'
@@ -12,12 +13,11 @@ import { TbDental } from 'react-icons/tb'
 import { BentoGrid, BentoGridItem } from '../components/ui/bento-grid'
 
 const Home = () => {
+  const router = useRouter()
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null)
   const [showLeadForm, setShowLeadForm] = useState(false)
   const [mobileProvinceDropdownOpen, setMobileProvinceDropdownOpen] = useState(false)
   const [showOTPVerification, setShowOTPVerification] = useState(false)
-  const [showThankYou, setShowThankYou] = useState(false)
-  const [thankYouCountdown, setThankYouCountdown] = useState(5)
   const [otp, setOTP] = useState(['', '', '', '', '', ''])
   const [phoneNumber, setPhoneNumber] = useState('')
   const [formErrors, setFormErrors] = useState({
@@ -61,39 +61,6 @@ const Home = () => {
     const numAge = parseInt(age);
     return numAge >= 18 && numAge <= 99;
   }
-
-  // Thank You countdown timer
-  useEffect(() => {
-    if (showThankYou) {
-      setThankYouCountdown(5);
-      const timer = setInterval(() => {
-        setThankYouCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            setShowThankYou(false);
-            // Reset form data
-            setFormData({
-              fullName: '',
-              phoneNumber: '',
-              email: '',
-              gender: '',
-              age: '',
-              employmentStatus: '',
-              occupation: '',
-              annualIncome: '',
-              province: '',
-              provincialCoverage: '',
-              coverageAmount: 0
-            });
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }
-  }, [showThankYou]);
 
   const toggleFAQ = (index: number) => {
     setActiveFAQ(activeFAQ === index ? null : index)
@@ -189,9 +156,9 @@ const Home = () => {
     
     // Store phone number for reference
     setPhoneNumber(formData.phoneNumber)
-    // Hide lead form and show Thank You modal
+    // Hide lead form and redirect to Thank You page
     setShowLeadForm(false)
-    setShowThankYou(true)
+    router.push('/thank-you')
   }
 
   const handleOTPChange = (index: number, value: string) => {
@@ -739,140 +706,6 @@ const Home = () => {
                 Resend OTP (42s)
               </button>
             </p>
-          </div>
-        </div>
-      )}
-
-      {/* Thank You Modal */}
-      {showThankYou && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000,
-          padding: '20px',
-          background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)'
-        }}>
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: '20px',
-            padding: 'clamp(40px, 6vw, 60px) clamp(30px, 5vw, 40px)',
-            maxWidth: '600px',
-            width: '100%',
-            textAlign: 'center',
-            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.1)'
-          }}>
-            {/* Success Icon */}
-            <div style={{
-              width: '100px',
-              height: '100px',
-              margin: '0 auto 30px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 10px 30px rgba(22, 163, 74, 0.3)'
-            }}>
-              <svg 
-                width="50" 
-                height="50" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="white" 
-                strokeWidth="3" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-            </div>
-
-            {/* Thank You Message */}
-            <h2 style={{
-              fontSize: 'clamp(32px, 5vw, 42px)',
-              fontWeight: 700,
-              color: '#1a202c',
-              marginBottom: '16px',
-              lineHeight: '1.2'
-            }}>
-              Thank You!
-            </h2>
-            
-            <p style={{
-              fontSize: 'clamp(16px, 2.5vw, 20px)',
-              color: '#4a5568',
-              marginBottom: '8px',
-              lineHeight: '1.6'
-            }}>
-              We've received your request successfully.
-            </p>
-            
-            <p style={{
-              fontSize: 'clamp(15px, 2vw, 18px)',
-              color: '#64748b',
-              marginBottom: '40px',
-              lineHeight: '1.6'
-            }}>
-              One of our licensed advisors will reach out soon with your Sun Life health and dental plan options.
-            </p>
-
-            {/* Redirect Message */}
-            <div style={{
-              padding: '20px',
-              background: '#f1f5f9',
-              borderRadius: '12px',
-              marginBottom: '30px'
-            }}>
-              <p style={{
-                fontSize: '16px',
-                color: '#475569',
-                margin: '0',
-                lineHeight: '1.5'
-              }}>
-                This window will close in <strong style={{ color: '#013946', fontSize: '18px' }}>{thankYouCountdown}</strong> second{thankYouCountdown !== 1 ? 's' : ''}...
-              </p>
-            </div>
-
-            {/* Manual Close Button */}
-            <button
-              onClick={() => {
-                setShowThankYou(false);
-                setFormData({
-                  fullName: '',
-                  phoneNumber: '',
-                  email: '',
-                  gender: '',
-                  age: '',
-                  employmentStatus: '',
-                  occupation: '',
-                  annualIncome: '',
-                  province: '',
-                  provincialCoverage: '',
-                  coverageAmount: 0
-                });
-              }}
-              style={{
-                padding: '14px 32px',
-                border: 'none',
-                borderRadius: '12px',
-                fontSize: '16px',
-                fontWeight: 600,
-                color: '#ffffff',
-                background: '#013946',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(1, 57, 70, 0.3)'
-              }}
-            >
-              Close
-            </button>
           </div>
         </div>
       )}
