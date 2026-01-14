@@ -35,9 +35,9 @@ export default function ThankYouPage() {
     }}>
       <div style={{
         background: 'white',
-        borderRadius: '24px',
-        padding: '60px 50px',
-        maxWidth: '600px',
+        borderRadius: '20px',
+        padding: '35px 40px',
+        maxWidth: '520px',
         width: '100%',
         textAlign: 'center',
         boxShadow: '0 25px 80px rgba(0, 0, 0, 0.15)',
@@ -55,49 +55,49 @@ export default function ThankYouPage() {
         }} />
 
         {/* Sun Life Logo */}
-        <div style={{ marginBottom: '30px' }}>
+        <div style={{ marginBottom: '20px' }}>
           <Image
             src="/Sun-Life-Financial-Logo.png"
             alt="Sun Life Financial"
-            width={180}
-            height={45}
+            width={450}
+            height={113}
             style={{ objectFit: 'contain' }}
           />
         </div>
 
         {/* Success Icon */}
         <div style={{
-          width: '100px',
-          height: '100px',
+          width: '70px',
+          height: '70px',
           background: 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          margin: '0 auto 30px',
-          boxShadow: '0 10px 30px rgba(76, 175, 80, 0.3)'
+          margin: '0 auto 20px',
+          boxShadow: '0 8px 20px rgba(76, 175, 80, 0.3)'
         }}>
-          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </div>
 
         {/* Thank You Message */}
         <h1 style={{
-          fontSize: '32px',
+          fontSize: '28px',
           fontWeight: '700',
           color: '#1a1a2e',
-          marginBottom: '15px',
+          marginBottom: '10px',
           letterSpacing: '-0.5px'
         }}>
           Thank You!
         </h1>
 
         <p style={{
-          fontSize: '18px',
+          fontSize: '16px',
           color: '#555',
-          marginBottom: '30px',
-          lineHeight: '1.6'
+          marginBottom: '20px',
+          lineHeight: '1.5'
         }}>
           Your request has been submitted successfully.<br />
           A Sun Life advisor will contact you shortly.
@@ -106,15 +106,16 @@ export default function ThankYouPage() {
         {/* Info Box */}
         <div style={{
           background: '#FFF8E0',
-          borderRadius: '12px',
-          padding: '20px',
-          marginBottom: '30px',
+          borderRadius: '10px',
+          padding: '14px 16px',
+          marginBottom: '20px',
           border: '1px solid #FFE082'
         }}>
           <p style={{
-            fontSize: '14px',
+            fontSize: '13px',
             color: '#666',
-            margin: 0
+            margin: 0,
+            lineHeight: '1.5'
           }}>
             <strong style={{ color: '#333' }}>What's next?</strong><br />
             Our licensed advisor will review your information and reach out within 24-48 hours to discuss your health & dental insurance options.
@@ -126,24 +127,24 @@ export default function ThankYouPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '10px',
-          marginBottom: '20px'
+          gap: '8px',
+          marginBottom: '15px'
         }}>
           <div style={{
-            width: '40px',
-            height: '40px',
+            width: '32px',
+            height: '32px',
             background: 'linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '18px',
+            fontSize: '15px',
             fontWeight: '700',
             color: '#1a1a2e'
           }}>
             {countdown}
           </div>
-          <span style={{ fontSize: '14px', color: '#888' }}>
+          <span style={{ fontSize: '13px', color: '#888' }}>
             Redirecting to homepage...
           </span>
         </div>
@@ -155,9 +156,9 @@ export default function ThankYouPage() {
             background: 'linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)',
             color: '#1a1a2e',
             border: 'none',
-            padding: '14px 40px',
+            padding: '12px 32px',
             borderRadius: '8px',
-            fontSize: '16px',
+            fontSize: '15px',
             fontWeight: '600',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
@@ -177,9 +178,9 @@ export default function ThankYouPage() {
 
         {/* Contact Info */}
         <p style={{
-          fontSize: '13px',
+          fontSize: '12px',
           color: '#999',
-          marginTop: '30px'
+          marginTop: '20px'
         }}>
           Questions? Call us at <a href="tel:1-888-601-9980" style={{ color: '#FFC107', textDecoration: 'none', fontWeight: '600' }}>1-888-601-9980</a>
         </p>

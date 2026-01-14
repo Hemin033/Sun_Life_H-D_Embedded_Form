@@ -21,7 +21,8 @@ const Home = () => {
   const [otp, setOTP] = useState(['', '', '', '', '', ''])
   const [phoneNumber, setPhoneNumber] = useState('')
   const [formErrors, setFormErrors] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     phoneNumber: '',
     email: '',
     gender: '',
@@ -33,7 +34,8 @@ const Home = () => {
     provincialCoverage: ''
   })
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     phoneNumber: '',
     email: '',
     gender: '',
@@ -76,7 +78,8 @@ const Home = () => {
 
   const validateAllFields = () => {
     const errors = {
-      fullName: '',
+      firstName: '',
+      lastName: '',
       phoneNumber: '',
       email: '',
       gender: '',
@@ -89,9 +92,15 @@ const Home = () => {
     }
     let isValid = true
 
-    // Full Name
-    if (!formData.fullName.trim()) {
-      errors.fullName = 'Full name is required'
+    // First Name
+    if (!formData.firstName.trim()) {
+      errors.firstName = 'First name is required'
+      isValid = false
+    }
+
+    // Last Name
+    if (!formData.lastName.trim()) {
+      errors.lastName = 'Last name is required'
       isValid = false
     }
 
@@ -137,9 +146,6 @@ const Home = () => {
     // Provincial Coverage
     if (!formData.provincialCoverage) {
       errors.provincialCoverage = 'Please select provincial coverage'
-      isValid = false
-    } else if (formData.provincialCoverage === 'No') {
-      errors.provincialCoverage = 'These plans require valid provincial coverage.'
       isValid = false
     }
 
@@ -277,31 +283,89 @@ const Home = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmitLead}>
-              {/* Basic Information Row */}
+              {/* First Name / Last Name Row */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Full Name <span style={{ color: '#013946' }}>*</span>
+                  First Name <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="John Smith"
-                  value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  placeholder="John"
+                  value={formData.firstName}
+                  onChange={(e) => handleInputChange('firstName', e.target.value)}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
                     fontSize: '16px',
-                      border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      border: formErrors.firstName ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '8px',
                     outline: 'none'
                   }}
                 />
-                  {formErrors.fullName && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                  {formErrors.firstName && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.firstName}</p>
                   )}
               </div>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                  Last Name <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Smith"
+                  value={formData.lastName}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
+                      border: formErrors.lastName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
+                  {formErrors.lastName && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.lastName}</p>
+                  )}
+              </div>
+              </div>
+
+              {/* Email / Phone Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
+                <div>
+                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
+                    Email Address <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="john.smith@gmail.com"
+                    value={formData.email}
+                    onChange={(e) => {
+                      handleInputChange('email', e.target.value);
+                      setFormErrors(prev => ({ ...prev, email: '' }));
+                    }}
+                    onBlur={() => {
+                      if (formData.email && !validateEmail(formData.email)) {
+                        setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                      }
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '16px',
+                      border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      outline: 'none'
+                    }}
+                  />
+                  {formErrors.email && (
+                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
+                  )}
+                </div>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
                   Phone Number <span style={{ color: '#013946' }}>*</span>
@@ -345,39 +409,6 @@ const Home = () => {
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
                   )}
               </div>
-              </div>
-
-              {/* Email */}
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Email Address <span style={{ color: '#013946' }}>*</span>
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="john.smith@gmail.com"
-                  value={formData.email}
-                  onChange={(e) => {
-                    handleInputChange('email', e.target.value);
-                    setFormErrors(prev => ({ ...prev, email: '' }));
-                  }}
-                  onBlur={() => {
-                    if (formData.email && !validateEmail(formData.email)) {
-                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    fontSize: '16px',
-                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    outline: 'none'
-                  }}
-                />
-                {formErrors.email && (
-                  <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
-                )}
               </div>
 
               {/* Gender and Age */}
@@ -533,15 +564,15 @@ const Home = () => {
                       type="button"
                       onClick={() => {
                         handleInputChange('provincialCoverage', 'No')
-                        setFormErrors(prev => ({ ...prev, provincialCoverage: 'These plans require valid provincial coverage.' }))
+                        setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
                       }}
                       style={{
                         flex: 1,
                         padding: '14px 16px',
                         fontSize: '16px',
-                        border: `2px solid ${formData.provincialCoverage === 'No' ? '#dc2626' : '#d1d5db'}`,
+                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
-                        backgroundColor: formData.provincialCoverage === 'No' ? '#fee2e2' : '#fff',
+                        backgroundColor: formData.provincialCoverage === 'No' ? '#e0f2fe' : '#fff',
                         color: '#1f2937',
                         cursor: 'pointer',
                         fontWeight: 600
@@ -774,7 +805,7 @@ const Home = () => {
                 lineHeight: '1.6',
                 maxWidth: '480px'
               }}>
-                Get comprehensive health & dental coverage with Sun Life — Canada's trusted insurer. Our licensed advisors help you find the perfect plan.
+                Get comprehensive health & dental coverage with Sun Life, Canada's trusted insurer. Our licensed advisors help you find the perfect plan.
               </p>
             </div>
 
@@ -838,31 +869,93 @@ const Home = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmitLead}>
-              {/* Basic Information */}
+              {/* First Name / Last Name */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
-                    Full Name *
+                    First Name *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="John Smith"
-                    value={formData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                    placeholder="John"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
               style={{
                 width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
-                      border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      border: formErrors.firstName ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
                       outline: 'none',
                       backgroundColor: '#fff',
                       color: '#1f2937'
                     }}
                   />
-                  {formErrors.fullName && (
-                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                  {formErrors.firstName && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.firstName}</p>
+                  )}
+                </div>
+                <div>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Smith"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '15px',
+                      border: formErrors.lastName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      outline: 'none',
+                      backgroundColor: '#fff',
+                      color: '#1f2937'
+                    }}
+                  />
+                  {formErrors.lastName && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.lastName}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Email / Phone */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                <div>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="john.smith@gmail.com"
+                    value={formData.email}
+                    onChange={(e) => {
+                      handleInputChange('email', e.target.value);
+                      setFormErrors(prev => ({ ...prev, email: '' }));
+                    }}
+                    onBlur={() => {
+                      if (formData.email && !validateEmail(formData.email)) {
+                        setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                      }
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      fontSize: '15px',
+                      border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      outline: 'none',
+                      backgroundColor: '#fff',
+                      color: '#1f2937'
+                    }}
+                  />
+                  {formErrors.email && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
                   )}
                 </div>
                 <div>
@@ -910,40 +1003,6 @@ const Home = () => {
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
                   )}
                 </div>
-              </div>
-
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="john.smith@gmail.com"
-                  value={formData.email}
-                  onChange={(e) => {
-                    handleInputChange('email', e.target.value);
-                    setFormErrors(prev => ({ ...prev, email: '' }));
-                  }}
-                  onBlur={() => {
-                    if (formData.email && !validateEmail(formData.email)) {
-                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    fontSize: '15px',
-                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '6px',
-                    outline: 'none',
-                    backgroundColor: '#fff',
-                    color: '#1f2937'
-                  }}
-                />
-                {formErrors.email && (
-                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
-                )}
               </div>
 
               {/* Gender and Age */}
@@ -1119,19 +1178,6 @@ const Home = () => {
                 </div>
               </div>
               
-              {formData.provincialCoverage === 'No' && (
-                <div style={{
-                  marginBottom: '20px',
-                  padding: '12px 14px',
-                  backgroundColor: '#fef3c7',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  color: '#92400e',
-                  lineHeight: '1.5'
-                }}>
-                  These plans require valid provincial coverage.
-                </div>
-              )}
 
               {/* Submit Button */}
             <button 
@@ -1238,31 +1284,90 @@ const Home = () => {
             overflow: 'visible'
           }}>
             <form onSubmit={handleSubmitLead}>
-              {/* Basic Info */}
+              {/* First Name */}
               <div style={{ marginBottom: '10px' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
-                  Full Name <span style={{ color: '#013946' }}>*</span>
+                  First Name <span style={{ color: '#013946' }}>*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="John Smith"
-                  value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  placeholder="John"
+                  value={formData.firstName}
+                  onChange={(e) => handleInputChange('firstName', e.target.value)}
                   style={{
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '15px',
-                    border: formErrors.fullName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                    border: formErrors.firstName ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
                     outline: 'none'
                   }}
                 />
-                {formErrors.fullName && (
-                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.fullName}</p>
+                {formErrors.firstName && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.firstName}</p>
                 )}
               </div>
 
+              {/* Last Name */}
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Last Name <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Smith"
+                  value={formData.lastName}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '15px',
+                    border: formErrors.lastName ? '1px solid #dc2626' : '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    outline: 'none'
+                  }}
+                />
+                {formErrors.lastName && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.lastName}</p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                  Email <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="email@example.com"
+                  value={formData.email}
+                  onChange={(e) => {
+                    handleInputChange('email', e.target.value);
+                    setFormErrors(prev => ({ ...prev, email: '' }));
+                  }}
+                  onBlur={() => {
+                    if (formData.email && !validateEmail(formData.email)) {
+                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                    }
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '15px',
+                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    outline: 'none'
+                  }}
+                />
+                {formErrors.email && (
+                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
+                )}
+              </div>
+
+              {/* Phone */}
               <div style={{ marginBottom: '10px' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
                   Phone <span style={{ color: '#013946' }}>*</span>
@@ -1304,37 +1409,6 @@ const Home = () => {
                 />
                 {formErrors.phoneNumber && (
                   <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
-                )}
-              </div>
-              <div style={{ marginBottom: '10px' }}>
-                <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
-                  Email <span style={{ color: '#013946' }}>*</span>
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="email@example.com"
-                  value={formData.email}
-                  onChange={(e) => {
-                    handleInputChange('email', e.target.value);
-                    setFormErrors(prev => ({ ...prev, email: '' }));
-                  }}
-                  onBlur={() => {
-                    if (formData.email && !validateEmail(formData.email)) {
-                      setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    fontSize: '15px',
-                    border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '6px',
-                    outline: 'none'
-                  }}
-                />
-                {formErrors.email && (
-                  <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
                 )}
               </div>
 
@@ -1537,15 +1611,15 @@ const Home = () => {
                     type="button"
                     onClick={() => {
                       handleInputChange('provincialCoverage', 'No')
-                      setFormErrors(prev => ({ ...prev, provincialCoverage: 'These plans require valid provincial coverage.' }))
+                      setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
                     }}
                     style={{
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#dc2626' : '#d1d5db')}`,
+                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
-                      backgroundColor: formData.provincialCoverage === 'No' ? '#fee2e2' : '#fff',
+                      backgroundColor: formData.provincialCoverage === 'No' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
                       cursor: 'pointer',
                       fontWeight: 600
@@ -1597,7 +1671,7 @@ const Home = () => {
         <div className="vitality-intro" style={{ padding: '0 8px' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)' }}>Comprehensive health and dental coverage with Sun Life</h2>
           <p style={{ lineHeight: '1.6', marginBottom: '16px', fontSize: 'clamp(16px, 2.5vw, 20px)' }}>
-            Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance that helps safeguard you from unexpected medical expenses not covered by provincial healthcare — including prescription drugs, dental care, vision, and paramedical services.
+            Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance that helps safeguard you from unexpected medical expenses not covered by provincial healthcare, including prescription drugs, dental care, vision, and paramedical services.
           </p>
           <p style={{ lineHeight: '1.6', marginBottom: '0', fontSize: 'clamp(16px, 2.5vw, 20px)' }}>
             Perfect especially for self-employed Canadians, retirees, or anyone losing group benefits, Sun Life makes it easy to maintain comprehensive coverage and peace of mind for you and your family.
@@ -1807,7 +1881,7 @@ const Home = () => {
                   lineHeight: '1.5',
                   paddingLeft: '24px'
                 }}>
-                  Get a personalized quote and consultation from a licensed advisor — at no cost, with no pressure.
+                  Get a personalized quote and consultation from a licensed advisor at no cost, with no pressure.
                 </p>
               </div>
             </div>
@@ -2280,7 +2354,7 @@ const Home = () => {
             </div>
             {activeFAQ === 3 && (
               <div className="faq-answer">
-                    For most dental and extended health claims, you must submit within 365 days after the end of the benefit year in which the expense occurred or within 90 days after your coverage ends—whichever comes first.
+                    For most dental and extended health claims, you must submit within 365 days after the end of the benefit year in which the expense occurred or within 90 days after your coverage ends, whichever comes first.
               </div>
             )}
           </div>

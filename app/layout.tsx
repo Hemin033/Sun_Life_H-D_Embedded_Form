@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Sun Life Insurance - Protect What Matters Most',
+  title: 'Sun Life Insurance | Protect What Matters Most',
   description: 'Secure your family\'s future with trusted coverage. Get flexible life insurance options from one of Canada\'s most established insurers.',
 }
 
