@@ -33,6 +33,7 @@ a {
   padding: 0;
   position: relative;
   overflow: hidden;
+  margin-bottom: 30px;
 }
 
 .hero-container {
@@ -127,7 +128,12 @@ a {
 
 /* Section Containers */
 .section {
-  padding: 40px 20px;
+  padding: 30px 20px;
+}
+
+/* Consistent 60px gap between adjacent sections */
+.section + .section {
+  margin-top: 0;
 }
 
 .section > * {
@@ -662,10 +668,10 @@ a {
 /* FAQ Section */
 .faq-section {
   background: #fff;
-  padding: 60px 20px;
+  padding: 30px 20px;
   text-align: center;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 30px auto;
 }
 
 .faq-section h2 {
@@ -806,14 +812,15 @@ a {
     font-size: 15px;
   }
   
-  /* Section padding */
+  /* Section padding - consistent 30px gaps on mobile (15+15) */
   .section {
-    padding: 30px 16px;
+    padding: 15px 16px;
   }
 
-  /* Hero Section Mobile */
+  /* Hero Section Mobile - consistent 30px gaps (15+15) */
   .hero-section {
     padding: 0;
+    margin-bottom: 15px;
   }
   
   .hero-container {
@@ -907,9 +914,10 @@ a {
     font-size: 26px;
   }
 
-  /* FAQ Section */
+  /* FAQ Section - consistent 30px gaps on mobile (15+15) */
   .faq-section {
-    padding: 40px 16px;
+    padding: 15px 16px;
+    margin: 15px auto;
   }
   
   .faq-section h2 {
@@ -955,9 +963,10 @@ a {
     font-size: 14px;
   }
 
-  /* Footer */
+  /* Footer - consistent 30px gaps on mobile (15+15) */
   footer {
-    padding: 30px 16px !important;
+    padding: 15px 16px !important;
+    margin-top: 15px !important;
   }
   
   footer p {
@@ -972,7 +981,7 @@ a {
   }
   
   .section {
-    padding: 24px 12px;
+    padding: 15px 12px;
   }
   
   .hero-container h1 {

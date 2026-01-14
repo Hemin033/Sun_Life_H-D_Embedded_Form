@@ -1737,7 +1737,7 @@ const Home = () => {
       </section>
 
       {/* Active Lifestyle Benefits */}
-      <section className="section section-white" style={{ paddingTop: 'clamp(30px, 6vw, 60px)' }}>
+      <section className="section section-white">
         <div className="benefits-section">
           <div className="benefits-image" style={{ flex: '0 0 45%', minWidth: '280px' }}>
             <Image
@@ -2013,21 +2013,19 @@ const Home = () => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
-              <div style={{
-                fontSize: 'clamp(28px, 4vw, 32px)',
-                color: '#013946',
-                marginBottom: '16px'
-              }}>
-                <AiOutlineMedicineBox />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
+                  <AiOutlineMedicineBox />
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 3vw, 22px)',
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Prescription drugs
+                </h3>
               </div>
-              <h3 style={{
-                fontSize: 'clamp(18px, 3vw, 24px)',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '12px'
-              }}>
-                Prescription drugs
-              </h3>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
@@ -2053,21 +2051,19 @@ const Home = () => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
-              <div style={{
-                fontSize: 'clamp(28px, 4vw, 32px)',
-                color: '#013946',
-                marginBottom: '16px'
-              }}>
-                <AiOutlineTeam />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
+                  <AiOutlineTeam />
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 3vw, 22px)',
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Paramedical services
+                </h3>
               </div>
-              <h3 style={{
-                fontSize: 'clamp(18px, 3vw, 24px)',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '12px'
-              }}>
-                Paramedical services
-              </h3>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
@@ -2093,21 +2089,19 @@ const Home = () => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
-              <div style={{
-                fontSize: 'clamp(28px, 4vw, 32px)',
-                color: '#013946',
-                marginBottom: '16px'
-              }}>
-                <AiOutlineEye />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
+                  <AiOutlineEye />
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 3vw, 22px)',
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Vision care
+                </h3>
               </div>
-              <h3 style={{
-                fontSize: 'clamp(18px, 3vw, 24px)',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '12px'
-              }}>
-                Vision care
-              </h3>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
@@ -2133,21 +2127,19 @@ const Home = () => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
-              <div style={{
-                fontSize: 'clamp(28px, 4vw, 32px)',
-                color: '#013946',
-                marginBottom: '16px'
-              }}>
-                <AiOutlineGlobal />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
+                  <AiOutlineGlobal />
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 3vw, 22px)',
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Travel medical
+                </h3>
               </div>
-              <h3 style={{
-                fontSize: 'clamp(18px, 3vw, 24px)',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '12px'
-              }}>
-                Travel medical
-              </h3>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
@@ -2173,21 +2165,19 @@ const Home = () => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
-              <div style={{
-                fontSize: 'clamp(28px, 4vw, 32px)',
-                color: '#013946',
-                marginBottom: '16px'
-              }}>
-                <AiOutlineMedicineBox />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
+                  <AiOutlineMedicineBox />
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 3vw, 22px)',
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Medical equipment
+                </h3>
               </div>
-              <h3 style={{
-                fontSize: 'clamp(18px, 3vw, 24px)',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '12px'
-              }}>
-                Medical equipment
-              </h3>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
@@ -2213,21 +2203,19 @@ const Home = () => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
             }}>
-              <div style={{
-                fontSize: 'clamp(28px, 4vw, 32px)',
-                color: '#013946',
-                marginBottom: '16px'
-              }}>
-                <TbDental />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
+                  <TbDental />
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 3vw, 22px)',
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Dental
+                </h3>
               </div>
-              <h3 style={{
-                fontSize: 'clamp(18px, 3vw, 24px)',
-                fontWeight: 700,
-                color: '#1f2937',
-                marginBottom: '12px'
-              }}>
-                Dental
-              </h3>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
@@ -2376,8 +2364,8 @@ const Home = () => {
       {/* Footer */}
       <footer style={{
         backgroundColor: '#f8f9fa',
-        padding: 'clamp(24px, 4vw, 40px) clamp(16px, 4vw, 20px)',
-        marginTop: 'clamp(30px, 6vw, 60px)',
+        padding: '30px 20px',
+        marginTop: '30px',
         borderTop: '1px solid #e5e7eb'
       }}>
         <div style={{
