@@ -337,13 +337,13 @@ const Home = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
                 <div>
                   <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Email Address <span style={{ color: '#013946' }}>*</span>
-                  </label>
-                  <input
-                    type="email"
-                    required
+                  Email Address <span style={{ color: '#013946' }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  required
                     placeholder="john.smith@gmail.com"
-                    value={formData.email}
+                  value={formData.email}
                     onChange={(e) => {
                       handleInputChange('email', e.target.value);
                       setFormErrors(prev => ({ ...prev, email: '' }));
@@ -353,15 +353,15 @@ const Home = () => {
                         setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
                       }
                     }}
-                    style={{
-                      width: '100%',
-                      padding: '14px 16px',
-                      fontSize: '16px',
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    fontSize: '16px',
                       border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
-                      borderRadius: '8px',
-                      outline: 'none'
-                    }}
-                  />
+                    borderRadius: '8px',
+                    outline: 'none'
+                  }}
+                />
                   {formErrors.email && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
                   )}
@@ -408,7 +408,7 @@ const Home = () => {
                   {formErrors.phoneNumber && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
                   )}
-              </div>
+                </div>
               </div>
 
               {/* Gender and Age */}
@@ -805,7 +805,7 @@ const Home = () => {
                 lineHeight: '1.6',
                 maxWidth: '480px'
               }}>
-                Get comprehensive health & dental coverage with Sun Life, Canada's trusted insurer. Our licensed advisors help you find the perfect plan.
+                Get comprehensive health & dental coverage with Sun Life, Canada's trusted insurer. Our licensed advisors help you find the perfect plan for your needs and budget.
               </p>
             </div>
 
@@ -1137,10 +1137,10 @@ const Home = () => {
                     Do you have Provincial Coverage? *
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <button
+            <button 
                       type="button"
                       onClick={() => handleInputChange('provincialCoverage', 'Yes')}
-                      style={{
+              style={{
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
@@ -1148,7 +1148,7 @@ const Home = () => {
                         borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
-                        cursor: 'pointer',
+                cursor: 'pointer',
                         fontWeight: 500
                       }}
                     >
@@ -1162,7 +1162,7 @@ const Home = () => {
                         padding: '14px 12px',
                         fontSize: '15px',
                         border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
-                        borderRadius: '6px',
+                borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
                         cursor: 'pointer',
@@ -1671,10 +1671,10 @@ const Home = () => {
         <div className="vitality-intro" style={{ padding: '0 8px' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)' }}>Comprehensive health and dental coverage with Sun Life</h2>
           <p style={{ lineHeight: '1.6', marginBottom: '16px', fontSize: 'clamp(16px, 2.5vw, 20px)' }}>
-            Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance that helps safeguard you from unexpected medical expenses not covered by provincial healthcare, including prescription drugs, dental care, vision, and paramedical services.
+            Your health deserves more than the basics. Sun Life offers flexible personal health and dental insurance designed to help cover medical expenses not covered by provincial healthcare, including prescription drugs, dental care, vision, and paramedical services.
           </p>
           <p style={{ lineHeight: '1.6', marginBottom: '0', fontSize: 'clamp(16px, 2.5vw, 20px)' }}>
-            Perfect especially for self-employed Canadians, retirees, or anyone losing group benefits, Sun Life makes it easy to maintain comprehensive coverage and peace of mind for you and your family.
+            Ideal for self-employed Canadians, individuals without workplace benefits including retirees, or those transitioning out of a group plan, Sun Life makes it easy to maintain essential coverage and peace of mind for you and your family.
           </p>
         </div>
       </section>
@@ -1988,7 +1988,7 @@ const Home = () => {
             maxWidth: '900px',
             margin: '0 auto clamp(24px, 4vw, 40px)'
           }}>
-            Private health insurance helps cover healthcare costs not fully included in public plans, giving you access to services like prescription drugs, dental, vision, and paramedical care. Here's what a personal health insurance plan typically covers:
+            Private health insurance helps cover your out-of-pocket health-care costs not fully included in public plans, giving you access to services like prescription drugs, dental, vision, and paramedical care. Here's what a personal health insurance plan typically covers:
           </p>
 
           <div className="coverage-cards-grid" style={{
@@ -2015,23 +2015,23 @@ const Home = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
-                  <AiOutlineMedicineBox />
-                </div>
-                <h3 style={{
+                <AiOutlineMedicineBox />
+              </div>
+              <h3 style={{
                   fontSize: 'clamp(18px, 3vw, 22px)',
-                  fontWeight: 700,
-                  color: '#1f2937',
+                fontWeight: 700,
+                color: '#1f2937',
                   margin: 0
-                }}>
-                  Prescription drugs
-                </h3>
+              }}>
+                Prescription drugs
+              </h3>
               </div>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
-                Helps pay for medications and treatments not covered by public health plans
+                Helps cover the cost of prescription medications and eligible treatments not fully covered by provincial health plans.
               </p>
             </div>
 
@@ -2053,16 +2053,16 @@ const Home = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
-                  <AiOutlineTeam />
-                </div>
-                <h3 style={{
+                <AiOutlineTeam />
+              </div>
+              <h3 style={{
                   fontSize: 'clamp(18px, 3vw, 22px)',
-                  fontWeight: 700,
-                  color: '#1f2937',
+                fontWeight: 700,
+                color: '#1f2937',
                   margin: 0
-                }}>
-                  Paramedical services
-                </h3>
+              }}>
+                Paramedical services
+              </h3>
               </div>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
@@ -2091,16 +2091,16 @@ const Home = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
-                  <AiOutlineEye />
-                </div>
-                <h3 style={{
+                <AiOutlineEye />
+              </div>
+              <h3 style={{
                   fontSize: 'clamp(18px, 3vw, 22px)',
-                  fontWeight: 700,
-                  color: '#1f2937',
+                fontWeight: 700,
+                color: '#1f2937',
                   margin: 0
-                }}>
-                  Vision care
-                </h3>
+              }}>
+                Vision care
+              </h3>
               </div>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
@@ -2129,23 +2129,23 @@ const Home = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
-                  <AiOutlineGlobal />
-                </div>
-                <h3 style={{
+                <AiOutlineGlobal />
+              </div>
+              <h3 style={{
                   fontSize: 'clamp(18px, 3vw, 22px)',
-                  fontWeight: 700,
-                  color: '#1f2937',
+                fontWeight: 700,
+                color: '#1f2937',
                   margin: 0
-                }}>
-                  Travel medical
-                </h3>
+              }}>
+                Travel medical
+              </h3>
               </div>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
-                Provides emergency medical coverage for unexpected expenses incurred while traveling
+                Provides emergency medical coverage for unexpected illnesses or injuries while travelling outside your home province.
               </p>
             </div>
 
@@ -2167,23 +2167,23 @@ const Home = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
-                  <AiOutlineMedicineBox />
-                </div>
-                <h3 style={{
+                <AiOutlineMedicineBox />
+              </div>
+              <h3 style={{
                   fontSize: 'clamp(18px, 3vw, 22px)',
-                  fontWeight: 700,
-                  color: '#1f2937',
+                fontWeight: 700,
+                color: '#1f2937',
                   margin: 0
-                }}>
-                  Medical equipment
-                </h3>
+              }}>
+                Medical equipment
+              </h3>
               </div>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
-                Coverage for medical devices, supplies, and durable equipment
+                Coverage for eligible medical devices and supplies prescribed by a healthcare professional.
               </p>
             </div>
 
@@ -2205,23 +2205,23 @@ const Home = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ fontSize: 'clamp(24px, 3vw, 28px)', color: '#013946', display: 'flex', alignItems: 'center' }}>
-                  <TbDental />
-                </div>
-                <h3 style={{
+                <TbDental />
+              </div>
+              <h3 style={{
                   fontSize: 'clamp(18px, 3vw, 22px)',
-                  fontWeight: 700,
-                  color: '#1f2937',
+                fontWeight: 700,
+                color: '#1f2937',
                   margin: 0
-                }}>
-                  Dental
-                </h3>
+              }}>
+                Dental
+              </h3>
               </div>
               <p style={{
                 fontSize: 'clamp(15px, 2vw, 18px)',
                 color: '#4a5568',
                 lineHeight: '1.6'
               }}>
-                Covers routine checkups, cleanings, fillings, crowns, and major work depending on your plan
+                Covers basic routine checkups and cleanings, as well as major dental services depending on your plan.
               </p>
             </div>
           </div>
@@ -2301,60 +2301,101 @@ const Home = () => {
         <div className="faq-list">
           <div className={`faq-item ${activeFAQ === 0 ? 'active' : ''}`} onClick={() => toggleFAQ(0)}>
             <div className="faq-question">
-                  <span>What does Sun Life health & dental insurance cover?</span>
+              <span>Is private health insurance worth it in Canada?</span>
               <span>{activeFAQ === 0 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 0 && (
               <div className="faq-answer">
-                    Sun Life's extended health and dental coverage helps pay for expenses not covered by your provincial health plan. This includes prescription drugs, preventive dental care, major dental work, vision care, medical equipment, and registered health services such as physiotherapy and chiropractic.
+                <p>Yes. Private health insurance can help protect you from paying out of pocket for medical expenses that aren't fully covered by provincial healthcare, such as prescription drugs, dental care, vision, and paramedical services.</p>
+                <p>Even if you currently have workplace benefits, having your own coverage can provide continuity if your employer coverage ends due to a job change, leave, or retirement.</p>
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 1 ? 'active' : ''}`} onClick={() => toggleFAQ(1)}>
             <div className="faq-question">
-                  <span>How are dental coverage costs determined?</span>
+              <span>How much does health insurance cost in Canada?</span>
               <span>{activeFAQ === 1 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 1 && (
               <div className="faq-answer">
-                    Sun Life reimburses dental expenses based on fee guides published annually by the Canadian Dental Association for each province. The plan pays the reasonable cost of the least expensive eligible procedure that achieves an adequate result.
+                <p>The cost of health insurance varies based on several factors, including your age, location, coverage level, and whether you're including a spouse or dependents. Some plans may also require health questions or medical underwriting.</p>
+                <p>Getting a personalized quote is the best way to understand pricing and coverage options available to you.</p>
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 2 ? 'active' : ''}`} onClick={() => toggleFAQ(2)}>
             <div className="faq-question">
-                  <span>When should I submit a dental pre-treatment estimate?</span>
+              <span>Who can apply for health insurance in Canada?</span>
               <span>{activeFAQ === 2 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 2 && (
               <div className="faq-answer">
-                    Sun Life recommends that plan members submit an estimate before receiving any dental service costing $500 or more. This allows the insurer to confirm your coverage and the amount payable before the work is completed.
+                <p>Most Canadian residents are eligible to apply for personal health insurance. Approval and available options depend on factors such as age, province of residence, and health history.</p>
+                <p>A licensed advisor can help confirm eligibility and explain which plans may be available based on your situation.</p>
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 3 ? 'active' : ''}`} onClick={() => toggleFAQ(3)}>
             <div className="faq-question">
-                  <span>How long do I have to submit a claim?</span>
+              <span>How does private health insurance work in Canada?</span>
               <span>{activeFAQ === 3 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 3 && (
               <div className="faq-answer">
-                    For most dental and extended health claims, you must submit within 365 days after the end of the benefit year in which the expense occurred or within 90 days after your coverage ends, whichever comes first.
+                <p>Private (or personal) health insurance is a policy you purchase directly from an insurer. You pay a regular premium, and in return, the policy helps cover eligible healthcare expenses according to the plan's terms and limits.</p>
+                <p>Coverage is designed to complement provincial healthcare rather than replace it.</p>
               </div>
             )}
           </div>
 
           <div className={`faq-item ${activeFAQ === 4 ? 'active' : ''}`} onClick={() => toggleFAQ(4)}>
             <div className="faq-question">
-                  <span>Can I coordinate my Sun Life benefits with another plan?</span>
+              <span>Does private health insurance replace provincial healthcare?</span>
               <span>{activeFAQ === 4 ? '−' : '+'}</span>
             </div>
             {activeFAQ === 4 && (
               <div className="faq-answer">
-                    Yes. Sun Life allows coordination of benefits between your plan and a spouse's plan. You may also refuse coverage if you already have comparable dental or extended health benefits elsewhere, then re-enroll later if that coverage ends.
+                <p>No. Private health insurance is designed to supplement provincial healthcare by helping cover services that aren't fully insured by government plans, such as prescription drugs, dental care, vision, and paramedical services.</p>
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 5 ? 'active' : ''}`} onClick={() => toggleFAQ(5)}>
+            <div className="faq-question">
+              <span>Can I keep my health insurance if I change jobs or become self-employed?</span>
+              <span>{activeFAQ === 5 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 5 && (
+              <div className="faq-answer">
+                <p>Yes. Personal health insurance is not tied to your employer, so your coverage can continue even if you change jobs, become self-employed, or retire, as long as you keep paying your premiums.</p>
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 6 ? 'active' : ''}`} onClick={() => toggleFAQ(6)}>
+            <div className="faq-question">
+              <span>What if I already have health insurance through my employer?</span>
+              <span>{activeFAQ === 6 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 6 && (
+              <div className="faq-answer">
+                <p>You can purchase personal health insurance to complement your existing group benefits. Many people use individual coverage to fill gaps in their workplace plan or to maintain coverage if their employment situation changes.</p>
+                <p>Depending on your needs, personal coverage can help support expenses that may not be fully covered under a group plan.</p>
+              </div>
+            )}
+          </div>
+
+          <div className={`faq-item ${activeFAQ === 7 ? 'active' : ''}`} onClick={() => toggleFAQ(7)}>
+            <div className="faq-question">
+              <span>How can a licensed advisor help me choose the right plan?</span>
+              <span>{activeFAQ === 7 ? '−' : '+'}</span>
+            </div>
+            {activeFAQ === 7 && (
+              <div className="faq-answer">
+                <p>A licensed advisor can walk you through your options, explain coverage differences, and help you choose a plan that fits your needs and budget with no obligation to proceed.</p>
               </div>
             )}
           </div>
@@ -2364,31 +2405,39 @@ const Home = () => {
       {/* Footer */}
       <footer style={{
         backgroundColor: '#f8f9fa',
-        padding: '30px 20px',
+        padding: '20px 40px',
         marginTop: '30px',
         borderTop: '1px solid #e5e7eb'
       }}>
         <div style={{
           width: '100%',
-          maxWidth: '1200px',
+          maxWidth: '1600px',
           margin: '0 auto',
           textAlign: 'center'
         }}>
           <p style={{
-            fontSize: 'clamp(12px, 2vw, 14px)',
+            fontSize: 'clamp(10px, 1.2vw, 11px)',
             color: '#6b7280',
-            lineHeight: '1.5',
-            margin: '0 0 16px 0'
+            lineHeight: '1.4',
+            margin: '0 0 8px 0'
           }}>
-            <strong>Disclaimer:</strong> This website is operated by Policy Advisor, an independent insurance broker. We are not directly affiliated with or endorsed by Sun Life Financial. All product names, logos, and brands are property of their respective owners. The information provided on this site is for general informational purposes only and should not be considered as professional insurance advice. Insurance products and their features may vary based on your location and individual circumstances. For specific details about Sun Life insurance products, please consult with a licensed insurance advisor or contact Sun Life directly.
+            <strong>Disclaimer:</strong> This website is operated by PolicyAdvisor, a licensed independent insurance brokerage and authorized distributor of Sun Life insurance products. PolicyAdvisor is not the insurer. All insurance products discussed on this site are underwritten by Sun Life Assurance Company of Canada and are subject to eligibility, terms, conditions, and provincial variations. The content on this site is provided for general informational purposes only and does not constitute insurance advice. For specific product details and advice tailored to your situation, please consult a licensed advisor.
           </p>
           <p style={{
-            fontSize: 'clamp(12px, 2vw, 14px)',
+            fontSize: 'clamp(10px, 1.2vw, 11px)',
             color: '#6b7280',
-            lineHeight: '1.6',
+            lineHeight: '1.4',
+            margin: '0 0 10px 0'
+          }}>
+            PolicyAdvisor is not the insurer. All insurance products are underwritten by Sun Life Assurance Company of Canada. Product availability, features, and eligibility may vary by province and individual circumstances. The information provided on this website is for general informational purposes only and does not constitute professional insurance advice. For full details, terms, and conditions, please speak with a licensed Sun Life advisor.
+          </p>
+          <p style={{
+            fontSize: 'clamp(10px, 1.2vw, 11px)',
+            color: '#6b7280',
+            lineHeight: '1.4',
             margin: '0'
           }}>
-            © {new Date().getFullYear()} Policy Advisor. All rights reserved.
+            © {new Date().getFullYear()} PolicyAdvisor. All rights reserved.
           </p>
         </div>
       </footer>
