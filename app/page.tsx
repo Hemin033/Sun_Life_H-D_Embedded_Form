@@ -1252,7 +1252,7 @@ const Home = () => {
                 lineHeight: '1.5',
                 textAlign: 'center'
               }}>
-                By submitting, you agree to be contacted by a licensed advisor from Sun Life.
+                A licensed Sun Life advisor will reach out within the next business hours to present coverage options tailored to your needs.
               </p>
             </form>
           </div>
@@ -1695,7 +1695,7 @@ const Home = () => {
                 lineHeight: '1.4',
                 textAlign: 'center'
               }}>
-                By submitting, you agree to be contacted by a licensed advisor from Sun Life.
+                A licensed Sun Life advisor will reach out within the next business hours to present coverage options tailored to your needs.
               </p>
             </form>
           </div>
