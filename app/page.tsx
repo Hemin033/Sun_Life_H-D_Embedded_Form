@@ -805,7 +805,7 @@ const Home = () => {
                 lineHeight: '1.6',
                 maxWidth: '480px'
               }}>
-                Get comprehensive health & dental coverage with Sun Life, Canada's trusted insurer. Our licensed advisors help you find the perfect plan for your needs and budget.
+                Get comprehensive health & dental coverage with Sun Life, one of Canada's most trusted insurers. Our licensed advisors can help you find the perfect plan for your needs and budget.
               </p>
             </div>
 
@@ -2422,14 +2422,6 @@ const Home = () => {
             margin: '0 0 8px 0'
           }}>
             <strong>Disclaimer:</strong> This website is operated by PolicyAdvisor, a licensed independent insurance brokerage and authorized distributor of Sun Life insurance products. PolicyAdvisor is not the insurer. All insurance products discussed on this site are underwritten by Sun Life Assurance Company of Canada and are subject to eligibility, terms, conditions, and provincial variations. The content on this site is provided for general informational purposes only and does not constitute insurance advice. For specific product details and advice tailored to your situation, please consult a licensed advisor.
-          </p>
-          <p style={{
-            fontSize: 'clamp(10px, 1.2vw, 11px)',
-            color: '#6b7280',
-            lineHeight: '1.4',
-            margin: '0 0 10px 0'
-          }}>
-            PolicyAdvisor is not the insurer. All insurance products are underwritten by Sun Life Assurance Company of Canada. Product availability, features, and eligibility may vary by province and individual circumstances. The information provided on this website is for general informational purposes only and does not constitute professional insurance advice. For full details, terms, and conditions, please speak with a licensed Sun Life advisor.
           </p>
           <p style={{
             fontSize: 'clamp(10px, 1.2vw, 11px)',
