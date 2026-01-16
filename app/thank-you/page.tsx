@@ -155,7 +155,7 @@ export default function ThankYouPage() {
               e.currentTarget.style.background = '#FFB803';
             }}
           >
-            Return to Home
+            Schedule a Call
           </button>
         </div>
       </div>
