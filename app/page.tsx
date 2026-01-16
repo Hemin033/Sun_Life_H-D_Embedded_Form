@@ -17,6 +17,7 @@ const Home = () => {
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null)
   const [showLeadForm, setShowLeadForm] = useState(false)
   const [mobileProvinceDropdownOpen, setMobileProvinceDropdownOpen] = useState(false)
+  const [modalProvinceDropdownOpen, setModalProvinceDropdownOpen] = useState(false)
   const [showOTPVerification, setShowOTPVerification] = useState(false)
   const [otp, setOTP] = useState(['', '', '', '', '', ''])
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -499,37 +500,94 @@ const Home = () => {
 
               {/* Province and Provincial Coverage */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
-                  <div>
+                  <div style={{ position: 'relative' }}>
                     <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Province of Residence <span style={{ color: '#013946' }}>*</span>
+                    Province? <span style={{ color: '#013946' }}>*</span>
                 </label>
-                <select
-                    value={formData.province}
-                    onChange={(e) => handleInputChange('province', e.target.value)}
+                <div
+                  onClick={() => setModalProvinceDropdownOpen(!modalProvinceDropdownOpen)}
                   style={{
                     width: '100%',
-                      padding: '14px 16px',
-                    fontSize: '16px',
-                      border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
-                      borderRadius: '8px',
-                    outline: 'none',
+                    height: '44px',
+                    padding: '0 14px',
+                    fontSize: '15px',
+                    border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
+                    borderRadius: '8px',
                     backgroundColor: '#fff',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    boxSizing: 'border-box'
                   }}
                 >
-                    <option value="">Select...</option>
-                    <option value="AB">Alberta</option>
-                    <option value="BC">British Columbia</option>
-                    <option value="MB">Manitoba</option>
-                    <option value="ON">Ontario</option>
-                </select>
+                  <span style={{ color: formData.province ? '#1f2937' : '#9ca3af' }}>
+                    {formData.province ? 
+                      { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'ON': 'Ontario' }[formData.province] 
+                      : 'Select...'}
+                  </span>
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: modalProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                    <path d="M1 1.5L6 6.5L11 1.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                {modalProvinceDropdownOpen && (
+                  <ul style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    right: 0,
+                    backgroundColor: '#fff',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    marginTop: '4px',
+                    padding: 0,
+                    listStyle: 'none',
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                    zIndex: 1000,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}>
+                    {[
+                      { value: 'AB', label: 'Alberta' },
+                      { value: 'BC', label: 'British Columbia' },
+                      { value: 'MB', label: 'Manitoba' },
+                      { value: 'ON', label: 'Ontario' }
+                    ].map((province) => (
+                      <li
+                        key={province.value}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleInputChange('province', province.value);
+                          setModalProvinceDropdownOpen(false);
+                        }}
+                        style={{
+                          padding: '12px 16px',
+                          fontSize: '16px',
+                          cursor: 'pointer',
+                          backgroundColor: formData.province === province.value ? '#e0f7fa' : '#fff',
+                          borderBottom: '1px solid #f3f4f6'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (formData.province !== province.value) {
+                            e.currentTarget.style.backgroundColor = '#f9fafb';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = formData.province === province.value ? '#e0f7fa' : '#fff';
+                        }}
+                      >
+                        {province.label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                   {formErrors.province && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
                   )}
                   </div>
                   <div>
                     <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Do you have Provincial Coverage? <span style={{ color: '#013946' }}>*</span>
+                    Provincial coverage? <span style={{ color: '#013946' }}>*</span>
                 </label>
                   <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
                   <button
@@ -540,14 +598,16 @@ const Home = () => {
                       }}
                       style={{
                         flex: 1,
-                        padding: '14px 16px',
-                        fontSize: '16px',
-                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db')}`,
+                        height: '44px',
+                        padding: '0 14px',
+                        fontSize: '15px',
+                        border: `1px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f2fe' : '#fff',
                         color: '#1f2937',
                         cursor: 'pointer',
-                        fontWeight: 600
+                        fontWeight: 600,
+                        boxSizing: 'border-box'
                       }}
                     >
                       Yes
@@ -560,14 +620,16 @@ const Home = () => {
                       }}
                       style={{
                         flex: 1,
-                        padding: '14px 16px',
-                        fontSize: '16px',
-                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db')}`,
+                        height: '44px',
+                        padding: '0 14px',
+                        fontSize: '15px',
+                        border: `1px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db')}`,
                         borderRadius: '8px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#e0f2fe' : '#fff',
                         color: '#1f2937',
                         cursor: 'pointer',
-                        fontWeight: 600
+                        fontWeight: 600,
+                        boxSizing: 'border-box'
                       }}
                     >
                       No
