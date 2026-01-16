@@ -162,6 +162,7 @@ const Home = () => {
     
     // Store phone number for reference
     setPhoneNumber(formData.phoneNumber)
+    
     // Hide lead form and redirect to Thank You page
     setShowLeadForm(false)
     router.push('/thank-you')
@@ -520,16 +521,7 @@ const Home = () => {
                     <option value="AB">Alberta</option>
                     <option value="BC">British Columbia</option>
                     <option value="MB">Manitoba</option>
-                    <option value="NB">New Brunswick</option>
-                    <option value="NL">Newfoundland and Labrador</option>
-                    <option value="NS">Nova Scotia</option>
-                    <option value="NT">Northwest Territories</option>
-                    <option value="NU">Nunavut</option>
                     <option value="ON">Ontario</option>
-                    <option value="PE">Prince Edward Island</option>
-                    <option value="QC">Quebec</option>
-                    <option value="SK">Saskatchewan</option>
-                    <option value="YT">Yukon</option>
                 </select>
                   {formErrors.province && (
                     <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
@@ -1518,7 +1510,7 @@ const Home = () => {
                 >
                   <span style={{ color: formData.province ? '#1f2937' : '#9ca3af' }}>
                     {formData.province ? 
-                      { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'NB': 'New Brunswick', 'NL': 'Newfoundland and Labrador', 'NS': 'Nova Scotia', 'ON': 'Ontario', 'PE': 'Prince Edward Island', 'QC': 'Quebec', 'SK': 'Saskatchewan', 'NT': 'Northwest Territories', 'NU': 'Nunavut', 'YT': 'Yukon' }[formData.province] 
+                      { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'ON': 'Ontario' }[formData.province] 
                       : 'Select...'}
                   </span>
                   <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: mobileProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
@@ -1546,16 +1538,7 @@ const Home = () => {
                       { value: 'AB', label: 'Alberta' },
                       { value: 'BC', label: 'British Columbia' },
                       { value: 'MB', label: 'Manitoba' },
-                      { value: 'NB', label: 'New Brunswick' },
-                      { value: 'NL', label: 'Newfoundland and Labrador' },
-                      { value: 'NS', label: 'Nova Scotia' },
-                      { value: 'ON', label: 'Ontario' },
-                      { value: 'PE', label: 'Prince Edward Island' },
-                      { value: 'QC', label: 'Quebec' },
-                      { value: 'SK', label: 'Saskatchewan' },
-                      { value: 'NT', label: 'Northwest Territories' },
-                      { value: 'NU', label: 'Nunavut' },
-                      { value: 'YT', label: 'Yukon' }
+                      { value: 'ON', label: 'Ontario' }
                     ].map((province) => (
                       <li
                         key={province.value}

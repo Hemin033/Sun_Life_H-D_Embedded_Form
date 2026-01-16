@@ -23,6 +23,10 @@ export default function ThankYouPage() {
     return () => clearInterval(timer);
   }, [router]);
 
+  const handleScheduleCall = () => {
+    window.open('https://action.sunlife.ca/AppointmentRendezvous/s/prospr-home?language=en_CA&WT.ac=en-ca%3Aweb%3Aslf_internal%3Aprosprweb%3Aprosprweb', '_blank');
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -115,7 +119,7 @@ export default function ThankYouPage() {
             marginBottom: '29px',
             lineHeight: '1.6'
           }}>
-            A licensed Sun Life advisor will contact you shortly to discuss your life insurance options.
+            A licensed Sun Life advisor will contact you shortly to discuss your health and dental insurance options.
           </p>
 
           {/* Countdown Box */}
@@ -134,19 +138,23 @@ export default function ThankYouPage() {
             </p>
           </div>
 
-          {/* Return Button */}
+          {/* Schedule a Call Button */}
           <button
-            onClick={() => router.push('/')}
+            onClick={handleScheduleCall}
             style={{
               background: '#FFB803',
-              color: 'white',
+              color: '#013946',
               border: 'none',
               padding: '13px 32px',
               borderRadius: '8px',
               fontSize: '16px',
               fontWeight: '600',
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.background = '#e5a503';
@@ -155,6 +163,12 @@ export default function ThankYouPage() {
               e.currentTarget.style.background = '#FFB803';
             }}
           >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
             Schedule a Call
           </button>
         </div>
