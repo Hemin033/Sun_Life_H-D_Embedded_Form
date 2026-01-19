@@ -1,30 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 export default function ThankYouPage() {
   const router = useRouter();
-  const [countdown, setCountdown] = useState(5);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          router.push('/');
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [router]);
-
-  const handleScheduleCall = () => {
+  const handleBookCall = () => {
     window.open('https://action.sunlife.ca/AppointmentRendezvous/s/prospr-home?language=en_CA&WT.ac=en-ca%3Aweb%3Aslf_internal%3Aprosprweb%3Aprosprweb', '_blank');
+  };
+
+  const handleReturnHome = () => {
+    router.push('/');
   };
 
   return (
@@ -33,39 +20,12 @@ export default function ThankYouPage() {
       background: '#f5f7fa',
       fontFamily: "'Lato', sans-serif"
     }}>
-      {/* Header */}
-      <header style={{
-        width: '100%',
-        backgroundColor: '#F9FAFA',
-        padding: '12px 0',
-        borderBottom: '1px solid #eee'
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 40px'
-        }}>
-          <Image
-            src="/IMAGE-TOP-OVERLAY-Mob-2-.png"
-            alt="PolicyAdvisor | Sun Life"
-            width={400}
-            height={50}
-            style={{
-              width: 'auto',
-              height: '40px',
-              objectFit: 'contain',
-              display: 'block'
-            }}
-          />
-        </div>
-      </header>
-
       {/* Main Content */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 'calc(100vh - 70px)',
+        minHeight: '100vh',
         padding: '40px 20px'
       }}>
         <div style={{
@@ -77,6 +37,31 @@ export default function ThankYouPage() {
           textAlign: 'center',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
         }}>
+          {/* Logo */}
+          <Image
+            src="/IMAGE-TOP-OVERLAY-Mob-2-.png"
+            alt="PolicyAdvisor | Sun Life"
+            width={400}
+            height={50}
+            className="thank-you-logo"
+            style={{
+              width: 'auto',
+              objectFit: 'contain',
+              display: 'block',
+              margin: '0 auto 30px'
+            }}
+          />
+          <style jsx global>{`
+            .thank-you-logo {
+              height: 45px;
+            }
+            @media (max-width: 768px) {
+              .thank-you-logo {
+                height: 31px !important;
+              }
+            }
+          `}</style>
+
           {/* Success Icon */}
           <div style={{
             width: '72px',
@@ -93,7 +78,7 @@ export default function ThankYouPage() {
             </svg>
           </div>
 
-          {/* Thank You Message */}
+          {/* Title */}
           <h1 style={{
             fontSize: '36px',
             fontWeight: '700',
@@ -101,51 +86,56 @@ export default function ThankYouPage() {
             marginBottom: '14px',
             letterSpacing: '-0.5px'
           }}>
-            Thank You!
+            You're all set
           </h1>
 
+          {/* Body Copy */}
           <p style={{
             fontSize: '18px',
             color: '#4a5568',
-            marginBottom: '11px',
+            marginBottom: '8px',
             fontWeight: '500'
           }}>
-            We've received your request successfully.
+            We've received your request.
           </p>
 
+
+          {/* Phone Number */}
+          <p style={{
+            fontSize: '22px',
+            fontWeight: '700',
+            color: '#1a365d',
+            marginBottom: '8px'
+          }}>
+            Need quotes in a hurry?
+          </p>
           <p style={{
             fontSize: '16px',
-            color: '#718096',
-            marginBottom: '29px',
-            lineHeight: '1.6'
+            color: '#4a5568',
+            marginBottom: '28px'
           }}>
-            A licensed Sun Life advisor will contact you shortly to discuss your health and dental insurance options.
+            Call{' '}
+            <a 
+              href="tel:+18886019980" 
+              style={{ 
+                color: '#013946', 
+                fontWeight: '600',
+                textDecoration: 'none'
+              }}
+            >
+              +1-888-601-9980
+            </a>
+            {' '}or Book a time with a licensed advisor.
           </p>
 
-          {/* Countdown Box */}
-          <div style={{
-            background: '#e6f4f5',
-            borderRadius: '10px',
-            padding: '16px 22px',
-            marginBottom: '22px'
-          }}>
-            <p style={{
-              fontSize: '15px',
-              color: '#4a5568',
-              margin: 0
-            }}>
-              Redirecting you back in <strong style={{ color: '#0d6b6e' }}>{countdown}</strong> second{countdown !== 1 ? 's' : ''}...
-            </p>
-          </div>
-
-          {/* Schedule a Call Button */}
+          {/* Primary CTA - Book a Call */}
           <button
-            onClick={handleScheduleCall}
+            onClick={handleBookCall}
             style={{
               background: '#FFB803',
               color: '#013946',
               border: 'none',
-              padding: '13px 32px',
+              padding: '14px 40px',
               borderRadius: '8px',
               fontSize: '16px',
               fontWeight: '600',
@@ -154,7 +144,9 @@ export default function ThankYouPage() {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px'
+              gap: '8px',
+              width: '100%',
+              marginBottom: '12px'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.background = '#e5a503';
@@ -169,7 +161,34 @@ export default function ThankYouPage() {
               <line x1="8" y1="2" x2="8" y2="6"></line>
               <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
-            Schedule a Call
+            Book a Call
+          </button>
+
+          {/* Secondary CTA - Return to Home */}
+          <button
+            onClick={handleReturnHome}
+            style={{
+              background: 'transparent',
+              color: '#013946',
+              border: '2px solid #013946',
+              padding: '12px 40px',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              width: '100%'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#013946';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#013946';
+            }}
+          >
+            Return to Home
           </button>
         </div>
       </div>
