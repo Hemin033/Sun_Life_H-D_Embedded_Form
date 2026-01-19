@@ -425,7 +425,7 @@ const Home = () => {
                           flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.gender ? '1px solid #dc2626' : (formData.gender === 'Man' ? 'none' : '1px solid #d1d5db'),
                           borderRadius: '6px',
                         backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Man' ? '#013946' : '#1f2937',
@@ -442,7 +442,7 @@ const Home = () => {
                           flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.gender ? '1px solid #dc2626' : (formData.gender === 'Woman' ? 'none' : '1px solid #d1d5db'),
                           borderRadius: '6px',
                         backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
@@ -592,7 +592,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.provincialCoverage ? '1px solid #dc2626' : (formData.provincialCoverage === 'Yes' ? 'none' : '1px solid #d1d5db'),
                         borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
@@ -609,7 +609,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.provincialCoverage ? '1px solid #dc2626' : (formData.provincialCoverage === 'No' ? 'none' : '1px solid #d1d5db'),
                 borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
@@ -624,36 +624,37 @@ const Home = () => {
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
                   )}
                 </div>
-              </div>
+                  </div>
 
               {/* OTP Verification Field */}
               {showOTPVerification && (
                 <div style={{ marginBottom: '16px' }}>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
-                    Enter 6-digit OTP sent to your phone *
+                    Verification code <span style={{ color: '#1a1a1a' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder=""
+                    placeholder="Enter verification code sent on phone"
                     value={otpValue}
                     onChange={(e) => handleOTPInputChange(e.target.value)}
                     style={{
                       width: '100%',
                       padding: '14px 12px',
-                      fontSize: '18px',
-                      fontWeight: 600,
-                      letterSpacing: '8px',
-                      textAlign: 'center',
+                      fontSize: '15px',
+                      fontWeight: 400,
+                      letterSpacing: 'normal',
+                      textAlign: 'left',
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
-                      outline: 'none'
+                      outline: 'none',
+                      color: '#1a1a1a'
                     }}
                   />
                   <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '8px', textAlign: 'center' }}>
                     Didn't receive the code? <span onClick={handleResendOTP} style={{ color: '#013946', cursor: 'pointer', textDecoration: 'underline' }}>Resend OTP</span>
                   </p>
-                </div>
-              )}
+                    </div>
+                  )}
 
               {/* Submit Button */}
               <button
@@ -684,7 +685,7 @@ const Home = () => {
                 lineHeight: '1.5',
                 textAlign: 'center'
               }}>
-                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our Terms of Service and Privacy Policy.
+                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our <a href="https://www.policyadvisor.com/terms-of-service/" target="_blank" rel="noopener noreferrer" style={{ color: '#013946', textDecoration: 'underline' }}>Terms of Service</a> and <a href="https://www.policyadvisor.com/privacy-policy/" target="_blank" rel="noopener noreferrer" style={{ color: '#013946', textDecoration: 'underline' }}>Privacy Policy</a>.
                 </p>
             </form>
           </div>
@@ -728,14 +729,14 @@ const Home = () => {
           zIndex: 1
         }}>
           <div style={{
-              display: 'flex',
+          display: 'flex',
             maxWidth: '1200px',
             margin: '0 auto',
             padding: '50px 40px 60px',
             position: 'relative'
           }}>
             {/* Left Side - Text Content */}
-            <div style={{ 
+          <div style={{
               flex: '1',
               maxWidth: '55%',
               paddingRight: '40px'
@@ -776,7 +777,7 @@ const Home = () => {
               width={1920}
             height={600}
               style={{
-                width: '100%',
+            width: '100%',
                 height: 'auto',
                 display: 'block'
               }}
@@ -826,18 +827,18 @@ const Home = () => {
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
                     First Name *
                   </label>
-                  <input
-                    type="text"
+                <input
+                  type="text"
                     placeholder="John"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
-              style={{
+                  style={{
                 width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
                       border: formErrors.firstName ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
-                      outline: 'none',
+                    outline: 'none',
                       backgroundColor: '#fff',
                       color: '#1f2937'
                     }}
@@ -870,7 +871,7 @@ const Home = () => {
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.lastName}</p>
                   )}
                 </div>
-              </div>
+            </div>
 
               {/* Email / Phone */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
@@ -891,8 +892,8 @@ const Home = () => {
                         setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
                       }
                     }}
-                    style={{
-                      width: '100%',
+              style={{
+                width: '100%',
                       padding: '14px 16px',
                       fontSize: '15px',
                       border: formErrors.email ? '1px solid #dc2626' : '1px solid #d1d5db',
@@ -966,33 +967,33 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.gender ? '1px solid #dc2626' : (formData.gender === 'Man' ? 'none' : '1px solid #d1d5db'),
                         borderRadius: '6px',
                         backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Man' ? '#013946' : '#1f2937',
                 cursor: 'pointer',
                         fontWeight: 500
-                      }}
-                    >
+              }}
+            >
                       Man
-                    </button>
+            </button>
                     <button
                       type="button"
                       onClick={() => handleInputChange('gender', 'Woman')}
-                      style={{
+                style={{
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.gender ? '1px solid #dc2626' : (formData.gender === 'Woman' ? 'none' : '1px solid #d1d5db'),
                 borderRadius: '6px',
                         backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
-                        cursor: 'pointer',
-                        fontWeight: 500
-                      }}
-                    >
+                  cursor: 'pointer',
+                  fontWeight: 500
+                }}
+              >
                       Woman
-            </button>
+              </button>
           </div>
                   {formErrors.gender && (
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
@@ -1047,14 +1048,14 @@ const Home = () => {
                   <div
                     onClick={() => setHeroProvinceDropdownOpen(!heroProvinceDropdownOpen)}
                     style={{
-                      width: '100%',
+            width: '100%',
                       padding: '14px 12px',
                       fontSize: '15px',
                       border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
                       backgroundColor: '#fff',
                       cursor: 'pointer',
-                      display: 'flex',
+              display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center'
                     }}
@@ -1066,8 +1067,8 @@ const Home = () => {
                     </span>
                     <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: heroProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
                       <path d="M1 1.5L6 6.5L11 1.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+              </svg>
+            </div>
                   {heroProvinceDropdownOpen && (
                     <ul style={{
                       position: 'absolute',
@@ -1128,14 +1129,14 @@ const Home = () => {
                     Do you have Provincial Coverage? *
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
-            <button 
+            <button
                       type="button"
                       onClick={() => handleInputChange('provincialCoverage', 'Yes')}
               style={{
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.provincialCoverage ? '1px solid #dc2626' : (formData.provincialCoverage === 'Yes' ? 'none' : '1px solid #d1d5db'),
                         borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
@@ -1152,7 +1153,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
+                        border: formErrors.provincialCoverage ? '1px solid #dc2626' : (formData.provincialCoverage === 'No' ? 'none' : '1px solid #d1d5db'),
                 borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
@@ -1161,8 +1162,8 @@ const Home = () => {
                       }}
                     >
                       No
-                    </button>
-                  </div>
+            </button>
+          </div>
                   {formErrors.provincialCoverage && (
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
                   )}
@@ -1174,23 +1175,24 @@ const Home = () => {
               {showOTPVerification && (
                 <div style={{ marginBottom: '16px' }}>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
-                    Enter 6-digit OTP sent to your phone *
+                    Verification code <span style={{ color: '#1a1a1a' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder=""
+                    placeholder="Enter verification code sent on phone"
                     value={otpValue}
                     onChange={(e) => handleOTPInputChange(e.target.value)}
-                    style={{
-                      width: '100%',
+              style={{
+                width: '100%',
                       padding: '14px 12px',
-                      fontSize: '18px',
-                      fontWeight: 600,
-                      letterSpacing: '8px',
-                      textAlign: 'center',
+                      fontSize: '15px',
+                      fontWeight: 400,
+                      letterSpacing: 'normal',
+                      textAlign: 'left',
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
-                      outline: 'none'
+                      outline: 'none',
+                      color: '#1a1a1a'
                     }}
                   />
                   <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '8px', textAlign: 'center' }}>
@@ -1228,7 +1230,7 @@ const Home = () => {
                 lineHeight: '1.5',
                 textAlign: 'center'
               }}>
-                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our Terms of Service and Privacy Policy.
+                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our <a href="https://www.policyadvisor.com/terms-of-service/" target="_blank" rel="noopener noreferrer" style={{ color: '#013946', textDecoration: 'underline' }}>Terms of Service</a> and <a href="https://www.policyadvisor.com/privacy-policy/" target="_blank" rel="noopener noreferrer" style={{ color: '#013946', textDecoration: 'underline' }}>Privacy Policy</a>.
               </p>
             </form>
           </div>
@@ -1269,19 +1271,11 @@ const Home = () => {
               fontSize: '28px',
               fontWeight: '700',
               lineHeight: '1.2',
-              marginBottom: '12px'
+              marginBottom: '0'
             }}>
               Protect your health.<br />
               Smile with confidence.
             </h1>
-            <p style={{
-              color: '#4a5568',
-              fontSize: '15px',
-              lineHeight: '1.5',
-              marginBottom: '0'
-            }}>
-              Get your free Sun Life health & dental quote below.
-            </p>
           </div>
 
           {/* Header Image */}
@@ -1304,6 +1298,16 @@ const Home = () => {
             backgroundColor: '#fff',
             overflow: 'visible'
           }}>
+            <p style={{
+              color: '#1a1a1a',
+              fontSize: '15px',
+              fontWeight: 800,
+              lineHeight: '1.5',
+              marginBottom: '16px',
+              textAlign: 'center'
+            }}>
+              Get your free Sun Life health & dental quote below.
+            </p>
             <form onSubmit={handleSubmitLead} noValidate>
               {/* First Name */}
               <div style={{ marginBottom: '10px' }}>
@@ -1442,10 +1446,10 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#013946' : '#d1d5db')}`,
+                      border: formErrors.gender ? '1px solid #dc2626' : (formData.gender === 'Man' ? 'none' : '1px solid #d1d5db'),
                       borderRadius: '6px',
-                      backgroundColor: formData.gender === 'Man' ? '#e0f7fa' : '#fff',
-                      color: '#1f2937',
+                      backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
+                      color: formData.gender === 'Man' ? '#013946' : '#1f2937',
                 cursor: 'pointer',
                       fontWeight: 600
                     }}
@@ -1459,10 +1463,10 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#013946' : '#d1d5db')}`,
+                      border: formErrors.gender ? '1px solid #dc2626' : (formData.gender === 'Woman' ? 'none' : '1px solid #d1d5db'),
                       borderRadius: '6px',
-                      backgroundColor: formData.gender === 'Woman' ? '#e0f7fa' : '#fff',
-                      color: '#1f2937',
+                      backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
+                      color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
                       cursor: 'pointer',
                       fontWeight: 600
                     }}
@@ -1613,10 +1617,10 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#013946' : '#d1d5db')}`,
+                      border: formErrors.provincialCoverage ? '1px solid #dc2626' : (formData.provincialCoverage === 'Yes' ? 'none' : '1px solid #d1d5db'),
                       borderRadius: '6px',
-                      backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f7fa' : '#fff',
-                      color: '#1f2937',
+                      backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
+                      color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
                       cursor: 'pointer',
                       fontWeight: 600
                     }}
@@ -1633,10 +1637,10 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db')}`,
+                      border: formErrors.provincialCoverage ? '1px solid #dc2626' : (formData.provincialCoverage === 'No' ? 'none' : '1px solid #d1d5db'),
                       borderRadius: '6px',
-                      backgroundColor: formData.provincialCoverage === 'No' ? '#e0f7fa' : '#fff',
-                      color: '#1f2937',
+                      backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
+                      color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
                       cursor: 'pointer',
                       fontWeight: 600
                     }}
@@ -1653,23 +1657,24 @@ const Home = () => {
               {showOTPVerification && (
                 <div style={{ marginBottom: '12px' }}>
                   <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
-                    Enter 6-digit OTP sent to your phone <span style={{ color: '#013946' }}>*</span>
+                    Verification code <span style={{ color: '#013946' }}>*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder=""
+                    placeholder="Enter verification code sent on phone"
                     value={otpValue}
                     onChange={(e) => handleOTPInputChange(e.target.value)}
                     style={{
                       width: '100%',
                       padding: '12px',
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      letterSpacing: '6px',
-                      textAlign: 'center',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      letterSpacing: 'normal',
+                      textAlign: 'left',
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
-                      outline: 'none'
+                      outline: 'none',
+                      color: '#1a1a1a'
                     }}
                   />
                   <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '6px', textAlign: 'center' }}>
@@ -1684,18 +1689,22 @@ const Home = () => {
                 onClick={showOTPVerification ? handleVerifyOTP : undefined}
                 style={{
                   width: '100%',
-                  padding: '12px',
-                  fontSize: '15px',
-                  fontWeight: 700,
+                  maxWidth: '400px',
+                  padding: '18px 80px',
+                  fontSize: '16px',
+                  fontWeight: 600,
                   color: '#fff',
                   backgroundColor: '#013946',
                   border: 'none',
-                  borderRadius: '6px',
+                  borderRadius: '10px',
                   cursor: 'pointer',
-                  textTransform: 'uppercase'
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  display: 'block',
+                  margin: '0 auto'
                 }}
               >
-                {showOTPVerification ? 'Verify' : 'Submit Request'}
+                {showOTPVerification ? 'VERIFY' : 'SUBMIT REQUEST'}
               </button>
 
               <p style={{
@@ -1705,7 +1714,7 @@ const Home = () => {
                 lineHeight: '1.4',
                 textAlign: 'center'
               }}>
-                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our Terms of Service and Privacy Policy.
+                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our <a href="https://www.policyadvisor.com/terms-of-service/" target="_blank" rel="noopener noreferrer" style={{ color: '#013946', textDecoration: 'underline' }}>Terms of Service</a> and <a href="https://www.policyadvisor.com/privacy-policy/" target="_blank" rel="noopener noreferrer" style={{ color: '#013946', textDecoration: 'underline' }}>Privacy Policy</a>.
               </p>
             </form>
           </div>
@@ -2005,7 +2014,7 @@ const Home = () => {
               width: '100%',
               maxWidth: '250px'
             }}>
-              GET MY QUOTE
+              GET QUOTE
               </button>
           </div>
         </div>

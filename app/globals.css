@@ -1117,10 +1117,15 @@ a {
   .cta-box > div:last-child {
     width: 100% !important;
     max-width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
   }
   
   .cta-box .btn {
-    width: 100% !important;
+    width: 80% !important;
+    max-width: 320px !important;
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
   }
   
   .cta-image-box {
@@ -1133,6 +1138,9 @@ a {
   
   .cta-image-box > div:last-child {
     text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
   
   .cta-image-box > div:last-child h2,
@@ -1141,8 +1149,10 @@ a {
   }
   
   .cta-image-box > div:last-child button {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 80% !important;
+    max-width: 320px !important;
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
   }
 }
 
