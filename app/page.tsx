@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { IoMdWalk } from 'react-icons/io'
@@ -18,8 +18,9 @@ const Home = () => {
   const [showLeadForm, setShowLeadForm] = useState(false)
   const [mobileProvinceDropdownOpen, setMobileProvinceDropdownOpen] = useState(false)
   const [modalProvinceDropdownOpen, setModalProvinceDropdownOpen] = useState(false)
+  const [heroProvinceDropdownOpen, setHeroProvinceDropdownOpen] = useState(false)
   const [showOTPVerification, setShowOTPVerification] = useState(false)
-  const [otp, setOTP] = useState(['', '', '', '', '', ''])
+  const [otpValue, setOTPValue] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [formErrors, setFormErrors] = useState({
     firstName: '',
@@ -62,7 +63,7 @@ const Home = () => {
 
   const validateAge = (age: string) => {
     const numAge = parseInt(age);
-    return numAge >= 18 && numAge <= 99;
+    return numAge >= 18 && numAge <= 70;
   }
 
   const toggleFAQ = (index: number) => {
@@ -134,7 +135,7 @@ const Home = () => {
       errors.age = 'Age is required'
       isValid = false
     } else if (!validateAge(formData.age)) {
-      errors.age = 'Age must be between 18 and 99'
+      errors.age = 'Age must be between 18 and 70'
       isValid = false
     }
 
@@ -164,37 +165,19 @@ const Home = () => {
     // Store phone number for reference
     setPhoneNumber(formData.phoneNumber)
     
-    // Hide lead form and redirect to Thank You page
-    setShowLeadForm(false)
-    router.push('/thank-you')
+    // Show OTP verification step
+    setShowOTPVerification(true)
   }
 
-  const handleOTPChange = (index: number, value: string) => {
-    const newOTP = [...otp]
-    // Only allow numbers
-    if (value.match(/^[0-9]$/)) {
-      newOTP[index] = value
-      setOTP(newOTP)
-      // Auto-focus next input
-      if (index < 5 && value !== '') {
-        const nextInput = document.getElementById(`otp-${index + 1}`)
-        nextInput?.focus()
-      }
-    } else if (value === '') {
-      // Allow backspace
-      newOTP[index] = ''
-      setOTP(newOTP)
-      // Auto-focus previous input
-      if (index > 0) {
-        const prevInput = document.getElementById(`otp-${index - 1}`)
-        prevInput?.focus()
-      }
-    }
+  const handleOTPInputChange = (value: string) => {
+    // Only allow numbers and limit to 6 digits
+    const numericValue = value.replace(/\D/g, '').slice(0, 6)
+    setOTPValue(numericValue)
   }
 
   const handleVerifyOTP = () => {
     // Here you would verify the OTP
-    console.log('Verifying OTP:', otp.join(''))
+    console.log('Verifying OTP:', otpValue)
     setShowOTPVerification(false)
     router.push('/thank-you?return=/')
   }
@@ -202,9 +185,34 @@ const Home = () => {
   const handleResendOTP = () => {
     // Here you would trigger OTP resend
     console.log('Resending OTP to:', phoneNumber)
-    // Reset OTP inputs
-    setOTP(['', '', '', '', '', ''])
+    // Reset OTP input
+    setOTPValue('')
   }
+
+  // Close province dropdowns when clicking outside
+  const mobileProvinceRef = useRef<HTMLDivElement>(null)
+  const modalProvinceRef = useRef<HTMLDivElement>(null)
+  const heroProvinceRef = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileProvinceRef.current && !mobileProvinceRef.current.contains(event.target as Node)) {
+        setMobileProvinceDropdownOpen(false)
+      }
+      if (modalProvinceRef.current && !modalProvinceRef.current.contains(event.target as Node)) {
+        setModalProvinceDropdownOpen(false)
+      }
+      if (heroProvinceRef.current && !heroProvinceRef.current.contains(event.target as Node)) {
+        setHeroProvinceDropdownOpen(false)
+      }
+    }
+    if (mobileProvinceDropdownOpen || modalProvinceDropdownOpen || heroProvinceDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [mobileProvinceDropdownOpen, modalProvinceDropdownOpen, heroProvinceDropdownOpen])
 
   return (
     <main>
@@ -228,7 +236,7 @@ const Home = () => {
             backgroundColor: '#fff',
             borderRadius: '20px',
             padding: 'clamp(20px, 4vw, 40px)',
-            maxWidth: '900px',
+            maxWidth: '630px',
             width: '100%',
             maxHeight: '95vh',
             overflowY: 'auto',
@@ -257,66 +265,58 @@ const Home = () => {
 
             {/* Form Header */}
             <h2 style={{
-              fontSize: '32px',
+              fontSize: '26px',
               fontWeight: 700,
-              color: '#1f2937',
-              marginBottom: '8px',
+              color: '#1a1a1a',
+              marginBottom: '10px',
               textAlign: 'center'
             }}>
-              Get started today
+              Get your health insurance options
             </h2>
             <p style={{
-              fontSize: '16px',
-              color: '#6b7280',
-              marginBottom: '16px',
+              fontSize: '15px',
+              color: '#4a4a4a',
+              marginBottom: '24px',
+              lineHeight: '1.5',
               textAlign: 'center'
             }}>
-              Complete a short form to get your free, no-obligation quote for health and dental insurance. Your information is private, secure, and used only to assist with your Sun Life quote.
-            </p>
-            <p style={{
-              fontSize: '14px',
-              color: '#6b7280',
-              marginBottom: '32px',
-              textAlign: 'center',
-              fontStyle: 'italic'
-            }}>
-              <strong>Free of charge and with no obligation.</strong>
+              Complete a short form to receive a free, no-obligation quote.
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmitLead}>
+            <form onSubmit={handleSubmitLead} noValidate>
               {/* First Name / Last Name Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '12px' }}>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  First Name <span style={{ color: '#013946' }}>*</span>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    First Name *
                 </label>
                 <input
                   type="text"
-                  required
                   placeholder="John"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '14px 16px',
-                    fontSize: '16px',
+                      padding: '14px 16px',
+                      fontSize: '15px',
                       border: formErrors.firstName ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    outline: 'none'
+                      borderRadius: '6px',
+                      outline: 'none',
+                      backgroundColor: '#fff',
+                      color: '#1f2937'
                   }}
                 />
                   {formErrors.firstName && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.firstName}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.firstName}</p>
                   )}
               </div>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Last Name <span style={{ color: '#013946' }}>*</span>
-                </label>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Last Name *
+                  </label>
                 <input
                   type="text"
-                  required
                   placeholder="Smith"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
@@ -330,20 +330,19 @@ const Home = () => {
                   }}
                 />
                   {formErrors.lastName && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.lastName}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.lastName}</p>
                   )}
               </div>
               </div>
 
               {/* Email / Phone Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', marginBottom: '12px' }}>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Email Address <span style={{ color: '#013946' }}>*</span>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Email Address *
                 </label>
                 <input
                   type="email"
-                  required
                     placeholder="john.smith@gmail.com"
                   value={formData.email}
                     onChange={(e) => {
@@ -365,16 +364,15 @@ const Home = () => {
                   }}
                 />
                   {formErrors.email && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.email}</p>
                   )}
-                </div>
+              </div>
                 <div>
-                  <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Phone Number <span style={{ color: '#013946' }}>*</span>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Phone Number * <span style={{ fontWeight: 400, color: '#6b7280' }}>(we'll send a code)</span>
                 </label>
                 <input
                   type="tel"
-                  required
                   placeholder="(555) 123-4567"
                   value={formData.phoneNumber}
                     onChange={(e) => {
@@ -408,31 +406,31 @@ const Home = () => {
                   }}
                 />
                   {formErrors.phoneNumber && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.phoneNumber}</p>
                   )}
                 </div>
               </div>
 
               {/* Gender and Age */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '12px' }}>
                   <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                  Gender <span style={{ color: '#013946' }}>*</span>
+                    <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Gender *
                 </label>
-                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
                   <button
                     type="button"
                     onClick={() => handleInputChange('gender', 'Man')}
                     style={{
                           flex: 1,
-                        padding: '14px 16px',
-                          fontSize: '16px',
-                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#0086ae' : '#d1d5db')}`,
-                        borderRadius: '8px',
-                      backgroundColor: formData.gender === 'Man' ? '#e0f2fe' : '#fff',
-                      color: '#1f2937',
+                        padding: '14px 12px',
+                        fontSize: '15px',
+                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#FFB800' : '#d1d5db')}`,
+                          borderRadius: '6px',
+                        backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
+                        color: formData.gender === 'Man' ? '#013946' : '#1f2937',
                       cursor: 'pointer',
-                          fontWeight: 600
+                        fontWeight: 500
                     }}
                   >
                     Man
@@ -442,30 +440,29 @@ const Home = () => {
                     onClick={() => handleInputChange('gender', 'Woman')}
                     style={{
                           flex: 1,
-                        padding: '14px 16px',
-                          fontSize: '16px',
-                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#0086ae' : '#d1d5db')}`,
-                        borderRadius: '8px',
-                      backgroundColor: formData.gender === 'Woman' ? '#e0f2fe' : '#fff',
-                      color: '#1f2937',
+                        padding: '14px 12px',
+                        fontSize: '15px',
+                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#FFB800' : '#d1d5db')}`,
+                          borderRadius: '6px',
+                        backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
+                        color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
                       cursor: 'pointer',
-                          fontWeight: 600
+                        fontWeight: 500
                     }}
                   >
                     Woman
                   </button>
                 </div>
                   {formErrors.gender && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.gender}</p>
                   )}
               </div>
                 <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Age <span style={{ color: '#013946' }}>*</span>
+                    <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Age *
                   </label>
                 <input
                   type="text"
-                  required
                     maxLength={3}
                     placeholder="e.g. 35"
                     value={formData.age}
@@ -479,8 +476,8 @@ const Home = () => {
                     onBlur={(e) => {
                       const value = e.target.value;
                       const numValue = parseInt(value);
-                      if (value && (numValue < 18 || numValue > 99)) {
-                        setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
+                      if (value && (numValue < 18 || numValue > 70)) {
+                        setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 70' }));
                     }
                   }}
                   style={{
@@ -493,307 +490,207 @@ const Home = () => {
                   }}
                 />
                   {formErrors.age && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.age}</p>
                   )}
               </div>
                 </div>
 
               {/* Province and Provincial Coverage */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '20px' }}>
-                  <div style={{ position: 'relative' }}>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Province? <span style={{ color: '#013946' }}>*</span>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', marginBottom: '16px' }}>
+                <div ref={modalProvinceRef} style={{ position: 'relative' }}>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Province of Residence *
                 </label>
-                <div
-                  onClick={() => setModalProvinceDropdownOpen(!modalProvinceDropdownOpen)}
+                  <div
+                    onClick={() => setModalProvinceDropdownOpen(!modalProvinceDropdownOpen)}
                   style={{
                     width: '100%',
-                    height: '44px',
-                    padding: '0 14px',
-                    fontSize: '15px',
-                    border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
-                    borderRadius: '8px',
+                      padding: '14px 12px',
+                      fontSize: '15px',
+                      border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
+                        borderRadius: '6px',
                     backgroundColor: '#fff',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  <span style={{ color: formData.province ? '#1f2937' : '#9ca3af' }}>
-                    {formData.province ? 
-                      { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'ON': 'Ontario' }[formData.province] 
-                      : 'Select...'}
-                  </span>
-                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: modalProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                    <path d="M1 1.5L6 6.5L11 1.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                {modalProvinceDropdownOpen && (
-                  <ul style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    right: 0,
-                    backgroundColor: '#fff',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    marginTop: '4px',
-                    padding: 0,
-                    listStyle: 'none',
-                    maxHeight: '200px',
-                    overflowY: 'auto',
-                    zIndex: 1000,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                  }}>
-                    {[
-                      { value: 'AB', label: 'Alberta' },
-                      { value: 'BC', label: 'British Columbia' },
-                      { value: 'MB', label: 'Manitoba' },
-                      { value: 'ON', label: 'Ontario' }
-                    ].map((province) => (
-                      <li
-                        key={province.value}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleInputChange('province', province.value);
-                          setModalProvinceDropdownOpen(false);
-                        }}
-                        style={{
-                          padding: '12px 16px',
-                          fontSize: '16px',
-                          cursor: 'pointer',
-                          backgroundColor: formData.province === province.value ? '#e0f7fa' : '#fff',
-                          borderBottom: '1px solid #f3f4f6'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (formData.province !== province.value) {
-                            e.currentTarget.style.backgroundColor = '#f9fafb';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = formData.province === province.value ? '#e0f7fa' : '#fff';
-                        }}
-                      >
-                        {province.label}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                  {formErrors.province && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
-                  )}
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <span style={{ color: formData.province ? '#1f2937' : '#9ca3af' }}>
+                      {formData.province ? 
+                        { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'ON': 'Ontario' }[formData.province] 
+                        : 'Select...'}
+                    </span>
+                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: modalProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M1 1.5L6 6.5L11 1.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </div>
-                  <div>
-                    <label style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937', display: 'block', marginBottom: '8px' }}>
-                    Provincial coverage? <span style={{ color: '#013946' }}>*</span>
-                </label>
-                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                  <button
-                    type="button"
-                      onClick={() => {
-                        handleInputChange('provincialCoverage', 'Yes')
-                        setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
-                      }}
+                  {modalProvinceDropdownOpen && (
+                    <ul style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      right: 0,
+                      backgroundColor: '#fff',
+                    border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                      marginTop: '4px',
+                      padding: 0,
+                      listStyle: 'none',
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      zIndex: 1000,
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}>
+                      {[
+                        { value: 'AB', label: 'Alberta' },
+                        { value: 'BC', label: 'British Columbia' },
+                        { value: 'MB', label: 'Manitoba' },
+                        { value: 'ON', label: 'Ontario' }
+                      ].map((province) => (
+                        <li
+                          key={province.value}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInputChange('province', province.value);
+                            setModalProvinceDropdownOpen(false);
+                          }}
+                  style={{
+                            padding: '12px 16px',
+                            fontSize: '15px',
+                      cursor: 'pointer',
+                            backgroundColor: formData.province === province.value ? '#e0f7fa' : '#fff',
+                            borderBottom: '1px solid #f3f4f6'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (formData.province !== province.value) {
+                              e.currentTarget.style.backgroundColor = '#f9fafb';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = formData.province === province.value ? '#e0f7fa' : '#fff';
+                          }}
+                        >
+                          {province.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {formErrors.province && (
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
+                  )}
+                </div>
+                <div>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Do you have Provincial Coverage? *
+                  </label>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('provincialCoverage', 'Yes')}
                       style={{
                         flex: 1,
-                        height: '44px',
-                        padding: '0 14px',
+                        padding: '14px 12px',
                         fontSize: '15px',
-                        border: `1px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#0086ae' : '#d1d5db')}`,
-                        borderRadius: '8px',
-                        backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f2fe' : '#fff',
-                        color: '#1f2937',
+                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db')}`,
+                        borderRadius: '6px',
+                        backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
+                        color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
                         cursor: 'pointer',
-                        fontWeight: 600,
-                        boxSizing: 'border-box'
+                        fontWeight: 500
                       }}
                     >
                       Yes
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        handleInputChange('provincialCoverage', 'No')
-                        setFormErrors(prev => ({ ...prev, provincialCoverage: '' }))
-                      }}
+                      onClick={() => handleInputChange('provincialCoverage', 'No')}
                       style={{
                         flex: 1,
-                        height: '44px',
-                        padding: '0 14px',
+                        padding: '14px 12px',
                         fontSize: '15px',
-                        border: `1px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#0086ae' : '#d1d5db')}`,
-                        borderRadius: '8px',
-                        backgroundColor: formData.provincialCoverage === 'No' ? '#e0f2fe' : '#fff',
-                        color: '#1f2937',
+                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
+                borderRadius: '6px',
+                        backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
+                        color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
                         cursor: 'pointer',
-                        fontWeight: 600,
-                        boxSizing: 'border-box'
+                        fontWeight: 500
                       }}
                     >
                       No
                     </button>
                   </div>
                   {formErrors.provincialCoverage && (
-                    <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
+                    <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.provincialCoverage}</p>
                   )}
                 </div>
               </div>
 
+              {/* OTP Verification Field */}
+              {showOTPVerification && (
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Enter 6-digit OTP sent to your phone *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder=""
+                    value={otpValue}
+                    onChange={(e) => handleOTPInputChange(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 12px',
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      letterSpacing: '8px',
+                      textAlign: 'center',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      outline: 'none'
+                    }}
+                  />
+                  <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '8px', textAlign: 'center' }}>
+                    Didn't receive the code? <span onClick={handleResendOTP} style={{ color: '#013946', cursor: 'pointer', textDecoration: 'underline' }}>Resend OTP</span>
+                  </p>
+                </div>
+              )}
+
               {/* Submit Button */}
               <button
-                type="submit"
+                type={showOTPVerification ? "button" : "submit"}
+                onClick={showOTPVerification ? handleVerifyOTP : undefined}
                 style={{
                   width: '100%',
                   padding: '18px',
-                  fontSize: '18px',
+                  fontSize: '17px',
                   fontWeight: 700,
-                  color: '#fff',
-                  backgroundColor: '#013946',
+                  color: '#013946',
+                backgroundColor: '#FFB800',
                   border: 'none',
-                  borderRadius: '8px',
+                borderRadius: '6px',
                   cursor: 'pointer',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  transition: 'background-color 0.3s ease'
+                  letterSpacing: '0.5px'
                 }}
               >
-                Submit Request
+                {showOTPVerification ? 'Verify' : 'Submit Request'}
               </button>
 
               {/* Form Disclaimer */}
-              <div style={{
-                marginTop: '20px',
-                padding: '16px',
-                backgroundColor: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px',
-                fontSize: '14px',
-                color: '#64748b',
+              <p style={{
+                marginTop: '16px',
+                fontSize: '11px',
+                color: '#666',
                 lineHeight: '1.5',
-                textAlign: 'left'
+                textAlign: 'center'
               }}>
-                <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: '#334155' }}>
-                  By submitting this form, you agree to be contacted by a licensed advisor to discuss your Sun Life Health and Dental Insurance options.
+                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our Terms of Service and Privacy Policy.
                 </p>
-                <p style={{ margin: '0', fontSize: '13px' }}>
-                  Your information is secure, confidential and used only to assist with your insurance inquiry.
-                </p>
-              </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* OTP Verification Modal */}
-      {showOTPVerification && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }}>
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: '20px',
-            padding: '40px',
-            maxWidth: '400px',
-            width: '100%',
-            textAlign: 'center',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
-          }}>
-            <h2 style={{
-              fontSize: '24px',
-              fontWeight: 700,
-              color: '#1f2937',
-              marginBottom: '12px'
-            }}>
-              Verify Your Number
-            </h2>
-            <p style={{
-              fontSize: '14px',
-              color: '#6b7280',
-              marginBottom: '24px'
-            }}>
-              An OTP has been sent to {phoneNumber}
-            </p>
-            
-            <div style={{
-              display: 'flex',
-              gap: '8px',
-              justifyContent: 'center',
-              marginBottom: '24px'
-            }}>
-              {otp.map((digit, index) => (
-                <input
-                  key={index}
-                  id={`otp-${index}`}
-                  type="text"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleOTPChange(index, e.target.value)}
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    textAlign: 'center',
-                    fontSize: '18px',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    outline: 'none',
-                    transition: 'border-color 0.2s ease'
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = '#013946'}
-                  onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleVerifyOTP}
-              style={{
-                width: '100%',
-                padding: '14px',
-                backgroundColor: '#013946',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                marginBottom: '16px'
-              }}
-            >
-              Verify
-            </button>
-
-            <p style={{
-              fontSize: '14px',
-              color: '#6b7280'
-            }}>
-              Didn't receive the code? <button
-                onClick={handleResendOTP}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#013946',
-                  cursor: 'pointer',
-                  fontWeight: 500
-                }}
-              >
-                Resend OTP (42s)
-              </button>
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Hero Section - Desktop with Overlapping Form (Funeralcare Style) */}
       <section className="hero-section hero-desktop" style={{ position: 'relative', paddingBottom: '0' }}>
@@ -909,7 +806,7 @@ const Home = () => {
               marginBottom: '10px',
               textAlign: 'center'
             }}>
-              Get started today
+              Get your health insurance options
             </h2>
             <p style={{
               fontSize: '15px',
@@ -918,11 +815,11 @@ const Home = () => {
               lineHeight: '1.5',
               textAlign: 'center'
             }}>
-              Complete a short form to get your free, no-obligation quote.
+              Complete a short form to receive a free, no-obligation quote.
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmitLead}>
+            <form onSubmit={handleSubmitLead} noValidate>
               {/* First Name / Last Name */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
@@ -931,7 +828,6 @@ const Home = () => {
                   </label>
                   <input
                     type="text"
-                    required
                     placeholder="John"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
@@ -956,7 +852,6 @@ const Home = () => {
                   </label>
                   <input
                     type="text"
-                    required
                     placeholder="Smith"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
@@ -985,7 +880,6 @@ const Home = () => {
                   </label>
                   <input
                     type="email"
-                    required
                     placeholder="john.smith@gmail.com"
                     value={formData.email}
                     onChange={(e) => {
@@ -1014,11 +908,10 @@ const Home = () => {
                 </div>
                 <div>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
-                    Phone Number *
+                    Phone Number * <span style={{ fontWeight: 400, color: '#6b7280' }}>(we'll send a code)</span>
                   </label>
                   <input
                     type="tel"
-                    required
                     placeholder="(555) 123-4567"
                     value={formData.phoneNumber}
                     onChange={(e) => {
@@ -1073,7 +966,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#FFB800' : '#d1d5db')}`,
+                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#FFB800' : '#d1d5db')}`,
                         borderRadius: '6px',
                         backgroundColor: formData.gender === 'Man' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Man' ? '#013946' : '#1f2937',
@@ -1090,7 +983,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#FFB800' : '#d1d5db')}`,
+                        border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#FFB800' : '#d1d5db')}`,
                 borderRadius: '6px',
                         backgroundColor: formData.gender === 'Woman' ? '#FFB800' : '#fff',
                         color: formData.gender === 'Woman' ? '#013946' : '#1f2937',
@@ -1111,8 +1004,7 @@ const Home = () => {
                   </label>
                   <input
                     type="text"
-                    required
-                    maxLength={3}
+                      maxLength={3}
                     placeholder="e.g. 35"
                     value={formData.age}
                     onChange={(e) => {
@@ -1125,8 +1017,8 @@ const Home = () => {
                     onBlur={(e) => {
                       const value = e.target.value;
                       const numValue = parseInt(value);
-                      if (value && (numValue < 18 || numValue > 99)) {
-                        setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
+                      if (value && (numValue < 18 || numValue > 70)) {
+                        setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 70' }));
                       }
                     }}
                     style={{
@@ -1148,31 +1040,85 @@ const Home = () => {
 
               {/* Province of Residence and Provincial Coverage */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-                <div>
+                <div ref={heroProvinceRef} style={{ position: 'relative' }}>
                   <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
                     Province of Residence *
                   </label>
-                  <select
-                    value={formData.province}
-                    onChange={(e) => handleInputChange('province', e.target.value)}
-              style={{
-                width: '100%',
-                      padding: '14px 16px',
+                  <div
+                    onClick={() => setHeroProvinceDropdownOpen(!heroProvinceDropdownOpen)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 12px',
                       fontSize: '15px',
                       border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
                       borderRadius: '6px',
-                      outline: 'none',
                       backgroundColor: '#fff',
-                      color: '#1f2937',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
                     }}
                   >
-                    <option value="">Select...</option>
-                    <option value="AB">Alberta</option>
-                    <option value="BC">British Columbia</option>
-                    <option value="MB">Manitoba</option>
-                    <option value="ON">Ontario</option>
-                  </select>
+                    <span style={{ color: formData.province ? '#1f2937' : '#9ca3af' }}>
+                      {formData.province ? 
+                        { 'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba', 'ON': 'Ontario' }[formData.province] 
+                        : 'Select...'}
+                    </span>
+                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ transform: heroProvinceDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M1 1.5L6 6.5L11 1.5" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {heroProvinceDropdownOpen && (
+                    <ul style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      right: 0,
+                      backgroundColor: '#fff',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      marginTop: '4px',
+                      padding: 0,
+                      listStyle: 'none',
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      zIndex: 1000,
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}>
+                      {[
+                        { value: 'AB', label: 'Alberta' },
+                        { value: 'BC', label: 'British Columbia' },
+                        { value: 'MB', label: 'Manitoba' },
+                        { value: 'ON', label: 'Ontario' }
+                      ].map((province) => (
+                        <li
+                          key={province.value}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInputChange('province', province.value);
+                            setHeroProvinceDropdownOpen(false);
+                          }}
+                          style={{
+                            padding: '12px 16px',
+                            fontSize: '15px',
+                            cursor: 'pointer',
+                            backgroundColor: formData.province === province.value ? '#e0f7fa' : '#fff',
+                            borderBottom: '1px solid #f3f4f6'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (formData.province !== province.value) {
+                              e.currentTarget.style.backgroundColor = '#f9fafb';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = formData.province === province.value ? '#e0f7fa' : '#fff';
+                          }}
+                        >
+                          {province.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   {formErrors.province && (
                     <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '4px', margin: 0 }}>{formErrors.province}</p>
                   )}
@@ -1189,7 +1135,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db')}`,
+                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#FFB800' : '#d1d5db')}`,
                         borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'Yes' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'Yes' ? '#013946' : '#1f2937',
@@ -1206,7 +1152,7 @@ const Home = () => {
                         flex: 1,
                         padding: '14px 12px',
                         fontSize: '15px',
-                        border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
+                        border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#FFB800' : '#d1d5db')}`,
                 borderRadius: '6px',
                         backgroundColor: formData.provincialCoverage === 'No' ? '#FFB800' : '#fff',
                         color: formData.provincialCoverage === 'No' ? '#013946' : '#1f2937',
@@ -1224,9 +1170,39 @@ const Home = () => {
               </div>
               
 
+              {/* OTP Verification Field */}
+              {showOTPVerification && (
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '13px', color: '#1a1a1a', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                    Enter 6-digit OTP sent to your phone *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder=""
+                    value={otpValue}
+                    onChange={(e) => handleOTPInputChange(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 12px',
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      letterSpacing: '8px',
+                      textAlign: 'center',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      outline: 'none'
+                    }}
+                  />
+                  <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '8px', textAlign: 'center' }}>
+                    Didn't receive the code? <span onClick={handleResendOTP} style={{ color: '#013946', cursor: 'pointer', textDecoration: 'underline' }}>Resend OTP</span>
+                  </p>
+                </div>
+              )}
+
               {/* Submit Button */}
             <button 
-                type="submit"
+                type={showOTPVerification ? "button" : "submit"}
+                onClick={showOTPVerification ? handleVerifyOTP : undefined}
               style={{
                   width: '100%',
                   padding: '18px',
@@ -1241,18 +1217,18 @@ const Home = () => {
                   letterSpacing: '0.5px'
               }}
             >
-                Submit Request
+                {showOTPVerification ? 'Verify' : 'Submit Request'}
             </button>
 
               {/* Form Disclaimer */}
               <p style={{
                 marginTop: '16px',
-                fontSize: '12px',
+                fontSize: '11px',
                 color: '#666',
                 lineHeight: '1.5',
                 textAlign: 'center'
               }}>
-                A licensed Sun Life advisor will reach out within the next business hours to present coverage options tailored to your needs.
+                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our Terms of Service and Privacy Policy.
               </p>
             </form>
           </div>
@@ -1328,7 +1304,7 @@ const Home = () => {
             backgroundColor: '#fff',
             overflow: 'visible'
           }}>
-            <form onSubmit={handleSubmitLead}>
+            <form onSubmit={handleSubmitLead} noValidate>
               {/* First Name */}
               <div style={{ marginBottom: '10px' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
@@ -1336,7 +1312,6 @@ const Home = () => {
                 </label>
                 <input
                   type="text"
-                  required
                   placeholder="John"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
@@ -1361,7 +1336,6 @@ const Home = () => {
                 </label>
                 <input
                   type="text"
-                  required
                   placeholder="Smith"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
@@ -1386,7 +1360,6 @@ const Home = () => {
                 </label>
                 <input
                   type="email"
-                  required
                   placeholder="email@example.com"
                   value={formData.email}
                   onChange={(e) => {
@@ -1415,11 +1388,10 @@ const Home = () => {
               {/* Phone */}
               <div style={{ marginBottom: '10px' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
-                  Phone <span style={{ color: '#013946' }}>*</span>
+                  Phone <span style={{ color: '#013946' }}>*</span> <span style={{ fontWeight: 400, color: '#6b7280' }}>(we'll send a code)</span>
                 </label>
                 <input
                   type="tel"
-                  required
                   placeholder="(555) 123-4567"
                   value={formData.phoneNumber}
                   onChange={(e) => {
@@ -1470,7 +1442,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#013946' : '#d1d5db')}`,
+                      border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Man' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.gender === 'Man' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1487,7 +1459,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#013946' : '#d1d5db')}`,
+                      border: `${formErrors.gender ? '1px' : '2px'} solid ${formErrors.gender ? '#dc2626' : (formData.gender === 'Woman' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.gender === 'Woman' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1510,7 +1482,6 @@ const Home = () => {
                 </label>
                 <input
                   type="text"
-                  required
                   maxLength={3}
                   placeholder="e.g. 35"
                   value={formData.age}
@@ -1524,7 +1495,7 @@ const Home = () => {
                   }}
                   onBlur={() => {
                     if (formData.age && !validateAge(formData.age)) {
-                      setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 99' }));
+                      setFormErrors(prev => ({ ...prev, age: 'Age must be between 18 and 70' }));
                     }
                   }}
             style={{
@@ -1542,7 +1513,7 @@ const Home = () => {
               </div>
           
               {/* Province of Residence - Custom Dropdown */}
-              <div style={{ marginBottom: '10px', position: 'relative' }}>
+              <div ref={mobileProvinceRef} style={{ marginBottom: '10px', position: 'relative' }}>
                 <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
                   Province of Residence <span style={{ color: '#013946' }}>*</span>
                 </label>
@@ -1550,7 +1521,7 @@ const Home = () => {
                   onClick={() => setMobileProvinceDropdownOpen(!mobileProvinceDropdownOpen)}
                   style={{
                     width: '100%',
-                    padding: '10px 12px',
+                    padding: '14px 12px',
                     fontSize: '15px',
                     border: formErrors.province ? '1px solid #dc2626' : '1px solid #d1d5db',
                     borderRadius: '6px',
@@ -1595,7 +1566,8 @@ const Home = () => {
                     ].map((province) => (
                       <li
                         key={province.value}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           handleInputChange('province', province.value);
                           setMobileProvinceDropdownOpen(false);
                         }}
@@ -1605,6 +1577,14 @@ const Home = () => {
                           cursor: 'pointer',
                           backgroundColor: formData.province === province.value ? '#e0f7fa' : '#fff',
                           borderBottom: '1px solid #f3f4f6'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (formData.province !== province.value) {
+                            e.currentTarget.style.backgroundColor = '#f9fafb';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = formData.province === province.value ? '#e0f7fa' : '#fff';
                         }}
                       >
                         {province.label}
@@ -1633,7 +1613,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#013946' : '#d1d5db')}`,
+                      border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'Yes' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.provincialCoverage === 'Yes' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1653,7 +1633,7 @@ const Home = () => {
                       flex: 1,
                       padding: '10px',
                       fontSize: '14px',
-                      border: `2px solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db')}`,
+                      border: `${formErrors.provincialCoverage ? '1px' : '2px'} solid ${formErrors.provincialCoverage ? '#dc2626' : (formData.provincialCoverage === 'No' ? '#013946' : '#d1d5db')}`,
                       borderRadius: '6px',
                       backgroundColor: formData.provincialCoverage === 'No' ? '#e0f7fa' : '#fff',
                       color: '#1f2937',
@@ -1669,9 +1649,39 @@ const Home = () => {
                 )}
               </div>
 
+              {/* OTP Verification Field */}
+              {showOTPVerification && (
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={{ fontWeight: 600, fontSize: '13px', color: '#1f2937', display: 'block', marginBottom: '4px' }}>
+                    Enter 6-digit OTP sent to your phone <span style={{ color: '#013946' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder=""
+                    value={otpValue}
+                    onChange={(e) => handleOTPInputChange(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      letterSpacing: '6px',
+                      textAlign: 'center',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      outline: 'none'
+                    }}
+                  />
+                  <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '6px', textAlign: 'center' }}>
+                    Didn't receive the code? <span onClick={handleResendOTP} style={{ color: '#013946', cursor: 'pointer', textDecoration: 'underline' }}>Resend OTP</span>
+                  </p>
+                </div>
+              )}
+
               {/* Submit */}
               <button
-                type="submit"
+                type={showOTPVerification ? "button" : "submit"}
+                onClick={showOTPVerification ? handleVerifyOTP : undefined}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -1685,17 +1695,17 @@ const Home = () => {
                   textTransform: 'uppercase'
                 }}
               >
-                Submit Request
+                {showOTPVerification ? 'Verify' : 'Submit Request'}
               </button>
 
               <p style={{
                 marginTop: '10px',
-                fontSize: '10px',
+                fontSize: '9px',
                 color: '#6b7280',
                 lineHeight: '1.4',
                 textAlign: 'center'
               }}>
-                A licensed Sun Life advisor will reach out within the next business hours to present coverage options tailored to your needs.
+                You consent to PolicyAdvisor sharing your information with Sun Life to provide coverage options. A licensed Sun Life advisor may contact you to discuss coverage options tailored to you. For more details, see our Terms of Service and Privacy Policy.
               </p>
             </form>
           </div>
